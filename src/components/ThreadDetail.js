@@ -9,6 +9,10 @@ import PostListItem from './PostListItem';
 const initialPostNum = 27;
 
 export default class ThreadDetail extends React.Component {
+  mounted = false;
+  page = 0;
+  totalPages = 0;
+
   state = {
     postList: [],
     isInitialLoading: true,
@@ -20,7 +24,12 @@ export default class ThreadDetail extends React.Component {
   componentDidMount() {
     this.page = 1;
     this.totalPages = 1;
+    this.mounted = true;
     this.fetchFirstPage(this.props.navigation.state.params.tid);
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -38,6 +47,7 @@ export default class ThreadDetail extends React.Component {
   };
 
   async fetchFirstPage(tid) {
+    if (!this.mounted) return
     const data = await fetchThreadDetail(tid);
     this.totalPages = data.totalPages;
     this.setState({
@@ -54,6 +64,7 @@ export default class ThreadDetail extends React.Component {
     );
 
   async fetchNextPage(tid) {
+    if (!this.mounted) return
     this.setState({isPaginationLoading: true});
     const {postList: postListBeforeFetch} = this.state;
     const data = await fetchThreadDetail(tid, this.page + 1);
