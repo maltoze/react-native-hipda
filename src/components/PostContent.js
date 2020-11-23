@@ -30,14 +30,16 @@ export class PostContent extends React.Component {
   };
 
   alterNode = node => {
+    if (!node.attribs) {
+      return node;
+    }
     const {name} = node;
-    if (
-      name === 'img' &&
-      node.attribs &&
-      node.attribs.src.match(imgNonePattern)
-    ) {
+    if (name === 'img' && node.attribs.src.match(imgNonePattern)) {
       node.attribs = {...(node.attribs || {}), src: node.attribs.file};
       return node;
+      // eslint-disable-next-line no-script-url
+    } else if (name === 'a' && node.attribs.href === 'javascript:;') {
+      return node.children ? node.children[0] : node;
     }
   };
 
