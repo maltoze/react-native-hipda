@@ -4,14 +4,12 @@ import {getThreadListUrl} from '../api/urls';
 import {readBlobHtml} from '../utils/reader';
 
 // 帖子列表
-const parseThreadList = html => {
+const parseThreadList = (html) => {
   const $ = cheerio.load(html, {decodeEntities: false});
   let threadList = [];
   let spanID, span;
-  $('.threadlist tbody').each(function(i, elem) {
-    span = $(this)
-      .find('span')
-      .first();
+  $('.threadlist tbody').each(function (i, elem) {
+    span = $(this).find('span').first();
     spanID = span.attr('id');
     try {
       if (spanID && spanID.match(/thread_\d+/)) {
@@ -23,13 +21,8 @@ const parseThreadList = html => {
             .match(/.*tid=\d+/)[0]
             .match(/\d+$/)[0],
           author: {
-            name: $(this)
-              .find('.author cite')
-              .text()
-              .trim(),
-            uid: $(this)
-              .find('.author cite a')
-              .attr('href')
+            name: $(this).find('.author cite').text().trim(),
+            uid: $(this).find('.author cite a').attr('href')
               ? $(this)
                   .find('.author cite a')
                   .attr('href')
@@ -37,23 +30,11 @@ const parseThreadList = html => {
                   .match(/\d+$/)[0]
               : '0',
           },
-          date: $(this)
-            .find('.author em')
-            .text()
-            .trim(),
-          nums: $(this)
-            .find('.nums strong')
-            .text()
-            .trim(),
+          date: $(this).find('.author em').text().trim(),
+          nums: $(this).find('.nums strong').text().trim(),
           lastpost: {
-            author: $(this)
-              .find('.lastpost cite')
-              .text()
-              .trim(),
-            date: $(this)
-              .find('.lastpost em')
-              .text()
-              .trim(),
+            author: $(this).find('.lastpost cite').text().trim(),
+            date: $(this).find('.lastpost em').text().trim(),
           },
         });
       }
@@ -64,7 +45,7 @@ const parseThreadList = html => {
   return threadList;
 };
 
-export const fetchThreadList = async fid => {
+export const fetchThreadList = async (fid) => {
   const resp = await axios({
     method: 'get',
     url: getThreadListUrl(fid),

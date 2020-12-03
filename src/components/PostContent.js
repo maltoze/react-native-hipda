@@ -29,7 +29,7 @@ export class PostContent extends React.Component {
     }
   };
 
-  alterNode = node => {
+  alterNode = (node) => {
     if (!node.attribs) {
       return node;
     }

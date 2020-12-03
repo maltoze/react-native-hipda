@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const stCookieKey = 'cookie';
 // export const stGetCookie = () => {AsyncStorage.getItem(stCookieKey)};
-export const stSaveCookie = cookie => {
+export const stSaveCookie = (cookie) => {
   AsyncStorage.setItem(stCookieKey, cookie);
 };
 
@@ -10,13 +10,13 @@ export const stSaveCookie = cookie => {
 const stUserKey = 'user';
 export const stGetUser = () =>
   getJsonObjectFromStorage(stUserKey, {onJsonParseError: stRemoveUser});
-export const stSaveUser = user =>
+export const stSaveUser = (user) =>
   AsyncStorage.setItem(stUserKey, JSON.stringify(user));
 export const stRemoveUser = () => AsyncStorage.removeItem(stUserKey);
 
 // Local functions
 const getJsonObjectFromStorage = (key, params = {}) =>
-  new Promise(async resolve => {
+  new Promise(async (resolve) => {
     const {onJsonParseError} = params;
 
     try {

@@ -6,25 +6,22 @@ import {stSaveUser} from '../utils/storage';
 export const loginModalPopup = () => ({type: Auth.LOGIN_MODAL_POPUP});
 export const loginModalHide = () => ({type: Auth.LOGIN_MODAL_HIDE});
 
-export const loginUsernameChanged = text => ({
+export const loginUsernameChanged = (text) => ({
   type: Auth.USERNAME_CHANGED,
   payload: text,
 });
-export const loginPasswordChanged = text => ({
+export const loginPasswordChanged = (text) => ({
   type: Auth.PASSWORD_CHANGED,
   payload: text,
 });
-export const loadUserIntoRedux = user => ({
+export const loadUserIntoRedux = (user) => ({
   type: Auth.USER_LOADED,
   payload: user,
 });
 
-export const loginUser = ({
-  username,
-  password,
-  showToast,
-  onSuccess,
-}) => async dispatch => {
+export const loginUser = ({username, password, showToast, onSuccess}) => async (
+  dispatch,
+) => {
   try {
     const {uid} = await requestToLogin(username, password);
     dispatch({

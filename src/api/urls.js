@@ -23,7 +23,7 @@ export const getLatestPostUrl = () => {
   );
 };
 
-export const getAvatarUrl = uid => {
+export const getAvatarUrl = (uid) => {
   let avatarBaseUrl = BASE_URL + 'uc_server/data/avatar/';
   let fullUid = new Array(AVATAR_BASE.length - uid.length + 1).join('0') + uid;
   let str = [

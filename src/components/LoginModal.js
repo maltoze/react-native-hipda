@@ -11,8 +11,8 @@ import {
 } from '../actions/AuthActions';
 
 class LoginModal extends React.Component {
-  onUsernameTextChange = text => this.props.loginUsernameChanged(text);
-  onPasswordTextChange = text => this.props.loginPasswordChanged(text);
+  onUsernameTextChange = (text) => this.props.loginUsernameChanged(text);
+  onPasswordTextChange = (text) => this.props.loginPasswordChanged(text);
 
   onLoginPress = () => {
     const {loginUsername, loginPassword} = this.props;
@@ -78,7 +78,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({auth}) => auth;
-export default connect(
-  mapStateToProps,
-  {loginModalHide, loginUsernameChanged, loginPasswordChanged, loginUser},
-)(LoginModal);
+export default connect(mapStateToProps, {
+  loginModalHide,
+  loginUsernameChanged,
+  loginPasswordChanged,
+  loginUser,
+})(LoginModal);
