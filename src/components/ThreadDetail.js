@@ -25,7 +25,7 @@ export default class ThreadDetail extends React.Component {
     this.page = 1;
     this.totalPages = 1;
     this.mounted = true;
-    this.fetchFirstPage(this.props.navigation.state.params.tid);
+    this.fetchFirstPage(this.props.route.params.tid);
   }
 
   componentWillUnmount() {
@@ -47,7 +47,9 @@ export default class ThreadDetail extends React.Component {
   };
 
   async fetchFirstPage(tid) {
-    if (!this.mounted) return
+    if (!this.mounted) {
+      return;
+    }
     const data = await fetchThreadDetail(tid);
     this.totalPages = data.totalPages;
     this.setState({
@@ -56,15 +58,17 @@ export default class ThreadDetail extends React.Component {
     });
   }
 
-  filterDuplicatePosts = posts =>
+  filterDuplicatePosts = (posts) =>
     posts.filter(
       (post, index) =>
         index ===
-        posts.findIndex(p => p.postno.toString() === post.postno.toString()),
+        posts.findIndex((p) => p.postno.toString() === post.postno.toString()),
     );
 
   async fetchNextPage(tid) {
-    if (!this.mounted) return
+    if (!this.mounted) {
+      return;
+    }
     this.setState({isPaginationLoading: true});
     const {postList: postListBeforeFetch} = this.state;
     const data = await fetchThreadDetail(tid, this.page + 1);

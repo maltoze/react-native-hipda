@@ -1,89 +1,100 @@
-import React from 'react';
-// Drawer(react-navigation v3) sluggish on Android
-import {createDrawerNavigator} from 'react-navigation-drawer';
-import {
-  createStackNavigator,
-  createAppContainer,
-  createSwitchNavigator,
-} from 'react-navigation';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createStackNavigator} from '@react-navigation/stack';
+import {Icon} from 'react-native-elements';
 import ThreadListScreen from './screens/ThreadListScreen';
 import ThreadDetailScreen from './screens/ThreadDetailScreen';
-import Theme from './Theme';
 import Forums from './Forums';
-import Drawer from './components/Drawer';
+import {stGetUser} from './utils/storage';
 import Splash from './screens/Splash';
-import {Icon} from 'react-native-elements';
-import Profile from './screens/Profile';
+import HiDrawerContent from './components/Drawer';
+import ProfileScreen from './screens/ProfileScreen';
 
-const ThreadStack = createStackNavigator(
-  {
-    ThreadList: {
-      screen: ThreadListScreen,
-      params: {},
-    },
-    ThreadDetail: {
-      screen: ThreadDetailScreen,
-    },
-    Profile: {
-      screen: Profile,
-    },
-  },
-  {
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: Theme.colors.primary,
-      },
-      headerTintColor: '#fff',
-    },
-    headerMode: 'float',
-  },
-);
+export function AppContainer() {
+  const Drawer = createDrawerNavigator();
+  const Stack = createStackNavigator();
+  const [isLoading, setIsLoading] = useState(true);
 
-const AppDrawer = createDrawerNavigator(
-  {
-    [Forums.Discovery.name]: {
-      screen: ThreadStack,
-      params: {fid: Forums.Discovery.fid},
-      navigationOptions: ({navigation}) => ({
-        drawerIcon: <Icon name="cc-discover" type="font-awesome" size={18} />,
-      }),
-      path: 'forum/discovery',
-    },
-    [Forums.Geek.name]: {
-      screen: ThreadStack,
-      params: {fid: Forums.Geek.fid},
-      navigationOptions: ({navigation}) => ({
-        drawerIcon: <Icon name="comments" type="foundation" />,
-      }),
-      path: 'forum/geek',
-    },
-    [Forums.Palm.name]: {
-      screen: ThreadStack,
-      params: {fid: Forums.Palm.fid},
-      navigationOptions: ({navigation}) => ({
-        drawerIcon: <Icon name="smartphone" type="materialIcons" />,
-      }),
-    },
-    [Forums.Robots.name]: {
-      screen: ThreadStack,
-      params: {fid: Forums.Robots.fid},
-      navigationOptions: ({navigation}) => ({
-        drawerIcon: <Icon name="robot" type="material-community" />,
-      }),
-    },
-  },
-  {
-    contentOptions: {},
-    contentComponent: Drawer,
-  },
-);
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      await stGetUser();
+      setIsLoading(false);
+    };
+    bootstrapAsync();
+  });
 
-export const AppContainer = createAppContainer(
-  createSwitchNavigator(
-    {
-      Splash: {screen: Splash},
-      App: {screen: AppDrawer},
-    },
-    // { mode: "modal", headerMode: "none" }
-  ),
-);
+  if (isLoading) {
+    return <Splash />;
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          options={{
+            headerShown: false,
+          }}>
+          {() => (
+            <Drawer.Navigator
+              screenOptions={{headerShown: true}}
+              drawerContent={(props) => <HiDrawerContent {...props} />}>
+              <Drawer.Screen
+                name={Forums.Discovery.name}
+                initialParams={{fid: Forums.Discovery.fid}}
+                options={{
+                  drawerIcon: () => (
+                    <Icon name="cc-discover" type="font-awesome" size={18} />
+                  ),
+                }}>
+                {({navigation, route}) => (
+                  <ThreadListScreen navigation={navigation} route={route} />
+                )}
+              </Drawer.Screen>
+              <Drawer.Screen
+                name={Forums.Geek.name}
+                initialParams={{fid: Forums.Geek.fid}}
+                options={{
+                  drawerIcon: () => <Icon name="comments" type="foundation" />,
+                }}>
+                {({navigation, route}) => (
+                  <ThreadListScreen navigation={navigation} route={route} />
+                )}
+              </Drawer.Screen>
+              <Drawer.Screen
+                name={Forums.Palm.name}
+                initialParams={{fid: Forums.Palm.fid}}
+                options={{
+                  drawerIcon: () => (
+                    <Icon name="smartphone" type="materialIcons" />
+                  ),
+                }}>
+                {({navigation, route}) => (
+                  <ThreadListScreen navigation={navigation} route={route} />
+                )}
+              </Drawer.Screen>
+            </Drawer.Navigator>
+          )}
+        </Stack.Screen>
+        <Stack.Screen
+          name="ThreadDetail"
+          component={ThreadDetailScreen}
+          options={({route}) => {
+            return {
+              gestureEnabled: true,
+              title: route.params.subject,
+            };
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            gestureEnabled: true,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}

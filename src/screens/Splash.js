@@ -1,9 +1,9 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
+import Theme from '../Theme';
 import {stGetUser} from '../utils/storage';
 import {loadUserIntoRedux} from '../actions';
-import {connect} from 'react-redux';
-import Theme from '../Theme';
 
 class Splash extends React.Component {
   componentDidMount() {
@@ -11,17 +11,10 @@ class Splash extends React.Component {
   }
 
   loadUser = async () => {
-    const {navigation} = this.props;
     const user = await stGetUser();
-
-    // CookieManager.get(FORUM_SERVER_SSL).then(res => {
-    //   console.log("CookieManager.get =>", res); // => 'user_session=abcdefg; path=/;'
-    // });
-
     if (user) {
       this.props.loadUserIntoRedux(user);
     }
-    navigation.navigate('App');
   };
 
   render() {
@@ -46,8 +39,5 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({auth: {user}}) => ({user});
-export default connect(
-  mapStateToProps,
-  {loadUserIntoRedux},
-)(Splash);
+const mapStateToProps = ({auth}) => ({user: auth.user});
+export default connect(mapStateToProps, {loadUserIntoRedux})(Splash);

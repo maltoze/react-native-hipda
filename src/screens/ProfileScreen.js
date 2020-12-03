@@ -3,11 +3,7 @@ import {View, Text, StatusBar, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import Theme from '../Theme';
 
-class Profile extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {};
-  };
-
+class ProfileScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
@@ -29,4 +25,4 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({auth: {user}}) => ({user});
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(ProfileScreen);

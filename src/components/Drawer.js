@@ -1,17 +1,19 @@
 import React from 'react';
-import {StyleSheet, ScrollView, View, Text, StatusBar} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {Avatar, Divider} from 'react-native-elements';
 import {connect} from 'react-redux';
-import {DrawerItems, SafeAreaView} from 'react-navigation';
+import {
+  DrawerItemList,
+  DrawerContentScrollView,
+} from '@react-navigation/drawer';
 import Theme from '../Theme';
 import {loginModalPopup} from '../actions';
 import {getAvatarUrl} from '../api/urls';
 
-class Drawer extends React.Component {
+class HiDrawerContent extends React.Component {
   loadUser = () => {
     this.props.navigation.closeDrawer();
     if (this.props.user) {
-      // this.props.navigation.navigate("App");
       this.props.navigation.navigate('Profile');
     } else {
       this.props.loginModalPopup();
@@ -20,14 +22,16 @@ class Drawer extends React.Component {
 
   renderDefaultHeader = () => {
     return (
-      <Avatar
-        rounded
-        size="medium"
-        icon={{name: 'user', type: 'font-awesome'}}
-        activeOpacity={0.7}
-        containerStyle={styles.avatarContainer}
-        onPress={this.loadUser}
-      />
+      <View style={styles.headerContainer}>
+        <Avatar
+          rounded
+          size="medium"
+          icon={{name: 'user', type: 'font-awesome'}}
+          activeOpacity={0.7}
+          containerStyle={styles.avatarContainer}
+          onPress={this.loadUser}
+        />
+      </View>
     );
   };
 
@@ -54,13 +58,9 @@ class Drawer extends React.Component {
       <View style={styles.container}>
         {this.props.user ? this.renderHeader() : this.renderDefaultHeader()}
         <Divider />
-        <ScrollView>
-          <SafeAreaView
-          // forceInset={{ top: "always", horizontal: "never" }}
-          >
-            <DrawerItems {...this.props} />
-          </SafeAreaView>
-        </ScrollView>
+        <DrawerContentScrollView>
+          <DrawerItemList {...this.props} />
+        </DrawerContentScrollView>
       </View>
     );
   }
@@ -72,21 +72,21 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     marginLeft: Theme.spacing.small,
-    marginTop: Theme.spacing.base,
-    marginBottom: Theme.spacing.small,
+    // marginTop: Theme.spacing.base,
+    // marginBottom: Theme.spacing.small,
+    backgroundColor: Theme.gray.light,
   },
   headerContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: Theme.spacing.small,
   },
   headerText: {
     ...Theme.typography.body,
-    marginTop: Theme.spacing.large,
+    marginTop: Theme.spacing.tiny,
     marginLeft: Theme.spacing.tiny,
   },
 });
 
 const mapStateToProps = ({auth}) => ({user: auth.user});
-export default connect(
-  mapStateToProps,
-  {loginModalPopup},
-)(Drawer);
+export default connect(mapStateToProps, {loginModalPopup})(HiDrawerContent);
