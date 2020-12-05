@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, FlatList, ActivityIndicator, StyleSheet} from 'react-native';
-import {fetchThreadDetail} from '../parser/ThreadDetailParser';
+import { View, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { fetchThreadDetail } from '../parser/ThreadDetailParser';
 import Theme from '../Theme';
-import {FooterEnd, FooterLoading} from './Footer';
+import { FooterEnd, FooterLoading } from './Footer';
 import ListDivider from './ListDivider';
 import PostListItem from './PostListItem';
 
@@ -43,7 +43,7 @@ export default class ThreadDetail extends React.Component {
     if (this.state.isPaginationLoading || this.totalPages <= this.page) {
       return;
     }
-    this.fetchNextPage(this.props.navigation.state.params.tid);
+    this.fetchNextPage(this.props.route.params.tid);
   };
 
   async fetchFirstPage(tid) {
@@ -69,11 +69,11 @@ export default class ThreadDetail extends React.Component {
     if (!this.mounted) {
       return;
     }
-    this.setState({isPaginationLoading: true});
-    const {postList: postListBeforeFetch} = this.state;
+    this.setState({ isPaginationLoading: true });
+    const { postList: postListBeforeFetch } = this.state;
     const data = await fetchThreadDetail(tid, this.page + 1);
     const postProps = {};
-    const {postList} = this.state;
+    const { postList } = this.state;
     if (postList === postListBeforeFetch) {
       postProps.postList = this.filterDuplicatePosts([
         ...this.state.postList,
@@ -81,13 +81,13 @@ export default class ThreadDetail extends React.Component {
       ]);
       this.page++;
     }
-    this.setState({isPaginationLoading: false, ...postProps});
+    this.setState({ isPaginationLoading: false, ...postProps });
   }
 
-  _renderItem = ({item}) => <PostListItem post={item} />;
+  _renderItem = ({ item }) => <PostListItem post={item} />;
 
   renderListFooter = () => {
-    const {isPaginationLoading} = this.state;
+    const { isPaginationLoading } = this.state;
     return isPaginationLoading ? <FooterLoading /> : <FooterEnd />;
   };
 
@@ -116,7 +116,7 @@ export default class ThreadDetail extends React.Component {
   );
 
   render() {
-    const {isInitialLoading} = this.state;
+    const { isInitialLoading } = this.state;
     return (
       <View style={styles.container}>
         {isInitialLoading

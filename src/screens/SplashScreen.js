@@ -1,9 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {View, StyleSheet, Text, StatusBar} from 'react-native';
+import { connect } from 'react-redux';
+import { View, StyleSheet, Text, StatusBar } from 'react-native';
 import Theme from '../Theme';
-import {stGetUser} from '../utils/storage';
-import {loadUserIntoRedux} from '../actions';
+import { stGetUser } from '../utils/storage';
+import { loadUserIntoRedux } from '../actions';
 
 class Splash extends React.Component {
   componentDidMount() {
@@ -39,5 +39,5 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({auth}) => ({user: auth.user});
-export default connect(mapStateToProps, {loadUserIntoRedux})(Splash);
+const mapStateToProps = ({ auth }) => ({ user: auth.user });
+export default connect(mapStateToProps, { loadUserIntoRedux })(Splash);

@@ -1,14 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import {Avatar, Divider} from 'react-native-elements';
-import {connect} from 'react-redux';
+import { StyleSheet, View, Text } from 'react-native';
+import { Avatar, Divider } from 'react-native-elements';
+import { connect } from 'react-redux';
 import {
   DrawerItemList,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import Theme from '../Theme';
-import {loginModalPopup} from '../actions';
-import {getAvatarUrl} from '../api/urls';
+import { loginModalPopup } from '../actions';
+import { getAvatarUrl } from '../api/urls';
 
 class HiDrawerContent extends React.Component {
   loadUser = () => {
@@ -26,7 +26,7 @@ class HiDrawerContent extends React.Component {
         <Avatar
           rounded
           size="medium"
-          icon={{name: 'user', type: 'font-awesome'}}
+          icon={{ name: 'user', type: 'font-awesome' }}
           activeOpacity={0.7}
           containerStyle={styles.avatarContainer}
           onPress={this.loadUser}
@@ -59,7 +59,7 @@ class HiDrawerContent extends React.Component {
         {this.props.user ? this.renderHeader() : this.renderDefaultHeader()}
         <Divider />
         <DrawerContentScrollView>
-          <DrawerItemList {...this.props} />
+          <DrawerItemList {...this.props} labelStyle={styles.drawerLabel} />
         </DrawerContentScrollView>
       </View>
     );
@@ -72,8 +72,6 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     marginLeft: Theme.spacing.small,
-    // marginTop: Theme.spacing.base,
-    // marginBottom: Theme.spacing.small,
     backgroundColor: Theme.gray.light,
   },
   headerContainer: {
@@ -86,7 +84,10 @@ const styles = StyleSheet.create({
     marginTop: Theme.spacing.tiny,
     marginLeft: Theme.spacing.tiny,
   },
+  drawerLabel: {
+    fontWeight: 'bold',
+  },
 });
 
-const mapStateToProps = ({auth}) => ({user: auth.user});
-export default connect(mapStateToProps, {loginModalPopup})(HiDrawerContent);
+const mapStateToProps = ({ auth }) => ({ user: auth.user });
+export default connect(mapStateToProps, { loginModalPopup })(HiDrawerContent);
