@@ -1,9 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {View, StyleSheet} from 'react-native';
-import {Overlay, Icon, Input, Button} from 'react-native-elements';
+import { connect } from 'react-redux';
+import { View, StyleSheet } from 'react-native';
+import { Overlay, Icon, Input, Button } from 'react-native-elements';
 import Theme from '../Theme';
-import {loginModalHide} from '../actions';
+import { loginModalHide } from '../actions';
 import {
   loginUsernameChanged,
   loginPasswordChanged,
@@ -15,7 +15,7 @@ class LoginModal extends React.Component {
   onPasswordTextChange = (text) => this.props.loginPasswordChanged(text);
 
   onLoginPress = () => {
-    const {loginUsername, loginPassword} = this.props;
+    const { loginUsername, loginPassword } = this.props;
     this.props.loginUser({
       username: loginUsername,
       password: loginPassword,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({auth}) => auth;
+const mapStateToProps = ({ auth }) => auth;
 export default connect(mapStateToProps, {
   loginModalHide,
   loginUsernameChanged,

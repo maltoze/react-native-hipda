@@ -1,8 +1,8 @@
 import React from 'react';
 import HTML from 'react-native-render-html';
-import {ScrollView, StyleSheet, Dimensions} from 'react-native';
+import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 import Theme from '../Theme';
-import {FORUM_IMG_PATTERN} from '../api/urls';
+import { FORUM_IMG_PATTERN } from '../api/urls';
 
 // 忽略的元素className
 const ignoreNodeClass = ['t_attach', 'imgtitle', 'attach_popup'];
@@ -33,9 +33,9 @@ export class PostContent extends React.Component {
     if (!node.attribs) {
       return node;
     }
-    const {name} = node;
+    const { name } = node;
     if (name === 'img' && node.attribs.src.match(imgNonePattern)) {
-      node.attribs = {...(node.attribs || {}), src: node.attribs.file};
+      node.attribs = { ...(node.attribs || {}), src: node.attribs.file };
       return node;
       // eslint-disable-next-line no-script-url
     } else if (name === 'a' && node.attribs.href === 'javascript:;') {

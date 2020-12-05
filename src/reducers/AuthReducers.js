@@ -1,4 +1,4 @@
-import {Auth} from '../actions/types';
+import { Auth } from '../actions/types';
 
 const INITIAL_STATE = {
   loginUsername: '',
@@ -10,9 +10,9 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case Auth.LOGIN_MODAL_POPUP:
-      return {...state, modalVisible: true};
+      return { ...state, modalVisible: true };
     case Auth.LOGIN_MODAL_HIDE:
-      return {...state, modalVisible: false};
+      return { ...state, modalVisible: false };
     case Auth.USERNAME_CHANGED:
       return {
         ...state,
@@ -36,6 +36,6 @@ export default (state = INITIAL_STATE, action) => {
         user: action.payload,
       };
     default:
-      return {...state};
+      return { ...state };
   }
 };

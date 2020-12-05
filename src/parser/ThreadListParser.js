@@ -1,11 +1,11 @@
 import cheerio from 'cheerio-without-node-native';
 import axios from 'axios';
-import {getThreadListUrl} from '../api/urls';
-import {readBlobHtml} from '../utils/reader';
+import { getThreadListUrl } from '../api/urls';
+import { readBlobHtml } from '../utils/reader';
 
 // 帖子列表
 const parseThreadList = (html) => {
-  const $ = cheerio.load(html, {decodeEntities: false});
+  const $ = cheerio.load(html, { decodeEntities: false });
   let threadList = [];
   let spanID, span;
   $('.threadlist tbody').each(function (i, elem) {

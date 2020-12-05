@@ -1,7 +1,7 @@
 import React from 'react';
-import {PostContent} from './PostContent';
-import {getAvatarUrl} from '../api/urls';
-import {Image, View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import { PostContent } from './PostContent';
+import { getAvatarUrl } from '../api/urls';
+import { Image, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Theme from '../Theme';
 
 export default class PostListItem extends React.Component {
@@ -10,20 +10,22 @@ export default class PostListItem extends React.Component {
   }
 
   render() {
-    const {post} = this.props;
+    const { post } = this.props;
     return (
       <View style={styles.itemContainer}>
         <View style={styles.itemHeaderWrapper}>
           <TouchableOpacity style={styles.itemLeftHeaderContainer}>
             <Image
-              source={{uri: getAvatarUrl(post.author.uid)}}
+              source={{ uri: getAvatarUrl(post.author.uid) }}
               style={styles.avatar}
             />
             <Text style={styles.text}>{post.author.name}</Text>
           </TouchableOpacity>
           <View style={styles.itemRightHeaderContainer}>
             <Text>{post.posttime}</Text>
-            <Text style={{marginLeft: Theme.spacing.tiny}}>{post.postno}</Text>
+            <Text style={{ marginLeft: Theme.spacing.tiny }}>
+              {post.postno}
+            </Text>
           </View>
         </View>
         {post.content ? (

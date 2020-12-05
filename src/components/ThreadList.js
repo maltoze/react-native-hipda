@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {getAvatarUrl} from '../api/urls';
-import {fetchThreadList} from '../parser/ThreadListParser';
+import { getAvatarUrl } from '../api/urls';
+import { fetchThreadList } from '../parser/ThreadListParser';
 import LoginModal from './LoginModal';
 import Theme from '../Theme';
 import ListDivider from './ListDivider';
@@ -53,20 +53,20 @@ class ThreadList extends React.PureComponent {
     } catch (error) {
       console.error(error);
       // TODO 请检查网络连接
-      this.setState({refreshing: false, isInitialLoading: false});
+      this.setState({ refreshing: false, isInitialLoading: false });
     }
   }
 
   _keyExtractor = (item, index) => index.toString();
 
-  _renderItem = ({item}) => {
+  _renderItem = ({ item }) => {
     return (
-      <View style={styles.threadView}>
+      <View style={styles.threadContainer}>
         <TouchableOpacity>
           <View>
             <Image
-              source={{uri: getAvatarUrl(item.author.uid)}}
-              style={{width: 38, height: 38, borderRadius: 3}}
+              source={{ uri: getAvatarUrl(item.author.uid) }}
+              style={styles.avatarImg}
             />
           </View>
         </TouchableOpacity>
@@ -77,8 +77,8 @@ class ThreadList extends React.PureComponent {
               subject: item.name,
             })
           }>
-          <View style={{marginLeft: 10, flex: 1}}>
-            <Text style={{color: 'black'}}>{item.author.name}</Text>
+          <View style={styles.threadView}>
+            <Text style={styles.threadAuthorText}>{item.author.name}</Text>
             <Text>{item.date}</Text>
             <Text style={styles.threadText}>{item.name}</Text>
           </View>
@@ -113,7 +113,7 @@ class ThreadList extends React.PureComponent {
   );
 
   render() {
-    const {isInitialLoading} = this.state;
+    const { isInitialLoading } = this.state;
     return (
       <View style={styles.container}>
         <LoginModal />
@@ -130,9 +130,16 @@ const styles = StyleSheet.create({
     ...Theme.typography.body,
     lineHeight: 23,
   },
-  threadView: {
+  threadContainer: {
     flexDirection: 'row',
     padding: Theme.spacing.tiny,
+  },
+  threadView: {
+    marginLeft: 10,
+    flex: 1,
+  },
+  threadAuthorText: {
+    color: 'black',
   },
   flatList: {
     backgroundColor: 'white',
@@ -140,6 +147,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  avatarImg: {
+    width: 38,
+    height: 38,
+    borderRadius: 3,
   },
 });
 

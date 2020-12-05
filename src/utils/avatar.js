@@ -1,4 +1,4 @@
-export const getAvatarUri = uid => {
+export const getAvatarUri = (uid) => {
   var base_url = 'http://www.hi-pda.com/forum/uc_server/data/avatar/';
   var uid = new Array(9 - uid.length + 1).join('0') + uid;
   var str = [

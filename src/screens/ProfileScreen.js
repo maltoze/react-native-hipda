@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, StatusBar, StyleSheet} from 'react-native';
-import {connect} from 'react-redux';
+import { View, Text, StatusBar, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import Theme from '../Theme';
 
 class ProfileScreen extends React.Component {
@@ -24,5 +24,5 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({auth: {user}}) => ({user});
+const mapStateToProps = ({ auth: { user } }) => ({ user });
 export default connect(mapStateToProps)(ProfileScreen);
