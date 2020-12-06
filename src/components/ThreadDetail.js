@@ -3,7 +3,7 @@ import { View, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { fetchThreadDetail } from '../parser/ThreadDetailParser';
 import Theme from '../Theme';
 import { FooterEnd, FooterLoading } from './Footer';
-import ListDivider from './ListDivider';
+import Divider from './HiDivider';
 import PostListItem from './PostListItem';
 
 const initialPostNum = 27;
@@ -47,11 +47,11 @@ export default class ThreadDetail extends React.Component {
   };
 
   async fetchFirstPage(tid) {
+    const data = await fetchThreadDetail(tid);
+    this.totalPages = data.totalPages;
     if (!this.mounted) {
       return;
     }
-    const data = await fetchThreadDetail(tid);
-    this.totalPages = data.totalPages;
     this.setState({
       postList: data.postList,
       isInitialLoading: false,
@@ -99,7 +99,7 @@ export default class ThreadDetail extends React.Component {
         style={styles.flatList}
         keyExtractor={this._keyExtractor}
         initialNumToRender={initialPostNum}
-        ItemSeparatorComponent={ListDivider}
+        ItemSeparatorComponent={Divider}
         ListFooterComponent={this.renderListFooter}
         onEndReached={this.onListEndReached}
         onEndReachedThreshold={7}

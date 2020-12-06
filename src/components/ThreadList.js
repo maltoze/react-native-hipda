@@ -12,9 +12,8 @@ import {
 } from 'react-native';
 import { getAvatarUrl } from '../api/urls';
 import { fetchThreadList } from '../parser/ThreadListParser';
-import LoginModal from './LoginModal';
 import Theme from '../Theme';
-import ListDivider from './ListDivider';
+import Divider from './HiDivider';
 
 class ThreadList extends React.PureComponent {
   constructor(props) {
@@ -25,10 +24,6 @@ class ThreadList extends React.PureComponent {
     tList: [],
     isInitialLoading: true,
     refreshing: false,
-  };
-
-  static defaultProps = {
-    // fid: 7
   };
 
   static propTypes = {
@@ -100,7 +95,7 @@ class ThreadList extends React.PureComponent {
         keyExtractor={this._keyExtractor}
         onRefresh={this.onRefresh}
         refreshing={this.state.refreshing}
-        ItemSeparatorComponent={ListDivider}
+        ItemSeparatorComponent={Divider}
       />
     );
   };
@@ -116,7 +111,6 @@ class ThreadList extends React.PureComponent {
     const { isInitialLoading } = this.state;
     return (
       <View style={styles.container}>
-        <LoginModal />
         {isInitialLoading
           ? this.renderLoadingIndicator()
           : this.renderThreadList()}
@@ -149,8 +143,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   avatarImg: {
-    width: 38,
-    height: 38,
+    width: Theme.specifications.iconSize,
+    height: Theme.specifications.iconSize,
     borderRadius: 3,
   },
 });

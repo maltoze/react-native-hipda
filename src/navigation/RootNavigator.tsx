@@ -3,20 +3,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ThreadDetailScreen from '../screens/ThreadDetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeDrawerScreen';
-import { stGetUser } from '../utils/storage';
 import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createStackNavigator();
 
 export default function RootNavigator() {
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const bootstrapAsync = async () => {
-      await stGetUser();
-      setIsLoading(false);
-    };
-    bootstrapAsync();
-  });
+    setIsLoading(false);
+  }, []);
 
   if (isLoading) {
     return <SplashScreen />;

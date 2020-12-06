@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Theme from '../Theme';
-import ListDivider from './ListDivider';
+import Divider from './HiDivider';
 
 export class FooterEnd extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ListDivider />
+        <Divider />
         <Text style={styles.text} selectable={true}>
           全部加载完成
         </Text>
@@ -20,7 +20,7 @@ export class FooterLoading extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ListDivider />
+        <Divider />
         <Text style={styles.text}>加载中...</Text>
       </View>
     );

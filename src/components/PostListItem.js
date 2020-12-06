@@ -4,11 +4,7 @@ import { getAvatarUrl } from '../api/urls';
 import { Image, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Theme from '../Theme';
 
-export default class PostListItem extends React.Component {
-  shouldComponentUpdate() {
-    return false;
-  }
-
+export default class PostListItem extends React.PureComponent {
   render() {
     const { post } = this.props;
     return (
@@ -46,8 +42,8 @@ const styles = StyleSheet.create({
     padding: Theme.spacing.tiny,
   },
   avatar: {
-    width: Theme.specifications.largeIconSize,
-    height: Theme.specifications.largeIconSize,
+    width: Theme.specifications.iconSize,
+    height: Theme.specifications.iconSize,
     borderRadius: 3,
   },
   itemHeaderWrapper: {

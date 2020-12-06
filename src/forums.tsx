@@ -12,17 +12,19 @@ type ForumDeclaration = {
   name: string;
   fid: number;
   icon: (props: IconProps) => React.ReactNode;
+  needLogin?: boolean;
 };
 
-export type ForumId = 'Discovery' | 'Geek' | 'Palm';
+export type Forum = 'Discovery' | 'Geek' | 'Palm';
 
-const forums: Record<ForumId, ForumDeclaration> = {
+const forums: Record<Forum, ForumDeclaration> = {
   Discovery: {
     name: 'Discovery',
     fid: 2,
     icon: ({ size, color }: IconProps) => (
       <FontAwesomeIcon name="cc-discover" size={size! - 5} color={color} />
     ),
+    needLogin: true,
   },
   Geek: {
     name: 'Geek Talks',

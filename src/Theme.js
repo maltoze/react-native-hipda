@@ -10,14 +10,14 @@ Theme.spacing = {
   tiny: 8,
   small: 16,
   base: 24,
-  large: 48,
+  large: 52,
   xLarge: 64,
 };
 
 Theme.specifications = {
   smallIconSize: 20,
-  iconSize: 30,
-  largeIconSize: 36,
+  iconSize: 40,
+  largeIconSize: 54,
   hugeIconSize: 120,
 
   activityIndicatorSize: Config.isAndroid ? 60 : 'large',
