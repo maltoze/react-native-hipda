@@ -1,7 +1,6 @@
 import cheerio from 'cheerio-without-node-native';
-import axios from 'axios';
-import { getThreadListUrl } from '../api/urls';
 import { readBlobHtml } from '../utils/reader';
+import { fetchThreadList } from '../api/thread';
 
 // 帖子列表
 const parseThreadList = (html) => {
@@ -45,17 +44,8 @@ const parseThreadList = (html) => {
   return threadList;
 };
 
-export const fetchThreadList = async (fid) => {
-  const resp = await axios({
-    method: 'get',
-    url: getThreadListUrl(fid),
-    // url: getLatestPostUrl(),
-    responseType: 'blob',
-    withCredentials: true,
-    // headers: {
-    //   'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36',
-    // },
-  });
+export const getThreadList = async (fid) => {
+  const resp = await fetchThreadList(fid);
   const data = await readBlobHtml(resp.data);
   return parseThreadList(data);
 };

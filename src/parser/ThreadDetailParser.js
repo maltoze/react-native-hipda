@@ -1,7 +1,6 @@
-import { getThreadDetailUrl } from '../api/urls';
 import cheerio from 'cheerio-without-node-native';
-import axios from 'axios';
 import { readBlobHtml } from '../utils/reader';
+import { fetchThreadDetail } from '../api/thread';
 
 const parseThreadDetail = (html) => {
   const $ = cheerio.load(html);
@@ -34,19 +33,10 @@ const parseThreadDetail = (html) => {
   }
   const postObj = { postList: postList, totalPages: totalPages };
   return postObj;
-  // return postList;
 };
 
-export const fetchThreadDetail = async (tid, page = 1) => {
-  const resp = await axios({
-    method: 'get',
-    url: getThreadDetailUrl(tid, page),
-    // 带上cookie
-    withCredentials: true,
-    // 中文乱码处理
-    responseType: 'blob',
-  });
-
+export const getThreadDetail = async (tid, page = 1) => {
+  const resp = await fetchThreadDetail(tid, page);
   const data = await readBlobHtml(resp.data);
   return parseThreadDetail(data);
 };

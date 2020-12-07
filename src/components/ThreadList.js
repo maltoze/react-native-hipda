@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { getAvatarUrl } from '../api/urls';
-import { fetchThreadList } from '../parser/ThreadListParser';
+import { getThreadList } from '../parser/ThreadListParser';
 import Theme from '../Theme';
 import Divider from './HiDivider';
 
@@ -39,7 +39,7 @@ class ThreadList extends React.PureComponent {
       refreshing: true,
     });
     try {
-      const data = await fetchThreadList(fid);
+      const data = await getThreadList(fid);
       this.setState({
         tList: data,
         isInitialLoading: false,
