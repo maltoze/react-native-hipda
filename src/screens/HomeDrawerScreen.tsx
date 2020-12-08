@@ -1,31 +1,42 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerNavigationProp,
+} from '@react-navigation/drawer';
 import HiDrawerContent from '../components/HiDrawerContent';
-import forums, { Forum } from '../forums';
 import ThreadListScreen from './ThreadListScreen';
+import { Appbar } from 'react-native-paper';
 
 const Drawer = createDrawerNavigator();
+const defaultForum = 'Geek';
 
 export default function HomeScreen() {
   return (
     <Drawer.Navigator
-      screenOptions={{ headerShown: true }}
+      screenOptions={{
+        headerShown: true,
+        header: ({ scene }) => {
+          const { options, navigation } = scene.descriptor;
+          return (
+            <Appbar.Header>
+              <Appbar.Action
+                icon="menu"
+                onPress={() =>
+                  ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
+                }
+              />
+              <Appbar.Content title={options.title} />
+            </Appbar.Header>
+          );
+        },
+      }}
       drawerContent={(props) => <HiDrawerContent {...props} />}>
-      {(Object.keys(forums) as Forum[]).map((forum) => {
-        return (
-          <Drawer.Screen
-            key={forums[forum].name}
-            name={forum}
-            initialParams={{ forum }}
-            component={ThreadListScreen}
-            options={{
-              drawerIcon: ({ size, color }) =>
-                forums[forum].icon({ size, color }),
-              title: forums[forum].name,
-            }}
-          />
-        );
-      })}
+      <Drawer.Screen
+        name="Home"
+        component={ThreadListScreen}
+        initialParams={{ forum: defaultForum }}
+        options={{ title: 'Home' }}
+      />
     </Drawer.Navigator>
   );
 }

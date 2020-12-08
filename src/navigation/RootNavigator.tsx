@@ -1,25 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import ThreadDetailScreen from '../screens/ThreadDetailScreen';
+import React from 'react';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { Appbar } from 'react-native-paper';
 import ProfileScreen from '../screens/ProfileScreen';
+import ThreadDetailScreen from '../screens/ThreadDetailScreen';
 import HomeScreen from '../screens/HomeDrawerScreen';
-import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createStackNavigator();
 
 export default function RootNavigator() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
-  if (isLoading) {
-    return <SplashScreen />;
-  }
-
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator
+      initialRouteName="Home"
+      headerMode="screen"
+      screenOptions={{
+        header: ({ navigation, scene, previous }) => {
+          const { options } = scene.descriptor;
+          return (
+            <Appbar.Header>
+              {previous ? (
+                <Appbar.BackAction onPress={() => navigation.goBack()} />
+              ) : (navigation as any).openDrawer ? (
+                <Appbar.Action
+                  icon="menu"
+                  onPress={() =>
+                    ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
+                  }
+                />
+              ) : null}
+              <Appbar.Content title={options.title} />
+            </Appbar.Header>
+          );
+        },
+      }}>
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -33,6 +49,7 @@ export default function RootNavigator() {
           return {
             gestureEnabled: true,
             title: subject,
+            ...TransitionPresets.SlideFromRightIOS,
           };
         }}
       />

@@ -1,14 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { Avatar } from 'react-native-paper';
+import { Avatar, Drawer } from 'react-native-paper';
 import {
-  DrawerItemList,
-  DrawerContentScrollView,
   DrawerContentComponentProps,
+  DrawerContentScrollView,
 } from '@react-navigation/drawer';
 import Theme from '../Theme';
 import { getAvatarUrl } from '../api/urls';
-import Divider from './HiDivider';
 import { useSetLoginModalVisible, useUser } from '../state/store';
 import navigate from '../navigation/navigate';
 
@@ -57,13 +55,13 @@ export default function HiDrawerContent(
   };
 
   return (
-    <View style={styles.container}>
-      {user.isGuest ? renderDefaultHeader() : renderHeader()}
-      <Divider />
-      <DrawerContentScrollView>
-        <DrawerItemList {...props} labelStyle={styles.drawerLabel} />
-      </DrawerContentScrollView>
-    </View>
+    <DrawerContentScrollView {...props}>
+      <View style={styles.container}>
+        <Drawer.Section>
+          {user.isGuest ? renderDefaultHeader() : renderHeader()}
+        </Drawer.Section>
+      </View>
+    </DrawerContentScrollView>
   );
 }
 
