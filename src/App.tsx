@@ -6,15 +6,18 @@ import { StatusBar } from 'expo-status-bar';
 
 import Navigation from './navigation';
 import LoginModal from './components/LoginModal';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 enableScreens();
 
 export default function App() {
   return (
     <PaperProvider>
-      <Navigation />
-      <LoginModal />
-      <StatusBar />
+      <SafeAreaProvider>
+        <Navigation />
+        <LoginModal />
+        <StatusBar />
+      </SafeAreaProvider>
     </PaperProvider>
   );
 }

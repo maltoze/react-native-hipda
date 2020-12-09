@@ -17,10 +17,10 @@ export default function RootNavigator() {
       initialRouteName="Home"
       headerMode="screen"
       screenOptions={{
-        header: ({ navigation, scene, previous }) => {
+        header: ({ navigation, scene, previous, insets }) => {
           const { options } = scene.descriptor;
           return (
-            <Appbar.Header>
+            <Appbar.Header statusBarHeight={insets.top}>
               {previous ? (
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
               ) : (navigation as any).openDrawer ? (

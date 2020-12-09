@@ -3,14 +3,16 @@ import {
   createDrawerNavigator,
   DrawerNavigationProp,
 } from '@react-navigation/drawer';
+import { Appbar } from 'react-native-paper';
 import HiDrawerContent from '../components/HiDrawerContent';
 import ThreadListScreen from './ThreadListScreen';
-import { Appbar } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Drawer = createDrawerNavigator();
 const defaultForum = 'Geek';
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -18,7 +20,7 @@ export default function HomeScreen() {
         header: ({ scene }) => {
           const { options, navigation } = scene.descriptor;
           return (
-            <Appbar.Header>
+            <Appbar.Header statusBarHeight={insets.top}>
               <Appbar.Action
                 icon="menu"
                 onPress={() =>
