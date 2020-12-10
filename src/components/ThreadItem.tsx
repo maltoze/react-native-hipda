@@ -4,14 +4,13 @@ import {
   Avatar,
   Caption,
   Subheading,
-  Surface,
   Text,
   TouchableRipple,
 } from 'react-native-paper';
 import { getAvatarUrl } from '../api/urls';
-import { ThreadItem } from '../types';
+import { ThreadItemProp } from '../types';
 
-interface ThreadProps extends ThreadItem {
+interface ThreadProps extends ThreadItemProp {
   onPress?: () => void;
 }
 
@@ -19,7 +18,7 @@ export function Thread(props: ThreadProps) {
   const { onPress, author, title, date } = props;
   return (
     <TouchableRipple onPress={onPress}>
-      <Surface style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.upContainer}>
           <Avatar.Image
             source={{ uri: getAvatarUrl(author.uid) }}
@@ -34,7 +33,7 @@ export function Thread(props: ThreadProps) {
         <View>
           <Subheading>{title}</Subheading>
         </View>
-      </Surface>
+      </View>
     </TouchableRipple>
   );
 }

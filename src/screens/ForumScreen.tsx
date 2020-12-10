@@ -3,14 +3,15 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { getThreadList } from '../parser/ThreadListParser';
-import { ForumActionTypes, ThreadItem } from '../types';
+import { ForumActionTypes, ThreadItemProp } from '../types';
 import forums, { Forum } from '../forums';
-import Thread from '../components/Thread';
+import ThreadItem from '../components/ThreadItem';
 import useCancelToken from '../hooks/useCancelToken';
 import useMounted from '../hooks/useMounted';
+import HiDivider from '../components/HiDivider';
 
 type State = {
-  threads: ThreadItem[];
+  threads: ThreadItemProp[];
   page?: number;
   isLoading?: boolean;
   refreshing?: boolean;
@@ -34,7 +35,7 @@ function forumReducer(state: State, action: Action) {
     case ForumActionTypes.FETCH_FORUM:
       const threads = payload ? payload.threads : [];
       const toAdd = threads.filter(
-        (r: ThreadItem) => !state.threads.find((s) => s.tid === r.tid),
+        (r: ThreadItemProp) => !state.threads.find((s) => s.tid === r.tid),
       );
       return {
         ...state,
@@ -58,14 +59,14 @@ function forumReducer(state: State, action: Action) {
   }
 }
 
-function keyExtractor(item: ThreadItem) {
+function keyExtractor(item: ThreadItemProp) {
   return item.tid.toString();
 }
 
-type ThreadProp = React.ComponentProps<typeof Thread>;
+type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
 function renderItem({ item }: { item: ThreadProp }) {
-  return <Thread {...item} />;
+  return <ThreadItem {...item} />;
 }
 
 export default function ForumScreen({
@@ -141,10 +142,11 @@ export default function ForumScreen({
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           onEndReached={handleOnLoad}
-          onEndReachedThreshold={0.2}
-          ItemSeparatorComponent={React.memo(() => (
-            <View style={{ height: StyleSheet.hairlineWidth }} />
-          ))}
+          onEndReachedThreshold={0.5}
+          maxToRenderPerBatch={50}
+          initialNumToRender={20}
+          windowSize={61}
+          ItemSeparatorComponent={HiDivider}
         />
       )}
     </View>

@@ -3,7 +3,7 @@ export type User = {
   uid: number;
 };
 
-export type ThreadItem = {
+export type ThreadItemProp = {
   title: string;
   tid: number;
   author: User;
