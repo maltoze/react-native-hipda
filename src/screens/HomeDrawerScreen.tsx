@@ -5,8 +5,8 @@ import {
 } from '@react-navigation/drawer';
 import { Appbar } from 'react-native-paper';
 import HiDrawerContent from '../components/HiDrawerContent';
-import ThreadListScreen from './ThreadListScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ForumScreen from './ForumScreen';
 
 const Drawer = createDrawerNavigator();
 const defaultForum = 'Geek';
@@ -35,7 +35,7 @@ export default function HomeScreen() {
       drawerContent={(props) => <HiDrawerContent {...props} />}>
       <Drawer.Screen
         name="Home"
-        component={ThreadListScreen}
+        component={ForumScreen}
         initialParams={{ forum: defaultForum }}
         options={{ title: 'Home' }}
       />
