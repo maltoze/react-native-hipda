@@ -35,8 +35,8 @@ const parseThreadDetail = (html) => {
   return postObj;
 };
 
-export const getThreadDetail = async (tid, page = 1) => {
-  const resp = await fetchThreadDetail(tid, page);
+export const getThreadDetail = async (args) => {
+  const resp = await fetchThreadDetail({ ...args });
   const data = await readBlobHtml(resp.data);
   return parseThreadDetail(data);
 };

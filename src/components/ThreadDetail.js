@@ -47,7 +47,7 @@ export default class ThreadDetail extends React.Component {
   };
 
   async fetchFirstPage(tid) {
-    const data = await getThreadDetail(tid);
+    const data = await getThreadDetail({ tid });
     this.totalPages = data.totalPages;
     if (!this.mounted) {
       return;
@@ -71,7 +71,7 @@ export default class ThreadDetail extends React.Component {
     }
     this.setState({ isPaginationLoading: true });
     const { postList: postListBeforeFetch } = this.state;
-    const data = await getThreadDetail(tid, this.page + 1);
+    const data = await getThreadDetail({ tid, page: this.page + 1 });
     const postProps = {};
     const { postList } = this.state;
     if (postList === postListBeforeFetch) {
