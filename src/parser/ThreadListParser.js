@@ -4,6 +4,9 @@ import { fetchThreadList } from '../api/thread';
 
 // 帖子列表
 const parseThreadList = (html) => {
+  if (!html) {
+    return [];
+  }
   const $ = cheerio.load(html, { decodeEntities: false });
   let threadList = [];
   let spanID, span;
@@ -13,7 +16,7 @@ const parseThreadList = (html) => {
     try {
       if (spanID && spanID.match(/thread_\d+/)) {
         threadList.push({
-          name: span.text(),
+          title: span.text(),
           tid: span
             .children('a')
             .attr('href')
@@ -30,7 +33,7 @@ const parseThreadList = (html) => {
               : '0',
           },
           date: $(this).find('.author em').text().trim(),
-          nums: $(this).find('.nums strong').text().trim(),
+          nums: $(this).find('.nums').text().trim(),
           lastpost: {
             author: $(this).find('.lastpost cite').text().trim(),
             date: $(this).find('.lastpost em').text().trim(),
@@ -44,8 +47,8 @@ const parseThreadList = (html) => {
   return threadList;
 };
 
-export const getThreadList = async (fid) => {
-  const resp = await fetchThreadList(fid);
-  const data = await readBlobHtml(resp.data);
+export const getThreadList = async (args) => {
+  const resp = await fetchThreadList({ ...args });
+  const data = resp && (await readBlobHtml(resp.data));
   return parseThreadList(data);
 };

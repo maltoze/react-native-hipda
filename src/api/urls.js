@@ -8,8 +8,8 @@ const AVATAR_BASE = '000000000';
 export const LOGIN_SUBMIT =
   BASE_URL + 'logging.php?action=login&loginsubmit=yes&inajax=1';
 
-export const getThreadListUrl = (fid) => {
-  return BASE_URL + 'forumdisplay.php?fid=' + fid;
+export const getThreadListUrl = (fid, page = 1) => {
+  return `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}`;
 };
 
 export const getThreadDetailUrl = (tid, page = 1) => {

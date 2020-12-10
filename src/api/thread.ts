@@ -1,22 +1,28 @@
-import axios from 'axios';
+import { CancelToken } from 'axios';
+import { axiosGet } from './axios';
 import { getThreadDetailUrl, getThreadListUrl } from './urls';
 
-export const fetchThreadDetail = async (tid: any, page: number | undefined) => {
-  const resp = await axios({
-    method: 'get',
-    url: getThreadDetailUrl(tid, page),
-    withCredentials: true,
-    responseType: 'blob',
-  });
-  return resp;
+type ThreadReqBaseArgs = {
+  page?: number;
+  cancelToken: CancelToken;
 };
 
-export const fetchThreadList = async (fid: number) => {
-  const resp = await axios({
-    method: 'get',
-    url: getThreadListUrl(fid),
-    responseType: 'blob',
-    withCredentials: true,
-  });
-  return resp;
+interface ThreadDetailArgs extends ThreadReqBaseArgs {
+  tid: number;
+}
+
+interface ThreadListArgs extends ThreadReqBaseArgs {
+  fid: number;
+}
+
+export const fetchThreadDetail = async (args: ThreadDetailArgs) => {
+  const { tid, page, cancelToken } = args;
+  const url = getThreadDetailUrl(tid, page);
+  return await axiosGet(url, cancelToken);
+};
+
+export const fetchThreadList = async (args: ThreadListArgs) => {
+  const { fid, page, cancelToken } = args;
+  const url = getThreadListUrl(fid, page);
+  return await axiosGet(url, cancelToken);
 };
