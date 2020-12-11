@@ -15,14 +15,14 @@ interface ThreadListArgs extends ThreadReqBaseArgs {
   fid: number;
 }
 
-export const fetchThreadDetail = async (args: ThreadDetailArgs) => {
+export const fetchThreadDetail = (args: ThreadDetailArgs) => {
   const { tid, page, cancelToken } = args;
   const url = getThreadDetailUrl(tid, page);
-  return await axiosGet(url, cancelToken);
+  return axiosGet(url, cancelToken);
 };
 
-export const fetchThreadList = async (args: ThreadListArgs) => {
+export const fetchThreadList = (args: ThreadListArgs) => {
   const { fid, page, cancelToken } = args;
   const url = getThreadListUrl(fid, page);
-  return await axiosGet(url, cancelToken);
+  return axiosGet(url, cancelToken);
 };
