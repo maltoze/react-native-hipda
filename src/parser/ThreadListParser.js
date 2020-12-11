@@ -33,7 +33,7 @@ const parseThreadList = (html) => {
               : '0',
           },
           date: $(this).find('.author em').text().trim(),
-          nums: $(this).find('.nums').text().trim(),
+          comments: $(this).find('.nums strong').text().trim(),
           lastpost: {
             author: $(this).find('.lastpost cite').text().trim(),
             date: $(this).find('.lastpost em').text().trim(),

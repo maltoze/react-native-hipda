@@ -3,12 +3,12 @@ export type User = {
   uid: number;
 };
 
-export type ThreadItemProp = {
+export type ThreadItemProps = {
   title: string;
   tid: number;
   author: User;
   date: string;
-  nums: string;
+  comments: number;
 };
 
 export enum ForumActionTypes {

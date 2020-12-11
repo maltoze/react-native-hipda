@@ -1,17 +1,17 @@
 import React, { useEffect, useReducer } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { getThreadList } from '../parser/ThreadListParser';
-import { ForumActionTypes, ThreadItemProp } from '../types';
+import { ForumActionTypes, ThreadItemProps } from '../types';
 import forums, { Forum } from '../forums';
 import ThreadItem from '../components/ThreadItem';
 import useCancelToken from '../hooks/useCancelToken';
 import useMounted from '../hooks/useMounted';
-import HiDivider from '../components/HiDivider';
+import FlatListBase from '../components/FlatListBase';
 
 type State = {
-  threads: ThreadItemProp[];
+  threads: ThreadItemProps[];
   page?: number;
   isLoading?: boolean;
   refreshing?: boolean;
@@ -21,6 +21,8 @@ type Action = {
   type: ForumActionTypes;
   payload?: State;
 };
+
+type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
 const initialState = {
   threads: [],
@@ -35,7 +37,7 @@ function forumReducer(state: State, action: Action) {
     case ForumActionTypes.FETCH_FORUM:
       const threads = payload ? payload.threads : [];
       const toAdd = threads.filter(
-        (r: ThreadItemProp) => !state.threads.find((s) => s.tid === r.tid),
+        (r: ThreadItemProps) => !state.threads.find((s) => s.tid === r.tid),
       );
       return {
         ...state,
@@ -59,17 +61,15 @@ function forumReducer(state: State, action: Action) {
   }
 }
 
-function keyExtractor(item: ThreadItemProp) {
-  return item.tid.toString();
-}
-
-type ThreadProp = React.ComponentProps<typeof ThreadItem>;
-
 function renderItem({ item }: { item: ThreadProp }) {
   return <ThreadItem {...item} />;
 }
 
-export default function ForumScreen({
+function keyExtractor(item: ThreadItemProps) {
+  return item.tid.toString();
+}
+
+export default function ThreadScreen({
   navigation,
   route,
 }: DrawerScreenProps<any>) {
@@ -124,7 +124,7 @@ export default function ForumScreen({
       {isLoading && !page ? (
         <ActivityIndicator size="large" style={styles.container} />
       ) : (
-        <FlatList
+        <FlatListBase
           data={
             threads &&
             threads.map((thread) => ({
@@ -142,11 +142,6 @@ export default function ForumScreen({
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           onEndReached={handleOnLoad}
-          onEndReachedThreshold={0.5}
-          maxToRenderPerBatch={50}
-          initialNumToRender={20}
-          windowSize={61}
-          ItemSeparatorComponent={HiDivider}
         />
       )}
     </View>

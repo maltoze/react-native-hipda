@@ -8,9 +8,9 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 import { getAvatarUrl } from '../api/urls';
-import { ThreadItemProp } from '../types';
+import { ThreadItemProps } from '../types';
 
-interface ThreadProps extends ThreadItemProp {
+interface ThreadProps extends ThreadItemProps {
   onPress?: () => void;
 }
 
