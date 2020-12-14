@@ -142,6 +142,9 @@ export default function ThreadScreen({
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           onEndReached={handleOnLoad}
+          maxToRenderPerBatch={50}
+          initialNumToRender={20}
+          windowSize={61}
         />
       )}
     </View>

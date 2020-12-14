@@ -6,8 +6,8 @@ import {
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { Appbar } from 'react-native-paper';
 import ProfileScreen from '../screens/ProfileScreen';
-import ThreadDetailScreen from '../screens/ThreadDetailScreen';
 import HomeScreen from '../screens/HomeDrawerScreen';
+import PostScreen from '../screens/PostScreen';
 
 const Stack = createStackNavigator();
 
@@ -43,7 +43,7 @@ export default function RootNavigator() {
       />
       <Stack.Screen
         name="ThreadDetail"
-        component={ThreadDetailScreen}
+        component={PostScreen}
         options={({ route }) => {
           const { subject } = route.params as any;
           return {

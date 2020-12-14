@@ -3,11 +3,16 @@ import { readBlobHtml } from '../utils/reader';
 import { fetchThreadDetail } from '../api/thread';
 
 const parseThreadDetail = (html) => {
+  if (!html) {
+    return { postList: [] };
+  }
   const $ = cheerio.load(html);
   let postList = [];
   $('#postlist')
     .children()
     .each(function (_i, _elem) {
+      const postAttachListHtml = $(this).find('.postattachlist').html();
+      const tMsgFontHtml = $(this).find('.t_msgfont').html();
       postList.push({
         postno: $(this).find('.postinfo strong a em').text(),
         author: {
@@ -19,10 +24,12 @@ const parseThreadDetail = (html) => {
             .match(/\d+$/)[0],
         },
         // content: cheerio.html($(this).find(".postmessage"), {
-        //   decodeEntities: false,gT
-        //   normalizeWhitespacea: true,
+        //   decodeEntities: false,
+        //   normalizeWhitespace: true,
         // }),
-        content: $(this).find('.t_msgfont').html(),
+        content: postAttachListHtml
+          ? postAttachListHtml + tMsgFontHtml
+          : tMsgFontHtml,
         posttime: $(this).find('.authorinfo em').text().slice(4),
       });
     });
@@ -37,6 +44,6 @@ const parseThreadDetail = (html) => {
 
 export const getThreadDetail = async (args) => {
   const resp = await fetchThreadDetail({ ...args });
-  const data = await readBlobHtml(resp.data);
+  const data = resp && (await readBlobHtml(resp.data));
   return parseThreadDetail(data);
 };

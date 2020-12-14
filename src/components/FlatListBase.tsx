@@ -6,9 +6,6 @@ const FlatListBase = React.memo((props: FlatListProps<any>) => {
   return (
     <FlatList
       onEndReachedThreshold={1}
-      maxToRenderPerBatch={50}
-      initialNumToRender={20}
-      windowSize={61}
       ItemSeparatorComponent={HiDivider}
       {...props}
     />

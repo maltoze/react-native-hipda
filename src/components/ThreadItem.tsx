@@ -14,7 +14,7 @@ interface ThreadProps extends ThreadItemProps {
   onPress?: () => void;
 }
 
-export function Thread(props: ThreadProps) {
+function Thread(props: ThreadProps) {
   const { onPress, author, title, date } = props;
   return (
     <TouchableRipple onPress={onPress}>
