@@ -28,7 +28,7 @@ const parseThreadDetail = (html) => {
         //   normalizeWhitespace: true,
         // }),
         content: postAttachListHtml
-          ? postAttachListHtml + tMsgFontHtml
+          ? tMsgFontHtml + postAttachListHtml
           : tMsgFontHtml,
         posttime: $(this).find('.authorinfo em').text().slice(4),
       });
