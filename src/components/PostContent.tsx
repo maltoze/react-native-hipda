@@ -47,9 +47,9 @@ export const PostContent = React.memo((props: any) => {
       // textAlign not work on Android
       textAlign: 'center',
       fontStyle: 'normal',
+      letterSpacing: 0,
     },
   };
-  const tagsStyles = {};
   return (
     <HTML
       source={{ html }}
@@ -58,7 +58,6 @@ export const PostContent = React.memo((props: any) => {
       alterNode={alterNode}
       baseFontStyle={styles.baseFontStyle}
       classesStyles={classesStyles}
-      tagsStyles={tagsStyles}
     />
   );
 });
@@ -66,7 +65,6 @@ export const PostContent = React.memo((props: any) => {
 const styles = StyleSheet.create({
   baseFontStyle: {
     fontSize: 16,
-    fontFamily: 'sans-serif',
     lineHeight: 24,
     letterSpacing: 0.5,
   },

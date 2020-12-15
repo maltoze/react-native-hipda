@@ -23,7 +23,7 @@ export default function HiDrawerContent(
       navigation.closeDrawer();
       setLoginModalVisible(true);
     } else {
-      navigator.openProfile();
+      navigator.openProfile({ user });
     }
   };
 
@@ -45,7 +45,7 @@ export default function HiDrawerContent(
         <Avatar.Image
           size={Theme.specifications.largeIconSize}
           source={{
-            uri: getAvatarUrl(user.uid),
+            uri: getAvatarUrl(user.uid!),
           }}
           style={styles.avatarContainer}
         />

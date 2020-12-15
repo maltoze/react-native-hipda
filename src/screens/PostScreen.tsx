@@ -1,14 +1,15 @@
 import React, { useCallback, useReducer } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { ActivityIndicator, Title } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import FlatListBase from '../components/FlatListBase';
-import { PostActionTypes, PostItemBaseProps } from '../types';
+import { PostActionTypes, PostItemBaseProps, User } from '../types';
 import { getThreadDetail } from '../parser/ThreadDetailParser';
 import useCancelToken from '../hooks/useCancelToken';
 import useMounted from '../hooks/useMounted';
 import PostItem from '../components/PostItem';
 import { useFocusEffect } from '@react-navigation/native';
+import navigate from '../navigation/navigate';
 
 type State = {
   posts: PostItemBaseProps[];
@@ -60,6 +61,7 @@ export default function PostScreen({
   route,
 }: StackScreenProps<any>) {
   const { tid } = route.params as any;
+  const navigator = navigate(navigation);
 
   const [state, dispatch] = useReducer<React.Reducer<State, Action>>(
     postReducer,
@@ -93,7 +95,15 @@ export default function PostScreen({
         <ActivityIndicator size="large" style={styles.container} />
       ) : (
         <FlatListBase
-          data={posts}
+          data={
+            posts &&
+            posts.map((post) => ({
+              ...post,
+              onAvatarPress: (user: User) => {
+                navigator.openProfile({ user });
+              },
+            }))
+          }
           renderItem={renderItem}
           keyExtractor={(item) => item.postno.toString()}
           initialNumToRender={1}

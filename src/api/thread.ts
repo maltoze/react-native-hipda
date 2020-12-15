@@ -7,11 +7,11 @@ type ThreadReqBaseArgs = {
   cancelToken: CancelToken;
 };
 
-interface ThreadDetailArgs extends ThreadReqBaseArgs {
+export interface ThreadDetailArgs extends ThreadReqBaseArgs {
   tid: number;
 }
 
-interface ThreadListArgs extends ThreadReqBaseArgs {
+export interface ThreadListArgs extends ThreadReqBaseArgs {
   fid: number;
 }
 

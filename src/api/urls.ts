@@ -8,11 +8,11 @@ const AVATAR_BASE = '000000000';
 export const LOGIN_SUBMIT =
   BASE_URL + 'logging.php?action=login&loginsubmit=yes&inajax=1';
 
-export const getThreadListUrl = (fid, page = 1) => {
+export const getThreadListUrl = (fid: number, page = 1) => {
   return `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}`;
 };
 
-export const getThreadDetailUrl = (tid, page = 1) => {
+export const getThreadDetailUrl = (tid: number, page = 1) => {
   return BASE_URL + 'viewthread.php?tid=' + tid + '&page=' + page;
 };
 
@@ -23,9 +23,10 @@ export const getLatestPostUrl = () => {
   );
 };
 
-export const getAvatarUrl = (uid) => {
+export const getAvatarUrl = (uid: number) => {
   let avatarBaseUrl = BASE_URL + 'uc_server/data/avatar/';
-  let fullUid = new Array(AVATAR_BASE.length - uid.length + 1).join('0') + uid;
+  let fullUid =
+    new Array(AVATAR_BASE.length - uid.toString().length + 1).join('0') + uid;
   let str = [
     fullUid.substr(0, 3),
     fullUid.substr(3, 2),

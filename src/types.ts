@@ -1,6 +1,7 @@
 export type User = {
-  name: string;
-  uid: number;
+  username?: string;
+  uid?: number;
+  isGuest?: boolean;
 };
 
 export type ThreadItemProps = {
@@ -9,6 +10,7 @@ export type ThreadItemProps = {
   author: User;
   date: string;
   comments: number;
+  lastpost?: { author: string; date: string };
 };
 
 export enum ForumActionTypes {
@@ -20,7 +22,7 @@ export enum ForumActionTypes {
 
 export type PostItemBaseProps = {
   author: User;
-  content: string;
+  content: string | null;
   posttime: string;
   postno: number;
 };

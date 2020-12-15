@@ -21,12 +21,12 @@ function Thread(props: ThreadProps) {
       <View style={styles.container}>
         <View style={styles.upContainer}>
           <Avatar.Image
-            source={{ uri: getAvatarUrl(author.uid) }}
+            source={{ uri: getAvatarUrl(author.uid!) }}
             size={36}
             style={styles.avatarImg}
           />
           <View>
-            <Text>{author.name}</Text>
+            <Text>{author.username}</Text>
             <Caption>{date}</Caption>
           </View>
         </View>

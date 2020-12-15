@@ -2,9 +2,9 @@ import axios from 'axios';
 import { LOGIN_SUBMIT, BASE_URL } from './urls';
 import md5 from 'blueimp-md5';
 import qs from 'qs';
+import cheerio from 'cheerio';
 import { readBlobHtml } from '../utils/reader';
 import Config from '../Config';
-import cheerio from 'cheerio-without-node-native';
 
 export const requestToLogin = async (username, password) =>
   new Promise(async (resolve, reject) => {

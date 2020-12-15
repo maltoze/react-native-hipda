@@ -1,10 +1,10 @@
-import { NavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const openProfile = (navigation: NavigationProp<any>) => (props = {}) => {
-  navigation.navigate('Profile', props);
+const openProfile = (navigation: StackNavigationProp<any>) => (props = {}) => {
+  navigation.push('Profile', props);
 };
 
-const navigate = (navigation: NavigationProp<any>) => ({
+const navigate = (navigation: any) => ({
   openProfile: openProfile(navigation),
 });
 

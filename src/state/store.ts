@@ -1,12 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-
-type User = {
-  uid?: string;
-  username?: string;
-  isGuest?: boolean;
-};
+import { User } from '../types';
 
 type State = {
   user: User;
