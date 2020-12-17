@@ -18,6 +18,7 @@ export enum ForumActionTypes {
   REFRESH_FORUM = 'REFRESH_FORUM',
   FETCH_FORUM__SENT = 'FETCH_FORUM__SENT',
   REFRESH_FORUM__SENT = 'REFRESH_FORUM__SENT',
+  FORUM_CHANGED = 'FORUM_CHANGED',
 }
 
 export type PostItemBaseProps = {

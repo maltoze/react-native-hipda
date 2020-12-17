@@ -1,44 +1,32 @@
-import React from 'react';
-import {
-  createDrawerNavigator,
-  DrawerNavigationProp,
-} from '@react-navigation/drawer';
-import { Appbar } from 'react-native-paper';
+import React, { useCallback, useState } from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import HiDrawerContent from '../components/HiDrawerContent';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ThreadScreen from './ThreadScreen';
+import forums, { Forum } from '../forums';
+import HomeBar from '../components/HomeBar';
 
 const Drawer = createDrawerNavigator();
 const defaultForum = 'Geek';
 
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
+  const [forum, setForum] = useState<Forum>(defaultForum);
+  const setForumWithCallback = useCallback((forumId) => setForum(forumId), []);
+
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: true,
-        header: ({ scene }) => {
-          const { options, navigation } = scene.descriptor;
-          return (
-            <Appbar.Header statusBarHeight={insets.top}>
-              <Appbar.Action
-                icon="menu"
-                onPress={() =>
-                  ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
-                }
-              />
-              <Appbar.Content title={options.title} />
-            </Appbar.Header>
-          );
+        header: (props) => {
+          return <HomeBar {...props} onSetForum={setForumWithCallback} />;
         },
       }}
       drawerContent={(props) => <HiDrawerContent {...props} />}>
       <Drawer.Screen
         name="Home"
-        component={ThreadScreen}
-        initialParams={{ forum: defaultForum }}
-        options={{ title: 'Home' }}
-      />
+        initialParams={{ forum }}
+        options={{ title: forums[forum].name }}>
+        {(props) => <ThreadScreen {...props} fid={forums[forum].fid} />}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 }

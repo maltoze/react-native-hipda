@@ -1,10 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { getThreadList } from '../parser/ThreadListParser';
 import { ForumActionTypes, ThreadItemProps } from '../types';
-import forums, { Forum } from '../forums';
 import ThreadItem from '../components/ThreadItem';
 import useCancelToken from '../hooks/useCancelToken';
 import useMounted from '../hooks/useMounted';
@@ -35,7 +34,7 @@ function forumReducer(state: State, action: Action) {
   const { payload } = action;
   switch (action.type) {
     case ForumActionTypes.FETCH_FORUM:
-      const threads = payload ? payload.threads : [];
+      const threads = payload!.threads || [];
       const toAdd = threads.filter(
         (r: ThreadItemProps) => !state.threads.find((s) => s.tid === r.tid),
       );
@@ -56,6 +55,8 @@ function forumReducer(state: State, action: Action) {
       return { ...state, isLoading: true };
     case ForumActionTypes.REFRESH_FORUM__SENT:
       return { ...state, isLoading: false, refreshing: true };
+    case ForumActionTypes.FORUM_CHANGED:
+      return initialState;
     default:
       throw new Error('Unknown action type');
   }
@@ -69,12 +70,14 @@ function keyExtractor(item: ThreadItemProps) {
   return item.tid.toString();
 }
 
-export default function ThreadScreen({
-  navigation,
-  route,
-}: DrawerScreenProps<any>) {
-  const { forum } = route.params as { forum: Forum };
-  const { fid } = forums[forum];
+interface ThreadScreenProps extends DrawerScreenProps<any> {
+  fid: number;
+}
+
+export default function ThreadScreen(props: ThreadScreenProps) {
+  // const { forum } = route.params as { forum: Forum };
+  const { fid, navigation } = props;
+  const prevFid = useRef<number | null>(null);
   const [state, dispatch] = useReducer<React.Reducer<State, Action>>(
     forumReducer,
     initialState,
@@ -84,6 +87,12 @@ export default function ThreadScreen({
   const isMounted = useMounted();
 
   useEffect(() => {
+    if (prevFid.current) {
+      dispatch({
+        type: ForumActionTypes.FORUM_CHANGED,
+      });
+    }
+    prevFid.current = fid;
     const fetchForumAsync = async () => {
       const data = await getThreadList({ fid, cancelToken });
       isMounted() &&
@@ -93,7 +102,7 @@ export default function ThreadScreen({
         });
     };
     fetchForumAsync();
-  }, [fid, cancelToken, isMounted]);
+  }, [cancelToken, fid, isMounted]);
 
   const handleOnLoad = async () => {
     dispatch({ type: ForumActionTypes.FETCH_FORUM__SENT });
@@ -125,18 +134,15 @@ export default function ThreadScreen({
         <ActivityIndicator size="large" style={styles.container} />
       ) : (
         <FlatListBase
-          data={
-            threads &&
-            threads.map((thread) => ({
-              ...thread,
-              onPress: () => {
-                navigation.navigate('ThreadDetail', {
-                  tid: thread.tid,
-                  subject: thread.title,
-                });
-              },
-            }))
-          }
+          data={threads.map((thread) => ({
+            ...thread,
+            onPress: () => {
+              navigation.navigate('ThreadDetail', {
+                tid: thread.tid,
+                subject: thread.title,
+              });
+            },
+          }))}
           onRefresh={handleOnRefresh}
           refreshing={refreshing}
           keyExtractor={keyExtractor}
