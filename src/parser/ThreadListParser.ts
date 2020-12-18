@@ -8,7 +8,10 @@ const parseThreadList = (html: string) => {
   if (!html) {
     return [];
   }
-  const $ = cheerio.load(html, { decodeEntities: false });
+  const $ = cheerio.load(html, {
+    decodeEntities: false,
+    _useHtmlParser2: true,
+  });
   const threadList: ThreadItemProps[] = [];
   let spanID, span;
   $('.threadlist tbody').each(function (_, elem) {
@@ -38,7 +41,7 @@ const parseThreadList = (html: string) => {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err, spanID);
     }
   });
   return threadList;

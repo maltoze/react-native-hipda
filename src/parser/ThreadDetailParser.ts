@@ -11,7 +11,10 @@ const parseThreadDetail = (html: string) => {
   if (!html) {
     return { postList: [] };
   }
-  const $ = cheerio.load(html, { decodeEntities: false });
+  const $ = cheerio.load(html, {
+    decodeEntities: false,
+    _useHtmlParser2: true,
+  });
   const postList: PostItemBaseProps[] = [];
   $('#postlist')
     .children()
