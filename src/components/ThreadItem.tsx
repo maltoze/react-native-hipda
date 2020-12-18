@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import {
   Avatar,
   Caption,
+  IconButton,
   Subheading,
   Text,
-  TouchableRipple,
 } from 'react-native-paper';
 import { getAvatarUrl } from '../api/urls';
 import { ThreadItemProps } from '../types';
@@ -14,10 +14,10 @@ interface ThreadProps extends ThreadItemProps {
   onPress?: () => void;
 }
 
-function Thread(props: ThreadProps) {
-  const { onPress, author, title, date } = props;
+function ThreadItem(props: ThreadProps) {
+  const { onPress, author, title, date, comments } = props;
   return (
-    <TouchableRipple onPress={onPress}>
+    <Pressable onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.upContainer}>
           <Avatar.Image
@@ -27,14 +27,22 @@ function Thread(props: ThreadProps) {
           />
           <View>
             <Text>{author.username}</Text>
-            <Caption>{date}</Caption>
+            <View style={styles.rowContainer}>
+              <Caption>{date}</Caption>
+              <IconButton
+                icon="comment-outline"
+                size={12}
+                style={styles.icon}
+              />
+              <Caption>{comments}</Caption>
+            </View>
           </View>
         </View>
         <View>
           <Subheading>{title}</Subheading>
         </View>
       </View>
-    </TouchableRipple>
+    </Pressable>
   );
 }
 
@@ -49,6 +57,15 @@ const styles = StyleSheet.create({
   avatarImg: {
     marginRight: 10,
   },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    margin: 0,
+    marginLeft: 10,
+    marginTop: 2,
+  },
 });
 
-export default React.memo(Thread);
+export default React.memo(ThreadItem);

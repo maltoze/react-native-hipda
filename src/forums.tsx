@@ -35,7 +35,7 @@ const forums: Record<Forum, ForumDeclaration> = {
   },
   Palm: {
     name: 'PalmOS',
-    fid: 7,
+    fid: 12,
     icon: ({ size, color }: IconProps) => (
       <MaterialIcon name="smartphone" size={size} color={color} />
     ),
