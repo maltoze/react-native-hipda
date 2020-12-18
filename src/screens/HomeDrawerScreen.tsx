@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HiDrawerContent from '../components/HiDrawerContent';
 import ThreadScreen from './ThreadScreen';
@@ -10,14 +10,20 @@ const defaultForum = 'Geek';
 
 export default function HomeScreen() {
   const [forum, setForum] = useState<Forum>(defaultForum);
-  const setForumWithCallback = useCallback((forumId) => setForum(forumId), []);
 
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: true,
-        header: (props) => {
-          return <HomeBar {...props} onSetForum={setForumWithCallback} />;
+        header: ({ scene }) => {
+          const { options, navigation } = scene.descriptor;
+          return (
+            <HomeBar
+              title={options.title}
+              navigation={navigation}
+              onSetForum={setForum}
+            />
+          );
         },
       }}
       drawerContent={(props) => <HiDrawerContent {...props} />}>
