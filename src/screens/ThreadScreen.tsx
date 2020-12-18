@@ -74,7 +74,7 @@ interface ThreadScreenProps extends DrawerScreenProps<any> {
   fid: number;
 }
 
-export default function ThreadScreen(props: ThreadScreenProps) {
+function ThreadScreen(props: ThreadScreenProps) {
   // const { forum } = route.params as { forum: Forum };
   const { fid, navigation } = props;
   const prevFid = useRef<number | null>(null);
@@ -162,3 +162,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default React.memo(ThreadScreen);

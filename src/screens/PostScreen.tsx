@@ -56,10 +56,7 @@ function renderItem({ item }: { item: PostItemProp }) {
   return <PostItem {...item} />;
 }
 
-export default function PostScreen({
-  navigation,
-  route,
-}: StackScreenProps<any>) {
+function PostScreen({ navigation, route }: StackScreenProps<any>) {
   const { tid } = route.params as any;
   const navigator = navigate(navigation);
 
@@ -120,3 +117,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default React.memo(PostScreen);
