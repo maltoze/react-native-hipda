@@ -1,7 +1,6 @@
 import React from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FoundationIcon from 'react-native-vector-icons/Foundation';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 type IconProps = {
   size?: number;
@@ -11,11 +10,17 @@ type IconProps = {
 type ForumDeclaration = {
   name: string;
   fid: number;
-  icon: (props: IconProps) => React.ReactNode;
+  icon?: string | ((props: IconProps) => React.ReactNode);
   needLogin?: boolean;
 };
 
-export type Forum = 'Discovery' | 'Geek' | 'Palm';
+export type Forum =
+  | 'Discovery'
+  | 'Geek'
+  | 'Palm'
+  | 'Eink'
+  | 'BS'
+  | 'Smartphone';
 
 const forums: Record<Forum, ForumDeclaration> = {
   Discovery: {
@@ -25,6 +30,16 @@ const forums: Record<Forum, ForumDeclaration> = {
       <FontAwesomeIcon name="cc-discover" size={size! - 5} color={color} />
     ),
     needLogin: true,
+  },
+  BS: {
+    name: 'Buy & Sell',
+    fid: 6,
+    icon: 'cart',
+  },
+  Eink: {
+    name: 'E-INK',
+    fid: 59,
+    icon: 'book-open',
   },
   Geek: {
     name: 'Geek Talks',
@@ -36,9 +51,12 @@ const forums: Record<Forum, ForumDeclaration> = {
   Palm: {
     name: 'PalmOS',
     fid: 12,
-    icon: ({ size, color }: IconProps) => (
-      <MaterialIcon name="smartphone" size={size} color={color} />
-    ),
+    icon: 'cellphone-off',
+  },
+  Smartphone: {
+    name: 'Smartphone',
+    fid: 9,
+    icon: 'cellphone',
   },
 };
 
