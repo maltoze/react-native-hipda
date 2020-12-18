@@ -7,6 +7,7 @@ import { FORUM_IMG_PATTERN } from '../api/urls';
 const ignoreNodeClass = ['t_attach', 'imgtitle', 'attach_popup'];
 // 需要将匹配图片的src替换为file值
 const imgNonePattern = 'images/common/none.gif';
+const forumSmiliesImgPattern = '/forum/images/smilies/';
 
 export const PostContent = React.memo((props: any) => {
   const { pContent: html } = props;
@@ -30,9 +31,17 @@ export const PostContent = React.memo((props: any) => {
       return node;
     }
     const { name } = node;
-    if (name === 'img' && node.attribs.src.match(imgNonePattern)) {
-      node.attribs = { ...(node.attribs || {}), src: node.attribs.file };
-      return node;
+    if (name === 'img') {
+      if (node.attribs.src.match(imgNonePattern)) {
+        node.attribs = { ...(node.attribs || {}), src: node.attribs.file };
+        return node;
+      } else if (node.attribs.src.match(forumSmiliesImgPattern)) {
+        node.attribs = {
+          ...(node.attribs || {}),
+          style: 'justify-content:flex-start',
+        };
+        return node;
+      }
       // eslint-disable-next-line no-script-url
     } else if (name === 'a' && node.attribs.href === 'javascript:;') {
       return node.children ? node.children[0] : node;
@@ -48,6 +57,11 @@ export const PostContent = React.memo((props: any) => {
       textAlign: 'center',
       fontStyle: 'normal',
       letterSpacing: 0,
+    },
+    quote: {
+      backgroundColor: '#e6e6e6',
+      padding: 8,
+      borderRadius: 4,
     },
   };
   return (
