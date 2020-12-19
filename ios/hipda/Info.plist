@@ -57,6 +57,8 @@
 	<array>
 		<string>MaterialIcons.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>Foundation.ttf</string>
 	</array>
 </dict>
 </plist>
