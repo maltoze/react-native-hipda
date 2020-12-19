@@ -22,6 +22,8 @@ export type Forum =
   | 'BS'
   | 'Smartphone';
 
+export const defaultForum = 'Discovery';
+
 const forums: Record<Forum, ForumDeclaration> = {
   Discovery: {
     name: 'Discovery',
