@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     paddingHorizontal: 8,
     borderRadius: 8,
+    // fix borderRadius not work on ios
+    overflow: 'hidden',
   },
   lockedText: {
     color: 'rgba(0, 0, 0, 0.5)',
