@@ -31,7 +31,7 @@ export default function HomeScreen() {
         name="Home"
         initialParams={{ forum }}
         options={{ title: forums[forum].name }}>
-        {(props) => <ThreadScreen {...props} fid={forums[forum].fid} />}
+        {(props) => <ThreadScreen {...props} forum={forum} />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );

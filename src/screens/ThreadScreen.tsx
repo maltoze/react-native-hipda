@@ -8,6 +8,8 @@ import ThreadItem from '../components/ThreadItem';
 import useCancelToken from '../hooks/useCancelToken';
 import useMounted from '../hooks/useMounted';
 import FlatListBase from '../components/FlatListBase';
+import forums, { Forum } from '../forums';
+import { useSetLoginModalVisible, useUser } from '../state/store';
 
 type State = {
   threads: ThreadItemProps[];
@@ -71,13 +73,17 @@ function keyExtractor(item: ThreadItemProps) {
 }
 
 interface ThreadScreenProps extends DrawerScreenProps<any> {
-  fid: number;
+  forum: Forum;
 }
 
 function ThreadScreen(props: ThreadScreenProps) {
-  // const { forum } = route.params as { forum: Forum };
-  const { fid, navigation } = props;
+  const { forum, navigation } = props;
+  const { fid, needLogin } = forums[forum];
   const prevFid = useRef<number | null>(null);
+
+  const user = useUser();
+  const setLoginModalVisible = useSetLoginModalVisible();
+
   const [state, dispatch] = useReducer<React.Reducer<State, Action>>(
     forumReducer,
     initialState,
@@ -87,12 +93,6 @@ function ThreadScreen(props: ThreadScreenProps) {
   const isMounted = useMounted();
 
   useEffect(() => {
-    if (prevFid.current) {
-      dispatch({
-        type: ForumActionTypes.FORUM_CHANGED,
-      });
-    }
-    prevFid.current = fid;
     const fetchForumAsync = async () => {
       const data = await getThreadList({ fid, cancelToken });
       isMounted() &&
@@ -101,8 +101,25 @@ function ThreadScreen(props: ThreadScreenProps) {
           payload: { threads: data },
         });
     };
-    fetchForumAsync();
-  }, [cancelToken, fid, isMounted]);
+    if (prevFid.current) {
+      dispatch({
+        type: ForumActionTypes.FORUM_CHANGED,
+      });
+    }
+    prevFid.current = fid;
+    if (user.isGuest && needLogin) {
+      setLoginModalVisible(true);
+    } else {
+      fetchForumAsync();
+    }
+  }, [
+    cancelToken,
+    fid,
+    isMounted,
+    needLogin,
+    setLoginModalVisible,
+    user.isGuest,
+  ]);
 
   const handleOnLoad = async () => {
     dispatch({ type: ForumActionTypes.FETCH_FORUM__SENT });

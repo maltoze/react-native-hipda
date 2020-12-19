@@ -35,11 +35,13 @@ const forums: Record<Forum, ForumDeclaration> = {
     name: 'Buy & Sell',
     fid: 6,
     icon: 'cart',
+    needLogin: true,
   },
   Eink: {
     name: 'E-INK',
     fid: 59,
     icon: 'book-open',
+    needLogin: true,
   },
   Geek: {
     name: 'Geek Talks',
