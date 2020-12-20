@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
+    "@react-native-community/cookies": "^5.0.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
     "@react-navigation/drawer": "^5.11.4",
@@ -36,8 +37,10 @@
     "@babel/core": "^7.12.7",
     "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^2.0.0",
+    "@types/blueimp-md5": "^2.7.0",
     "@types/jest": "^26.0.16",
     "@types/lodash": "^4.14.165",
+    "@types/qs": "^6.9.5",
     "@types/react": "^17.0.0",
     "@types/react-native": "^0.63.37",
     "@types/react-native-vector-icons": "^6.4.6",

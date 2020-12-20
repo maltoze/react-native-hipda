@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Modal, Portal, TextInput, Button } from 'react-native-paper';
-import Theme from '../Theme';
+import { Modal, Portal, TextInput, Button, useTheme } from 'react-native-paper';
 import { requestToLogin } from '../api/auth';
 import {
   useLoginModalVisible,
@@ -15,14 +14,15 @@ export default function LoginModal() {
   const visible = useLoginModalVisible();
   const setLoginModalVisible = useSetLoginModalVisible();
   const setUser = useSetUser();
+  const theme = useTheme();
+  const backgroundColor = theme.colors.background;
+  const baseInputStyle = { backgroundColor };
 
   const handleLogin = async () => {
-    try {
-      const { uid } = await requestToLogin(username, password);
+    const { uid } = await requestToLogin(username, password);
+    if (uid) {
       setUser({ uid, username, isGuest: false });
       setLoginModalVisible(false);
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -31,17 +31,17 @@ export default function LoginModal() {
       <Modal
         visible={visible}
         onDismiss={() => setLoginModalVisible(false)}
-        contentContainerStyle={styles.modalContainer}>
+        contentContainerStyle={[styles.modalContainer, { backgroundColor }]}>
         <TextInput
           placeholder="用户名"
           left={<TextInput.Icon name="account" />}
-          style={styles.inputContainer}
+          style={[styles.inputContainer, baseInputStyle]}
           onChangeText={(text) => setUsername(text)}
         />
         <TextInput
           placeholder="密码"
           left={<TextInput.Icon name="lock" />}
-          style={styles.inputContainer}
+          style={[styles.inputContainer, baseInputStyle]}
           secureTextEntry={true}
           onChangeText={(text) => setPassword(text)}
         />
@@ -58,17 +58,15 @@ export default function LoginModal() {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    padding: Theme.spacing.base,
-    backgroundColor: 'white',
-    margin: Theme.spacing.large,
-    borderRadius: Theme.spacing.xTiny,
+    padding: 24,
+    margin: 52,
+    borderRadius: 4,
   },
   inputContainer: {
-    marginBottom: Theme.spacing.tiny,
-    backgroundColor: 'white',
-    height: Theme.spacing.large,
+    marginBottom: 8,
+    height: 52,
   },
   loginButton: {
-    marginTop: Theme.spacing.tiny,
+    marginTop: 8,
   },
 });

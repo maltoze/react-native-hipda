@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
+import CookieManager from '@react-native-community/cookies';
 import { Avatar, Drawer } from 'react-native-paper';
-import {
-  DrawerContentComponentProps,
-  DrawerContentScrollView,
-} from '@react-navigation/drawer';
-import Theme from '../Theme';
+import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { getAvatarUrl } from '../api/urls';
-import { useSetLoginModalVisible, useUser } from '../state/store';
+import { useSetLoginModalVisible, useSetUser, useUser } from '../state/store';
 import navigate from '../navigation/navigate';
+import { stRemoveCookie } from '../utils/storage';
+
+const avatarSize = 60;
 
 export default function HiDrawerContent(
   props: DrawerContentComponentProps<any>,
@@ -16,6 +16,7 @@ export default function HiDrawerContent(
   const { navigation } = props;
   const navigator = navigate(navigation);
   const user = useUser();
+  const setUser = useSetUser();
   const setLoginModalVisible = useSetLoginModalVisible();
 
   const handleAvatarPress = () => {
@@ -27,11 +28,17 @@ export default function HiDrawerContent(
     }
   };
 
+  const handleLogout = () => {
+    CookieManager.clearAll();
+    stRemoveCookie();
+    setUser({ isGuest: true });
+  };
+
   const renderDefaultHeader = () => {
     return (
       <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
         <Avatar.Icon
-          size={Theme.specifications.largeIconSize}
+          size={avatarSize}
           icon="account"
           style={styles.avatarContainer}
         />
@@ -43,7 +50,7 @@ export default function HiDrawerContent(
     return (
       <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
         <Avatar.Image
-          size={Theme.specifications.largeIconSize}
+          size={avatarSize}
           source={{
             uri: getAvatarUrl(user.uid!),
           }}
@@ -55,34 +62,30 @@ export default function HiDrawerContent(
   };
 
   return (
-    <DrawerContentScrollView {...props}>
-      <View style={styles.container}>
-        <Drawer.Section>
-          {user.isGuest ? renderDefaultHeader() : renderHeader()}
-        </Drawer.Section>
-      </View>
-    </DrawerContentScrollView>
+    <View style={styles.container}>
+      <Drawer.Section>
+        {user.isGuest ? renderDefaultHeader() : renderHeader()}
+      </Drawer.Section>
+      <Drawer.Item icon="logout" label="登出" onPress={handleLogout} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 22,
   },
   avatarContainer: {
-    marginLeft: Theme.spacing.small,
+    marginLeft: 16,
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Theme.spacing.small,
+    paddingVertical: 16,
   },
   headerText: {
-    ...Theme.typography.body,
-    marginTop: Theme.spacing.tiny,
-    marginLeft: Theme.spacing.tiny,
-  },
-  drawerLabel: {
-    fontWeight: 'bold',
+    marginTop: 8,
+    marginLeft: 8,
   },
 });

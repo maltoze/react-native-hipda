@@ -1,9 +1,14 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 const stCookieKey = 'cookie';
-// export const stGetCookie = () => {AsyncStorage.getItem(stCookieKey)};
+export const stGetCookie = () => {
+  return getJsonObjectFromStorage(stCookieKey);
+};
 export const stSaveCookie = (cookie) => {
-  AsyncStorage.setItem(stCookieKey, cookie);
+  return AsyncStorage.setItem(stCookieKey, JSON.stringify(cookie));
+};
+export const stRemoveCookie = () => {
+  return AsyncStorage.removeItem(stCookieKey);
 };
 
 // User
