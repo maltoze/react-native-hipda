@@ -1,14 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import {
-  Avatar,
-  Caption,
-  IconButton,
-  Subheading,
-  Text,
-} from 'react-native-paper';
-import { getAvatarUrl } from '../api/urls';
+import { Caption, IconButton, Subheading, Text } from 'react-native-paper';
 import { ThreadItemProps } from '../types';
+import HiAvatar from './HiAvatar';
 
 interface ThreadProps extends ThreadItemProps {
   onPress?: () => void;
@@ -20,11 +14,7 @@ function ThreadItem(props: ThreadProps) {
     <Pressable onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.upContainer}>
-          <Avatar.Image
-            source={{ uri: getAvatarUrl(author.uid!) }}
-            size={36}
-            style={styles.avatarImg}
-          />
+          <HiAvatar user={author} style={styles.avatarImg} size={36} />
           <View>
             <Text>{author.username}</Text>
             <View style={styles.rowContainer}>

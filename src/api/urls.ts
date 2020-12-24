@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const FORUM_SERVER = 'http://www.hi-pda.com';
 export const FORUM_SERVER_SSL = 'https://www.hi-pda.com';
 export const BASE_URL = FORUM_SERVER_SSL + '/forum/';
@@ -16,24 +18,28 @@ export const getThreadDetailUrl = (tid: number, page = 1) => {
   return BASE_URL + 'viewthread.php?tid=' + tid + '&page=' + page;
 };
 
-export const getLatestPostUrl = () => {
-  return (
-    BASE_URL +
-    'search.php?searchid=2056&orderby=lastpost&ascdesc=desc&searchsubmit=yes'
-  );
+export const getLatestThreadUrl = () => {
+  // 24小时内的帖子
+  return `${BASE_URL}search.php?srchfrom=86400&searchsubmit=yes`;
 };
 
-export const getAvatarUrl = (uid: number) => {
-  let avatarBaseUrl = BASE_URL + 'uc_server/data/avatar/';
-  let fullUid =
+export const getAvatarUrl = async (uid: number) => {
+  const avatarBaseUrl = BASE_URL + 'uc_server/data/avatar/';
+  const fullUid =
     new Array(AVATAR_BASE.length - uid.toString().length + 1).join('0') + uid;
-  let str = [
+  const str = [
     fullUid.substr(0, 3),
     fullUid.substr(3, 2),
     fullUid.substr(5, 2),
     fullUid.substr(7, 2),
   ].join('/');
-  return avatarBaseUrl + str + '_avatar_middle.jpg';
+  const avatarUrl = avatarBaseUrl + str + '_avatar_middle.jpg';
+  try {
+    await axios.head(avatarUrl);
+    return avatarUrl;
+  } catch (error) {
+    return '';
+  }
 };
 
 export const SMILIES_PATTERN = COOKIE_DOMAIN + '/forum/images/smilies';

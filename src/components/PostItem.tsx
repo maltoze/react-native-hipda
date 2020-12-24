@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Avatar, Text, TouchableRipple } from 'react-native-paper';
+import { Text, TouchableRipple } from 'react-native-paper';
 import { PostItemBaseProps, User } from '../types';
-import { getAvatarUrl } from '../api/urls';
 import { PostContent } from './PostContent';
+import HiAvatar from './HiAvatar';
 
 interface PostItemProps extends PostItemBaseProps {
   onPress: () => void;
@@ -20,10 +20,7 @@ const PostItem = React.memo((props: PostItemProps) => {
         <View style={styles.postInfoContainer}>
           <Pressable onPress={() => onAvatarPress(author)}>
             <View style={styles.postInfoView}>
-              <Avatar.Image
-                source={{ uri: getAvatarUrl(author.uid!) }}
-                size={36}
-              />
+              <HiAvatar user={author} size={36} />
               <Text style={styles.postAuthorText}>{author.username}</Text>
             </View>
           </Pressable>

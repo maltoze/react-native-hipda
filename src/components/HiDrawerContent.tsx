@@ -3,10 +3,10 @@ import { StyleSheet, View, Text, Pressable } from 'react-native';
 import CookieManager from '@react-native-community/cookies';
 import { Avatar, Drawer } from 'react-native-paper';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { getAvatarUrl } from '../api/urls';
 import { useSetLoginModalVisible, useSetUser, useUser } from '../state/store';
 import navigate from '../navigation/navigate';
 import { stRemoveCookie } from '../utils/storage';
+import HiAvatar from './HiAvatar';
 
 const avatarSize = 60;
 
@@ -49,12 +49,10 @@ export default function HiDrawerContent(
   const renderHeader = () => {
     return (
       <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
-        <Avatar.Image
-          size={avatarSize}
-          source={{
-            uri: getAvatarUrl(user.uid!),
-          }}
+        <HiAvatar
+          user={user}
           style={styles.avatarContainer}
+          size={avatarSize}
         />
         <Text style={styles.headerText}>{user.username}</Text>
       </Pressable>

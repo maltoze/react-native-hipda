@@ -2,7 +2,7 @@ import md5 from 'blueimp-md5';
 import cheerio from 'cheerio';
 import { readBlobHtml } from '../utils/reader';
 import { axiosGet, axiosPost } from './axios';
-import { LOGIN_SUBMIT, BASE_URL, FORUM_SERVER_SSL } from './urls';
+import { LOGIN_SUBMIT, BASE_URL, FORUM_SERVER_SSL, getAvatarUrl } from './urls';
 import CookieManager from '@react-native-community/cookies';
 import { stSaveCookie } from '../utils/storage';
 
@@ -12,10 +12,11 @@ export const requestToLogin = async (username: string, password: string) => {
   if (resp && resp.data.includes('欢迎您回来')) {
     const cookies = await CookieManager.get(FORUM_SERVER_SSL);
     await stSaveCookie(cookies);
-    const uid = await getUid();
-    return { uid: parseFloat(uid) };
+    const uid = parseFloat(await getUid());
+    const avatar = await getAvatarUrl(uid);
+    return { uid, avatar };
   } else {
-    return { uid: null };
+    return { uid: null, avatar: '' };
   }
 };
 

@@ -19,9 +19,9 @@ export default function LoginModal() {
   const baseInputStyle = { backgroundColor };
 
   const handleLogin = async () => {
-    const { uid } = await requestToLogin(username, password);
+    const { uid, avatar } = await requestToLogin(username, password);
     if (uid) {
-      setUser({ uid, username, isGuest: false });
+      setUser({ uid, username, isGuest: false, avatar });
       setLoginModalVisible(false);
     }
   };
