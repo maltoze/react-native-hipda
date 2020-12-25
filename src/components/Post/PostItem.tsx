@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
-import { PostItemBaseProps, User } from '../types';
+import { PostItemBaseProps, User } from '../../types';
 import { PostContent } from './PostContent';
-import HiAvatar from './HiAvatar';
+import HiAvatar from '../HiAvatar';
 
 interface PostItemProps extends PostItemBaseProps {
   onPress: () => void;
@@ -31,11 +31,13 @@ const PostItem = React.memo((props: PostItemProps) => {
             </Text>
           </View>
         </View>
-        {content ? (
-          <PostContent pContent={content} />
-        ) : (
-          <Text style={styles.lockedText}>{lockedContent}</Text>
-        )}
+        <View style={styles.content}>
+          {content ? (
+            <PostContent pContent={content} />
+          ) : (
+            <Text style={styles.lockedText}>{lockedContent}</Text>
+          )}
+        </View>
       </View>
     </TouchableRipple>
   );
@@ -44,8 +46,10 @@ const PostItem = React.memo((props: PostItemProps) => {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 4,
-    paddingBottom: 10,
     paddingHorizontal: 8,
+  },
+  content: {
+    paddingVertical: 14,
   },
   postInfoView: {
     flexDirection: 'row',
@@ -54,7 +58,6 @@ const styles = StyleSheet.create({
   postInfoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
   },
   postAuthorText: {
     marginLeft: 4,

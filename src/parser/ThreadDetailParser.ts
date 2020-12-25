@@ -5,7 +5,7 @@ import { PostItemBaseProps } from '../types';
 import { getAvatarUrl } from '../api/urls';
 
 function handleContent(content: string) {
-  return content.replace(/\n/g, '');
+  return content;
 }
 
 const parseThreadDetail = async (html: string) => {

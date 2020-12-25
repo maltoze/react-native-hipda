@@ -7,7 +7,7 @@ import { PostActionTypes, PostItemBaseProps, User } from '../types';
 import { getThreadDetail } from '../parser/ThreadDetailParser';
 import useCancelToken from '../hooks/useCancelToken';
 import useMounted from '../hooks/useMounted';
-import PostItem from '../components/PostItem';
+import PostItem from '../components/Post/PostItem';
 import { useFocusEffect } from '@react-navigation/native';
 import navigate from '../navigation/navigate';
 
