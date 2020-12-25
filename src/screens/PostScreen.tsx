@@ -1,8 +1,7 @@
 import React, { useCallback, useReducer } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ActivityIndicator } from 'react-native-paper';
-import FlatListBase from '../components/FlatListBase';
 import { PostActionTypes, PostItemBaseProps, User } from '../types';
 import { getThreadDetail } from '../parser/ThreadDetailParser';
 import useCancelToken from '../hooks/useCancelToken';
@@ -10,16 +9,19 @@ import useMounted from '../hooks/useMounted';
 import PostItem from '../components/Post/PostItem';
 import { useFocusEffect } from '@react-navigation/native';
 import navigate from '../navigation/navigate';
+import HiDivider from '../components/HiDivider';
+import PostListFooter from '../components/Post/PostListFooter';
 
 type State = {
   posts: PostItemBaseProps[];
-  page?: number;
-  isLoading?: boolean;
+  page: number;
+  isLoading: boolean;
+  totalPages: number;
 };
 
 type Action = {
   type: PostActionTypes;
-  payload?: State;
+  payload?: Partial<State>;
 };
 
 type PostItemProp = React.ComponentProps<typeof PostItem>;
@@ -28,13 +30,14 @@ const initialState = {
   posts: [],
   page: 0,
   isLoading: true,
+  totalPages: 1,
 };
 
 function postReducer(state: State, action: Action) {
   const { payload } = action;
   switch (action.type) {
     case PostActionTypes.FETCH_POST:
-      const posts = payload ? payload.posts : [];
+      const { posts = [], totalPages = 1 } = { ...payload };
       const toAdd = posts.filter(
         (r: PostItemBaseProps) =>
           !state.posts.find((s) => s.postno === r.postno),
@@ -42,8 +45,9 @@ function postReducer(state: State, action: Action) {
       return {
         ...state,
         posts: [...state.posts, ...toAdd],
-        page: state.page ? state.page + 1 : 1,
+        page: state.page < totalPages ? state.page + 1 : state.page,
         isLoading: false,
+        totalPages: totalPages,
       };
     case PostActionTypes.FETCH_POST__SENT:
       return { ...state, isLoading: true };
@@ -64,9 +68,27 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
     postReducer,
     initialState,
   );
-  const { posts, isLoading, page } = state;
+  const { posts, isLoading, page, totalPages } = state;
   const cancelToken = useCancelToken();
   const isMounted = useMounted();
+
+  const handleOnLoad = async () => {
+    if (isLoading || page >= totalPages) {
+      return;
+    }
+    dispatch({ type: PostActionTypes.FETCH_POST__SENT });
+    const data = await getThreadDetail({
+      tid,
+      page: page + 1,
+      cancelToken,
+    });
+    const { postList, totalPages: totalPagesLatest } = data;
+    isMounted() &&
+      dispatch({
+        type: PostActionTypes.FETCH_POST,
+        payload: { posts: postList, totalPages: totalPagesLatest },
+      });
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -75,11 +97,11 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
           tid,
           cancelToken,
         });
-        const { postList } = data;
+        const { postList, totalPages: totalPagesLatest } = data;
         isMounted() &&
           dispatch({
             type: PostActionTypes.FETCH_POST,
-            payload: { posts: postList },
+            payload: { posts: postList, totalPages: totalPagesLatest },
           });
       };
       fetchPostAsync();
@@ -91,7 +113,7 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
       {isLoading && !page ? (
         <ActivityIndicator size="large" style={styles.container} />
       ) : (
-        <FlatListBase
+        <FlatList
           data={
             posts &&
             posts.map((post) => ({
@@ -103,9 +125,11 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
           }
           renderItem={renderItem}
           keyExtractor={(item) => item.postno.toString()}
-          initialNumToRender={1}
-          maxToRenderPerBatch={6}
-          windowSize={11}
+          initialNumToRender={6}
+          ItemSeparatorComponent={HiDivider}
+          onEndReached={handleOnLoad}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={<PostListFooter loading={isLoading} />}
         />
       )}
     </View>
