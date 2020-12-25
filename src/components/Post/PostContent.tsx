@@ -11,12 +11,15 @@ const ignoreNodeClass = ['t_attach', 'imgtitle', 'attach_popup'];
 const imgNonePattern = 'images/common/none.gif';
 const forumSmiliesImgPattern = '/forum/images/smilies/';
 const fontSizeKeywords = [
-  'xx-small',
-  'x-small',
+  // set the min size to small(12)
+  // 'xx-small',
+  // 'x-small',
   'small',
   'medium',
   'large',
   'x-large',
+  'xx-large',
+  'xx-large',
   'xx-large',
   // 'xxx-large',
 ];
