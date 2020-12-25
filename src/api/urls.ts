@@ -34,11 +34,14 @@ export const getAvatarUrl = async (uid: number) => {
     fullUid.substr(7, 2),
   ].join('/');
   const avatarUrl = avatarBaseUrl + str + '_avatar_middle.jpg';
-  try {
-    await axios.head(avatarUrl);
-    return avatarUrl;
-  } catch (error) {
+  const resp = await axios.head(avatarUrl, {
+    validateStatus: (status) => status < 500,
+    responseType: 'blob',
+  });
+  if (resp.status === 404) {
     return '';
+  } else {
+    return avatarUrl;
   }
 };
 
