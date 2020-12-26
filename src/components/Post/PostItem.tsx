@@ -10,8 +10,6 @@ interface PostItemProps extends PostItemBaseProps {
   onAvatarPress: (user: User) => void;
 }
 
-const lockedContent = '提示: 作者被禁止或删除 内容自动屏蔽';
-
 const PostItem = React.memo((props: PostItemProps) => {
   const { author, postno, content, onPress, posttime, onAvatarPress } = props;
   const { colors } = useTheme();
@@ -44,13 +42,7 @@ const PostItem = React.memo((props: PostItemProps) => {
           </View>
         </View>
         <View style={styles.content}>
-          {content ? (
-            <PostContent pContent={content} />
-          ) : (
-            <Text style={[styles.lockedText, { color: colors.disabled }]}>
-              {lockedContent}
-            </Text>
-          )}
+          <PostContent pContent={content} />
         </View>
       </View>
     </TouchableRipple>
@@ -84,11 +76,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     // fix borderRadius not work on ios
     overflow: 'hidden',
-  },
-  lockedText: {
-    fontSize: 15,
-    lineHeight: 24,
-    letterSpacing: 0.5,
   },
 });
 

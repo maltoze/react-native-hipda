@@ -16,7 +16,7 @@ type State = {
   posts: PostItemBaseProps[];
   page: number;
   isLoading: boolean;
-  totalPages: number;
+  hasNextPage: boolean;
 };
 
 type Action = {
@@ -30,14 +30,14 @@ const initialState = {
   posts: [],
   page: 0,
   isLoading: true,
-  totalPages: 1,
+  hasNextPage: true,
 };
 
 function postReducer(state: State, action: Action) {
   const { payload } = action;
   switch (action.type) {
     case PostActionTypes.FETCH_POST:
-      const { posts = [], totalPages = 1 } = { ...payload };
+      const { posts = [], hasNextPage = true } = { ...payload };
       const toAdd = posts.filter(
         (r: PostItemBaseProps) =>
           !state.posts.find((s) => s.postno === r.postno),
@@ -45,9 +45,9 @@ function postReducer(state: State, action: Action) {
       return {
         ...state,
         posts: [...state.posts, ...toAdd],
-        page: state.page < totalPages ? state.page + 1 : state.page,
+        page: hasNextPage ? state.page + 1 : state.page,
         isLoading: false,
-        totalPages: totalPages,
+        hasNextPage,
       };
     case PostActionTypes.FETCH_POST__SENT:
       return { ...state, isLoading: true };
@@ -68,12 +68,12 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
     postReducer,
     initialState,
   );
-  const { posts, isLoading, page, totalPages } = state;
+  const { posts, isLoading, page, hasNextPage } = state;
   const cancelToken = useCancelToken();
   const isMounted = useMounted();
 
   const handleOnLoad = async () => {
-    if (isLoading || page >= totalPages) {
+    if (isLoading || !hasNextPage) {
       return;
     }
     dispatch({ type: PostActionTypes.FETCH_POST__SENT });
@@ -82,11 +82,11 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
       page: page + 1,
       cancelToken,
     });
-    const { postList, totalPages: totalPagesLatest } = data;
+    const { postList, hasNext } = data;
     isMounted() &&
       dispatch({
         type: PostActionTypes.FETCH_POST,
-        payload: { posts: postList, totalPages: totalPagesLatest },
+        payload: { posts: postList, hasNextPage: hasNext },
       });
   };
 
@@ -97,11 +97,11 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
           tid,
           cancelToken,
         });
-        const { postList, totalPages: totalPagesLatest } = data;
+        const { postList, hasNext } = data;
         isMounted() &&
           dispatch({
             type: PostActionTypes.FETCH_POST,
-            payload: { posts: postList, totalPages: totalPagesLatest },
+            payload: { posts: postList, hasNextPage: hasNext },
           });
       };
       fetchPostAsync();
@@ -125,11 +125,11 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
           }
           renderItem={renderItem}
           keyExtractor={(item) => item.postno.toString()}
-          initialNumToRender={6}
+          initialNumToRender={10}
           ItemSeparatorComponent={HiDivider}
           onEndReached={handleOnLoad}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={<PostListFooter loading={isLoading} />}
+          ListFooterComponent={<PostListFooter hasNextPage={hasNextPage} />}
         />
       )}
     </View>

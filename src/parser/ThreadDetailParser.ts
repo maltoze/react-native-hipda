@@ -26,9 +26,15 @@ const parseThreadDetail = async (html: string) => {
         .match(/.*?uid=(\d+)/)!;
       const postAttachListHtml = $(elem).find('.postattachlist').html();
       let tMsgFontHtml = $(elem).find('.t_msgfont').html();
-      const content = postAttachListHtml
-        ? tMsgFontHtml + postAttachListHtml
-        : tMsgFontHtml;
+      const lockedElem = $(elem).find('.locked');
+      let content: string | null;
+      if (lockedElem.length > 0) {
+        content = $.html(lockedElem);
+      } else {
+        content = postAttachListHtml
+          ? tMsgFontHtml + postAttachListHtml
+          : tMsgFontHtml;
+      }
       const postno = $(elem).find('.postinfo strong a em').text();
       const uid = parseFloat(uidMatch[1]);
 
@@ -47,12 +53,9 @@ const parseThreadDetail = async (html: string) => {
       };
       promises.push(postPromise());
     });
-  let totalPages = 1;
-  if ($('.pages')[0]) {
-    totalPages = $('.pages')[0].children.length - 1;
-  }
+  const hasNext = $('.pages .next').length > 0 ? true : false;
   const postList = await Promise.all(promises);
-  return { postList, totalPages: totalPages };
+  return { postList, hasNext };
 };
 
 export const getThreadDetail = async (args: ThreadDetailArgs) => {

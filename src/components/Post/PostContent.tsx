@@ -98,6 +98,14 @@ export const PostContent = React.memo((props: any) => {
       backgroundColor: Colors.grey200,
       padding: 8,
       borderRadius: 4,
+      borderLeftWidth: 4,
+      borderLeftColor: Colors.grey300,
+    },
+    locked: {
+      fontSize: 15,
+      lineHeight: 24,
+      letterSpacing: 0.5,
+      color: colors.disabled,
     },
   };
   return (
