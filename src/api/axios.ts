@@ -5,50 +5,51 @@ import { stGetCookie } from '../utils/storage';
 
 const userAgent = 'HiPDA-RN';
 
+const getHeader = async () => {
+  // Solution for Cookie based authentication issue
+  await CookieManager.clearAll();
+
+  const cookies: Cookies = await stGetCookie();
+  const headerCookie = cookies
+    ? `cdb_auth=${cookies.cdb_auth.value}`
+    : undefined;
+  return {
+    Cookie: headerCookie,
+    'User-Agent': userAgent,
+  };
+};
+
 export const axiosGet = async (
   url: string,
   cancelToken?: CancelToken | undefined,
 ) => {
   try {
-    // Solution for Cookie based authentication issue
-    await CookieManager.clearAll();
-
-    const cookies: Cookies = await stGetCookie();
-    const headerCookie = cookies
-      ? `cdb_auth=${cookies.cdb_auth.value}`
-      : undefined;
-    const resp = await axios({
+    const headers = await getHeader();
+    return await axios({
       method: 'get',
       url: url,
       // withCredentials: true,
       responseType: 'blob',
       cancelToken: cancelToken,
-      headers: {
-        Cookie: headerCookie,
-        'User-Agent': userAgent,
-      },
+      headers,
     });
-    return resp;
   } catch (error) {
-    if (axios.isCancel(error)) {
-      console.log(error);
-    } else {
-      console.warn(error);
+    if (!axios.isCancel(error)) {
+      throw error;
     }
   }
 };
 
 export const axiosPost = async (url: string, data: any) => {
   try {
+    const headers = await getHeader();
     return await axios({
       url,
       method: 'POST',
       data: qs.stringify(data),
-      headers: {
-        'User-Agent': userAgent,
-      },
+      headers,
     });
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

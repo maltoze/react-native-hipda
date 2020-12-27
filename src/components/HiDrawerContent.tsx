@@ -64,7 +64,9 @@ export default function HiDrawerContent(
       <Drawer.Section>
         {user.isGuest ? renderDefaultHeader() : renderHeader()}
       </Drawer.Section>
-      <Drawer.Item icon="logout" label="登出" onPress={handleLogout} />
+      {!user.isGuest && (
+        <Drawer.Item icon="logout" label="登出" onPress={handleLogout} />
+      )}
     </View>
   );
 }

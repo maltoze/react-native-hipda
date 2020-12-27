@@ -1,7 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Theme from '../Theme';
 import { User } from '../types';
 
 export default function ProfileScreen({ route }: StackScreenProps<any>) {
@@ -17,6 +16,6 @@ export default function ProfileScreen({ route }: StackScreenProps<any>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Theme.spacing.tiny,
+    padding: 8,
   },
 });

@@ -1,6 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
 import { User } from '../types';
 
 type State = {
@@ -10,23 +8,15 @@ type State = {
   setLoginModalVisible: (visible: boolean) => void;
 };
 
-const useStore = create<State>(
-  persist(
-    (set) => {
-      return {
-        user: { isGuest: true },
-        setUser: (user: User) => set(() => ({ user })),
-        loginModalVisible: false,
-        setLoginModalVisible: (visible) =>
-          set(() => ({ loginModalVisible: visible })),
-      };
-    },
-    {
-      name: 'hipda',
-      storage: AsyncStorage,
-    },
-  ),
-);
+const useStore = create<State>((set) => {
+  return {
+    user: { isGuest: true },
+    setUser: (user: User) => set(() => ({ user })),
+    loginModalVisible: false,
+    setLoginModalVisible: (visible) =>
+      set(() => ({ loginModalVisible: visible })),
+  };
+});
 
 const user = (s: State) => s.user;
 const setUser = (s: State) => s.setUser;
