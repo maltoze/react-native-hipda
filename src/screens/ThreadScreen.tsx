@@ -10,6 +10,7 @@ import useMounted from '../hooks/useMounted';
 import FlatListBase from '../components/FlatListBase';
 import forums, { Forum } from '../forums';
 import { useSetLoginModalVisible, useUser } from '../state/store';
+import navigate from '../navigation/navigate';
 
 type State = {
   threads: ThreadItemProps[];
@@ -78,6 +79,7 @@ interface ThreadScreenProps extends DrawerScreenProps<any> {
 
 function ThreadScreen(props: ThreadScreenProps) {
   const { forum, navigation } = props;
+  const navigator = navigate(navigation);
   const { fid, needLogin } = forums[forum];
   const prevFid = useRef<number | null>(null);
 
@@ -154,7 +156,7 @@ function ThreadScreen(props: ThreadScreenProps) {
           data={threads.map((thread) => ({
             ...thread,
             onPress: () => {
-              navigation.navigate('ThreadDetail', {
+              navigator.openPostScreen({
                 tid: thread.tid,
                 subject: thread.title,
               });
