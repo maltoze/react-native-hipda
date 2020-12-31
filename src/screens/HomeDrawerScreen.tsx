@@ -1,37 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HiDrawerContent from '../components/HiDrawerContent';
 import ThreadScreen from './ThreadScreen';
-import forums, { defaultForum, Forum } from '../forums';
 import HomeBar from '../components/HomeBar';
+import { ThreadProvider } from '../provider/ThreadProvider';
 
 const Drawer = createDrawerNavigator();
 
 export default function HomeScreen() {
-  const [forum, setForum] = useState<Forum>(defaultForum);
-
   return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerShown: true,
-        header: ({ scene }) => {
-          const { options, navigation } = scene.descriptor;
-          return (
-            <HomeBar
-              title={options.title}
-              navigation={navigation}
-              onSetForum={setForum}
-            />
-          );
-        },
-      }}
-      drawerContent={(props) => <HiDrawerContent {...props} />}>
-      <Drawer.Screen
-        name="Home"
-        initialParams={{ forum }}
-        options={{ title: forums[forum].name }}>
-        {(props) => <ThreadScreen {...props} forum={forum} />}
-      </Drawer.Screen>
-    </Drawer.Navigator>
+    <ThreadProvider>
+      <Drawer.Navigator
+        screenOptions={{
+          headerShown: true,
+          header: ({ scene }) => {
+            const { options, navigation } = scene.descriptor;
+            return <HomeBar title={options.title} navigation={navigation} />;
+          },
+        }}
+        drawerContent={(props) => <HiDrawerContent {...props} />}>
+        <Drawer.Screen name="Home">
+          {(props) => <ThreadScreen {...props} />}
+        </Drawer.Screen>
+      </Drawer.Navigator>
+    </ThreadProvider>
   );
 }

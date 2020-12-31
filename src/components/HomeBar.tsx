@@ -1,20 +1,24 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Appbar, Menu } from 'react-native-paper';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { NavigationProp } from '@react-navigation/native';
 import HomeBarContent from './HomeBarContent';
 import forums, { Forum } from '../forums';
+import { ThreadContext } from '../context/ThreadContext';
 
 type HomeBarProps = {
   navigation: NavigationProp<any>;
   title?: string;
-  onSetForum: (forum: Forum) => void;
 };
 
 function HomeBar(props: HomeBarProps) {
   const insets = useSafeAreaInsets();
-  const { title, navigation, onSetForum } = props;
+  const { navigation } = props;
+  const {
+    state: { forum },
+    actions,
+  } = useContext(ThreadContext);
 
   const [visible, setVisible] = useState(false);
   const openMenu = useCallback(() => setVisible(true), []);
@@ -25,14 +29,14 @@ function HomeBar(props: HomeBarProps) {
       <Menu.Item
         onPress={() => {
           closeMenu();
-          onSetForum(forumId);
+          actions.setForum(forumId);
         }}
         title={forums[forumId].name}
         key={`menu-${forumId}`}
         icon={forums[forumId].icon}
       />
     ));
-  }, [closeMenu, onSetForum]);
+  }, [actions, closeMenu]);
 
   return (
     <Appbar.Header statusBarHeight={insets.top}>
@@ -44,7 +48,9 @@ function HomeBar(props: HomeBarProps) {
         visible={visible}
         onDismiss={closeMenu}
         statusBarHeight={insets.top}
-        anchor={<HomeBarContent title={title} onPress={openMenu} />}>
+        anchor={
+          <HomeBarContent title={forums[forum].name} onPress={openMenu} />
+        }>
         {forumMenuItems}
       </Menu>
     </Appbar.Header>

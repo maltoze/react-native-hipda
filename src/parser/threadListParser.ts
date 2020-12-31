@@ -1,18 +1,12 @@
-import cheerio from 'cheerio';
-import { readBlobHtml } from '../utils/reader';
-import { fetchThreadList, ThreadListArgs } from '../api/thread';
-import { ThreadItemProps } from '../types';
 import { getAvatarUrl } from '../api/urls';
+import { ThreadItemProps } from '../types/thread';
+import { loadHtml } from './cheerio';
 
-// 帖子列表
-const parseThreadList = async (html: string) => {
+export const parseThreadList = async (html: string) => {
   if (!html) {
     return [];
   }
-  const $ = cheerio.load(html, {
-    decodeEntities: false,
-    _useHtmlParser2: true,
-  });
+  const $ = loadHtml(html);
   const promises: Promise<ThreadItemProps>[] = [];
   $('.threadlist tbody').each((_, elem) => {
     const span = $(elem).find('span').first();
@@ -47,16 +41,8 @@ const parseThreadList = async (html: string) => {
         };
         promises.push(threadPromise());
       }
-    } catch (err) {
-      console.warn(err, spanID);
-    }
+    } catch (err) {}
   });
   const res = await Promise.all(promises);
   return res;
-};
-
-export const getThreadList = async (args: ThreadListArgs) => {
-  const resp = await fetchThreadList({ ...args });
-  const data = resp && (await readBlobHtml(resp.data));
-  return parseThreadList(data);
 };

@@ -1,6 +1,6 @@
 export const readBlobHtml = (html) =>
   new Promise((resolve, reject) => {
-    // eslint-disable-next-line no-undef
+    /* globals FileReader */
     const reader = new FileReader();
     // Wait till complete
     reader.onloadend = function (e) {

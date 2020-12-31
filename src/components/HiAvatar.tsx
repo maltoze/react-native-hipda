@@ -24,4 +24,4 @@ const HiAvatar = (props: HiAvatarProps) => {
   }
 };
 
-export default HiAvatar;
+export default React.memo(HiAvatar);

@@ -10,9 +10,7 @@ import HiAvatar from './HiAvatar';
 
 const avatarSize = 60;
 
-export default function HiDrawerContent(
-  props: DrawerContentComponentProps<any>,
-) {
+const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
   const { navigation } = props;
   const navigator = navigate(navigation);
   const user = useUser();
@@ -34,42 +32,34 @@ export default function HiDrawerContent(
     setUser({ isGuest: true });
   };
 
-  const renderDefaultHeader = () => {
-    return (
-      <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
-        <Avatar.Icon
-          size={avatarSize}
-          icon="account"
-          style={styles.avatarContainer}
-        />
-      </Pressable>
-    );
-  };
-
-  const renderHeader = () => {
-    return (
-      <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
-        <HiAvatar
-          user={user}
-          style={styles.avatarContainer}
-          size={avatarSize}
-        />
-        <Text style={styles.headerText}>{user.username}</Text>
-      </Pressable>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <Drawer.Section>
-        {user.isGuest ? renderDefaultHeader() : renderHeader()}
+        <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
+          {user.isGuest ? (
+            <Avatar.Icon
+              size={avatarSize}
+              icon="account"
+              style={styles.avatarContainer}
+            />
+          ) : (
+            <>
+              <HiAvatar
+                user={user}
+                style={styles.avatarContainer}
+                size={avatarSize}
+              />
+              <Text style={styles.headerText}>{user.username}</Text>
+            </>
+          )}
+        </Pressable>
       </Drawer.Section>
       {!user.isGuest && (
         <Drawer.Item icon="logout" label="登出" onPress={handleLogout} />
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -89,3 +79,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(HiDrawerContent);

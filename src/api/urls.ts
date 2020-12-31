@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ThreadListUrlArgs } from '../types/thread';
 
 export const FORUM_SERVER = 'http://www.hi-pda.com';
 export const FORUM_SERVER_SSL = 'https://www.hi-pda.com';
@@ -10,8 +11,16 @@ const AVATAR_BASE = '000000000';
 export const LOGIN_SUBMIT =
   BASE_URL + 'logging.php?action=login&loginsubmit=yes&inajax=1';
 
-export const getThreadListUrl = (fid: number, page = 1) => {
-  return `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}`;
+export const getThreadListUrl = ({
+  fid,
+  page = 1,
+  orderby,
+  filter,
+}: ThreadListUrlArgs) => {
+  return (
+    `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}` +
+    `&filter=${filter || ''}&orderby=${orderby || ''}`
+  );
 };
 
 export const getThreadDetailUrl = (tid: number, page = 1) => {
@@ -34,14 +43,11 @@ export const getAvatarUrl = async (uid: number) => {
     fullUid.substr(7, 2),
   ].join('/');
   const avatarUrl = avatarBaseUrl + str + '_avatar_middle.jpg';
-  const resp = await axios.head(avatarUrl, {
-    validateStatus: (status) => status < 500,
-    responseType: 'blob',
-  });
-  if (resp.status === 404) {
-    return '';
-  } else {
+  try {
+    await axios.head(avatarUrl, { responseType: 'blob' });
     return avatarUrl;
+  } catch (error) {
+    return '';
   }
 };
 

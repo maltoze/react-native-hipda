@@ -5,10 +5,12 @@ import { getUser } from '../api/user';
 import { useSetUser } from '../state/store';
 import SplashScreen from '../screens/SplashScreen';
 import { notifyMessage } from '../utils/notify';
+import useMounted from '../hooks/useMounted';
 
 export default function Navigation() {
   const [loading, setLoading] = useState(true);
   const setUser = useSetUser();
+  const isMounted = useMounted();
 
   useEffect(() => {
     const bootstrapAsync = async () => {
@@ -18,10 +20,10 @@ export default function Navigation() {
       } catch (error) {
         notifyMessage(error.message);
       }
-      setLoading(false);
+      isMounted() && setLoading(false);
     };
     bootstrapAsync();
-  }, [setUser]);
+  }, [isMounted, setUser]);
 
   if (loading) {
     return <SplashScreen />;

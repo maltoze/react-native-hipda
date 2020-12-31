@@ -5,23 +5,6 @@ export type User = {
   avatar?: string;
 };
 
-export type ThreadItemProps = {
-  title: string;
-  tid: number;
-  author: User;
-  date: string;
-  comments: number;
-  lastpost?: { author: string; date: string };
-};
-
-export enum ForumActionTypes {
-  FETCH_FORUM = 'FETCH_FORUM',
-  REFRESH_FORUM = 'REFRESH_FORUM',
-  FETCH_FORUM__SENT = 'FETCH_FORUM__SENT',
-  REFRESH_FORUM__SENT = 'REFRESH_FORUM__SENT',
-  FORUM_CHANGED = 'FORUM_CHANGED',
-}
-
 export type PostItemBaseProps = {
   author: User;
   content: string | null;
