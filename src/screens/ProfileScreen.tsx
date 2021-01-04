@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { User } from '../types';
+import { User } from '../types/user';
 
 export default function ProfileScreen({ route }: StackScreenProps<any>) {
   const user = route.params?.user as User;

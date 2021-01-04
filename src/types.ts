@@ -1,9 +1,4 @@
-export type User = {
-  username?: string;
-  uid?: number;
-  isGuest?: boolean;
-  avatar?: string;
-};
+import { User } from './types/user';
 
 export type PostItemBaseProps = {
   author: User;

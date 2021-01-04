@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { Buffer } from 'buffer';
-import { User } from '../types';
+import { User } from '../types/user';
 
 type HiAvatarProps = {
   user: User;

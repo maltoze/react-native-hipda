@@ -1,5 +1,5 @@
 import { getAvatarUrl } from '../api/urls';
-import { User } from '../types';
+import { User } from '../types/user';
 import { loadHtml } from './cheerio';
 
 export const parseUser = async (html: string) => {
