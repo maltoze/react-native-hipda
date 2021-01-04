@@ -8,6 +8,11 @@ import { Appbar } from 'react-native-paper';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeDrawerScreen';
 import PostScreen from '../screens/PostScreen';
+import {
+  homeNavigatorRouteName,
+  postRouteName,
+  profileRouteName,
+} from './routes';
 
 const Stack = createStackNavigator();
 
@@ -37,12 +42,12 @@ export default function RootNavigator() {
         },
       }}>
       <Stack.Screen
-        name="Home"
+        name={homeNavigatorRouteName}
         component={HomeScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ThreadDetail"
+        name={postRouteName}
         component={PostScreen}
         options={({ route }) => {
           const { subject } = route.params as any;
@@ -54,7 +59,7 @@ export default function RootNavigator() {
         }}
       />
       <Stack.Screen
-        name="Profile"
+        name={profileRouteName}
         component={ProfileScreen}
         options={{
           gestureEnabled: true,

@@ -4,6 +4,7 @@ import HiDrawerContent from '../components/HiDrawerContent';
 import ThreadScreen from './ThreadScreen';
 import HomeBar from '../components/HomeBar';
 import { ThreadProvider } from '../provider/ThreadProvider';
+import { threadRouteName } from '../navigation/routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -19,7 +20,7 @@ export default function HomeScreen() {
           },
         }}
         drawerContent={(props) => <HiDrawerContent {...props} />}>
-        <Drawer.Screen name="Home">
+        <Drawer.Screen name={threadRouteName}>
           {(props) => <ThreadScreen {...props} />}
         </Drawer.Screen>
       </Drawer.Navigator>
