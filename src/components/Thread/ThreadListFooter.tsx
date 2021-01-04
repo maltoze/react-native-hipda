@@ -4,21 +4,21 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 import HiDivider from '../HiDivider';
 
 type ThreadListFooterProps = {
-  isLoading: boolean;
+  refreshing: boolean;
 };
 
 const ThreadListFooter = (props: ThreadListFooterProps) => {
-  const { isLoading } = props;
+  const { refreshing } = props;
   return (
     <View>
       <HiDivider />
       <View style={styles.container}>
-        {isLoading ? (
+        {refreshing ? null : (
           <>
             <ActivityIndicator />
             <Text style={styles.loading}>正在加载...</Text>
           </>
-        ) : null}
+        )}
       </View>
     </View>
   );
@@ -26,6 +26,7 @@ const ThreadListFooter = (props: ThreadListFooterProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical: 16,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

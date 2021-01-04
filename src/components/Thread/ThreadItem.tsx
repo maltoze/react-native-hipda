@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Caption, IconButton, Subheading, Text } from 'react-native-paper';
-import { ThreadItemProps } from '../types/thread';
-import HiAvatar from './HiAvatar';
+import { ThreadItemProps } from '../../types/thread';
+import HiAvatar from '../HiAvatar';
 
 interface ThreadProps extends ThreadItemProps {
   onPress?: () => void;

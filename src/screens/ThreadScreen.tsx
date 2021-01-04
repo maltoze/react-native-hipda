@@ -2,12 +2,13 @@ import React, { useMemo, useContext, useEffect, useRef } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { ThreadItemProps } from '../types/thread';
-import ThreadItem from '../components/ThreadItem';
+import ThreadItem from '../components/Thread/ThreadItem';
 import forums from '../forums';
 import { ThreadContext } from '../context/ThreadContext';
 import navigate from '../navigation/navigate';
 import { useSetLoginModalVisible, useUser } from '../state/store';
 import HiDivider from '../components/HiDivider';
+import ThreadListFooter from '../components/Thread/ThreadListFooter';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -65,6 +66,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
         onEndReached={handleOnLoad}
         initialNumToRender={15}
         ItemSeparatorComponent={HiDivider}
+        ListFooterComponent={() => <ThreadListFooter refreshing={refreshing} />}
       />
     </View>
   );

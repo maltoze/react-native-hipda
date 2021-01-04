@@ -10,8 +10,8 @@ export const threadInitialState: ThreadState = {
   threads: [],
   page: 0,
   forum: defaultForum,
-  isLoading: true,
-  refreshing: false,
+  isLoading: false,
+  refreshing: true,
 };
 
 export const threadReducer = (
