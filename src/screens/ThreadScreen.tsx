@@ -6,8 +6,8 @@ import { ThreadItemProps } from '../types/thread';
 import ThreadItem from '../components/ThreadItem';
 import FlatListBase from '../components/FlatListBase';
 import forums from '../forums';
-import { useSetLoginModalVisible, useUser } from '../state/store';
 import { ThreadContext } from '../context/ThreadContext';
+import navigate from '../navigation/navigate';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -21,16 +21,11 @@ function keyExtractor(item: ThreadItemProps) {
 
 function ThreadScreen(props: DrawerScreenProps<any>) {
   const { navigation } = props;
+  const navigator = navigate(navigation);
 
   const { state, actions } = useContext(ThreadContext);
   const { threads, isLoading, refreshing, page, forum } = state;
-  const { fid, needLogin } = forums[forum];
-
-  const user = useUser();
-  const setLoginModalVisible = useSetLoginModalVisible();
-  if (user.isGuest && needLogin) {
-    setLoginModalVisible(true);
-  }
+  const { fid } = forums[forum];
 
   useEffect(() => {
     actions.loadThread(fid);
@@ -49,7 +44,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
           data={threads.map((thread) => ({
             ...thread,
             onPress: () => {
-              navigation.navigate('ThreadDetail', {
+              navigator.openPostScreen({
                 tid: thread.tid,
                 subject: thread.title,
               });
