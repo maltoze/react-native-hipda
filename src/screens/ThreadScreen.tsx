@@ -1,13 +1,13 @@
-import React, { useContext, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import React, { useMemo, useContext, useEffect, useRef } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { ThreadItemProps } from '../types/thread';
 import ThreadItem from '../components/ThreadItem';
-import FlatListBase from '../components/FlatListBase';
 import forums from '../forums';
 import { ThreadContext } from '../context/ThreadContext';
 import navigate from '../navigation/navigate';
+import { useSetLoginModalVisible, useUser } from '../state/store';
+import HiDivider from '../components/HiDivider';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -21,15 +21,25 @@ function keyExtractor(item: ThreadItemProps) {
 
 function ThreadScreen(props: DrawerScreenProps<any>) {
   const { navigation } = props;
-  const navigator = navigate(navigation);
+  const navigator = useMemo(() => navigate(navigation), [navigation]);
 
   const { state, actions } = useContext(ThreadContext);
-  const { threads, isLoading, refreshing, page, forum } = state;
-  const { fid } = forums[forum];
+  const { threads, refreshing, page, forum } = state;
+  const { fid, needLogin } = forums[forum];
+
+  const user = useUser();
+  const setLoginModalVisible = useSetLoginModalVisible();
+
+  const flatListRef = useRef<FlatList<ThreadProp>>(null);
 
   useEffect(() => {
-    actions.loadThread(fid);
-  }, [actions, fid]);
+    if (user.isGuest && needLogin) {
+      setLoginModalVisible(true);
+    } else {
+      actions.refreshThread(fid);
+      flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+    }
+  }, [actions, fid, navigator, needLogin, setLoginModalVisible, user.isGuest]);
 
   const handleOnLoad = () => {
     actions.loadThread(fid, page + 1);
@@ -37,29 +47,25 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
 
   return (
     <View style={styles.container}>
-      {isLoading && !page ? (
-        <ActivityIndicator size="large" style={styles.container} />
-      ) : (
-        <FlatListBase
-          data={threads.map((thread) => ({
-            ...thread,
-            onPress: () => {
-              navigator.openPostScreen({
-                tid: thread.tid,
-                subject: thread.title,
-              });
-            },
-          }))}
-          onRefresh={() => actions.refreshThread(fid)}
-          refreshing={refreshing}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          onEndReached={handleOnLoad}
-          maxToRenderPerBatch={50}
-          initialNumToRender={20}
-          windowSize={61}
-        />
-      )}
+      <FlatList
+        ref={flatListRef}
+        data={threads.map((thread) => ({
+          ...thread,
+          onPress: () => {
+            navigator.openPostScreen({
+              tid: thread.tid,
+              subject: thread.title,
+            });
+          },
+        }))}
+        onRefresh={() => actions.refreshThread(fid)}
+        refreshing={refreshing}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        onEndReached={handleOnLoad}
+        initialNumToRender={15}
+        ItemSeparatorComponent={HiDivider}
+      />
     </View>
   );
 }
