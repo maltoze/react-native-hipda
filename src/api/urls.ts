@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { PostListUrlArgs } from '../types/post';
 import { ThreadListUrlArgs } from '../types/thread';
 
 export const FORUM_SERVER = 'http://www.hi-pda.com';
@@ -23,8 +24,16 @@ export const getThreadListUrl = ({
   );
 };
 
-export const getThreadDetailUrl = (tid: number, page = 1) => {
-  return BASE_URL + 'viewthread.php?tid=' + tid + '&page=' + page;
+export const getPostListUrl = ({
+  tid,
+  page = 1,
+  ordertype = 2,
+  authorid,
+}: PostListUrlArgs) => {
+  return (
+    `${BASE_URL}viewthread.php?tid=${tid}&page=${page}` +
+    `&ordertype=${ordertype}&authorid=${authorid || ''}`
+  );
 };
 
 export const getLatestThreadUrl = () => {

@@ -49,6 +49,6 @@ export const threadReducer = (
         refreshing: true,
       };
     default:
-      return state;
+      throw new Error('Unknown action type');
   }
 };

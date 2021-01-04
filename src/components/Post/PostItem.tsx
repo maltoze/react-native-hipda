@@ -1,9 +1,10 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple, useTheme, Colors } from 'react-native-paper';
-import { PostItemBaseProps, User } from '../../types';
+import { PostItemBaseProps } from '../../types/post';
 import { PostContent } from './PostContent';
 import HiAvatar from '../HiAvatar';
+import { User } from '../../types/user';
 
 interface PostItemProps extends PostItemBaseProps {
   onPress?: () => void;

@@ -1,21 +1,16 @@
-import cheerio from 'cheerio';
-import { readBlobHtml } from '../utils/reader';
-import { fetchThreadDetail, ThreadDetailArgs } from '../api/thread';
 import { PostItemBaseProps } from '../types';
 import { getAvatarUrl } from '../api/urls';
+import { loadHtml } from './cheerio';
 
 function handleContent(content: string) {
   return content;
 }
 
-const parseThreadDetail = async (html: string) => {
+export const parsePostList = async (html: string) => {
   if (!html) {
     return { postList: [] };
   }
-  const $ = cheerio.load(html, {
-    decodeEntities: false,
-    _useHtmlParser2: true,
-  });
+  const $ = loadHtml(html);
   const promises: Promise<PostItemBaseProps>[] = [];
   $('#postlist')
     .children()
@@ -56,10 +51,4 @@ const parseThreadDetail = async (html: string) => {
   const hasNext = $('.pages .next').length > 0 ? true : false;
   const postList = await Promise.all(promises);
   return { postList, hasNext };
-};
-
-export const getThreadDetail = async (args: ThreadDetailArgs) => {
-  const resp = await fetchThreadDetail({ ...args });
-  const data = resp && (await readBlobHtml(resp.data));
-  return parseThreadDetail(data);
 };
