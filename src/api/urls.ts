@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { PostListUrlArgs } from '../types/post';
 import { ThreadListUrlArgs } from '../types/thread';
 
@@ -53,8 +52,12 @@ export const getAvatarUrl = async (uid: number) => {
   ].join('/');
   const avatarUrl = avatarBaseUrl + str + '_avatar_middle.jpg';
   try {
-    await axios.head(avatarUrl, { responseType: 'blob' });
-    return avatarUrl;
+    const resp = await fetch(avatarUrl, { method: 'HEAD' });
+    if (resp.ok) {
+      return avatarUrl;
+    } else {
+      throw new Error(resp.statusText);
+    }
   } catch (error) {
     return '';
   }

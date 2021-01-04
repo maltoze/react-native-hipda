@@ -17,7 +17,7 @@ const getHeaders = async () => {
 
 export const fetchGet = async (
   url: string,
-  abortController: AbortController | undefined,
+  abortController?: AbortController,
 ) => {
   return fetch(url, {
     signal: abortController?.signal,
