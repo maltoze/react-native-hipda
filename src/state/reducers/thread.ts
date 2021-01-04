@@ -28,7 +28,7 @@ export const threadReducer = (
       return {
         ...state,
         threads: [...state.threads, ...toAdd],
-        page: state.page ? state.page + 1 : 1,
+        page: state.page + 1,
         isLoading: false,
       };
     case ThreadActionTypes.REFRESH_THREAD__FULFILLED:
@@ -43,7 +43,11 @@ export const threadReducer = (
     case ThreadActionTypes.REFRESH_THREAD__SENT:
       return { ...state, isLoading: false, refreshing: true };
     case ThreadActionTypes.SET_FORUM:
-      return { ...threadInitialState, forum: payload?.forum || defaultForum };
+      return {
+        ...state,
+        forum: payload?.forum || defaultForum,
+        refreshing: true,
+      };
     default:
       return state;
   }

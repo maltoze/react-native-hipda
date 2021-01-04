@@ -19,7 +19,6 @@ export const useThreadReducer = () => {
   /* global AbortController */
   const abortControllerRef = useRef<AbortController>();
   useEffect(() => {
-    abortControllerRef.current = new AbortController();
     return () => abortControllerRef.current?.abort();
   }, []);
 
@@ -27,13 +26,14 @@ export const useThreadReducer = () => {
     async (fid: number, page = 1) => {
       dispatch(fetchThreadSent());
       try {
+        abortControllerRef.current = new AbortController();
         const threads = await getThreadList(
           { fid, page, filter, orderby },
           abortControllerRef.current,
         );
         isMounted() && dispatch(fetchThread(threads));
       } catch (error) {
-        if (!abortControllerRef.current?.signal.aborted) {
+        if (error.name !== 'AbortError') {
           notifyMessage(error.message);
         }
       }
@@ -45,13 +45,14 @@ export const useThreadReducer = () => {
     async (fid: number) => {
       dispatch(refreshThreadSent());
       try {
+        abortControllerRef.current = new AbortController();
         const threads = await getThreadList(
           { fid },
           abortControllerRef.current,
         );
         isMounted() && dispatch(refreshThreadFulfilled(threads));
       } catch (error) {
-        if (!abortControllerRef.current?.signal.aborted) {
+        if (error.name !== 'AbortError') {
           notifyMessage(error.message);
         }
       }
@@ -60,6 +61,9 @@ export const useThreadReducer = () => {
   );
 
   const _setForum = useCallback((forum: Forum) => {
+    if (!abortControllerRef.current?.signal.aborted) {
+      abortControllerRef.current?.abort();
+    }
     dispatch(setForum(forum));
   }, []);
 

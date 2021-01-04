@@ -1,10 +1,16 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Appbar, Menu } from 'react-native-paper';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { NavigationProp } from '@react-navigation/native';
 import HomeBarContent from './HomeBarContent';
-import forums, { Forum } from '../forums';
+import forums, { defaultForum, Forum } from '../forums';
 import { ThreadContext } from '../context/ThreadContext';
 
 type HomeBarProps = {
@@ -24,12 +30,17 @@ function HomeBar(props: HomeBarProps) {
   const openMenu = useCallback(() => setVisible(true), []);
   const closeMenu = useCallback(() => setVisible(false), []);
 
+  const forumRef = useRef<Forum>(defaultForum);
+
   const forumMenuItems = useMemo(() => {
     return (Object.keys(forums) as Forum[]).map((forumId) => (
       <Menu.Item
         onPress={() => {
           closeMenu();
-          actions.setForum(forumId);
+          if (forumRef.current !== forumId) {
+            actions.setForum(forumId);
+            forumRef.current = forumId;
+          }
         }}
         title={forums[forumId].name}
         key={`menu-${forumId}`}
