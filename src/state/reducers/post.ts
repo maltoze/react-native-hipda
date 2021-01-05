@@ -21,7 +21,7 @@ export const postReducer = (
   const { payload } = action;
   switch (action.type) {
     case PostActionTypes.FETCH_POST__FULFILLED:
-      const { posts = [], hasNextPage = true, ordertype, tid } = {
+      const { posts = [], hasNextPage = true, ordertype, tid, authorid } = {
         ...payload,
       };
       const toAdd = posts.filter(
@@ -41,6 +41,7 @@ export const postReducer = (
         hasNextPage,
         ordertype: ordertype || postOrderAsc,
         tid,
+        authorid,
       };
     case PostActionTypes.FETCH_POST__SENT:
       return { ...state, isLoading: true };

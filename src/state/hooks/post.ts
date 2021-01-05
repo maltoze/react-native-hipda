@@ -16,16 +16,24 @@ export const usePostReducer = () => {
   }, []);
 
   const loadPost = useCallback(
-    async ({ tid, page = 1, ordertype = 2 }: PostListUrlArgs) => {
+    async ({ tid, page = 1, ordertype = 2, authorid }: PostListUrlArgs) => {
       dispatch(fetchPostSent());
       try {
         abortControllerRef.current = new AbortController();
         const { postList: posts, hasNext: hasNextPage } = await getPostList(
-          { tid, page, ordertype },
+          { tid, page, ordertype, authorid },
           abortControllerRef.current,
         );
         isMounted() &&
-          dispatch(fetchPostFulfilled({ posts, hasNextPage, ordertype, tid }));
+          dispatch(
+            fetchPostFulfilled({
+              posts,
+              hasNextPage,
+              ordertype,
+              tid,
+              authorid,
+            }),
+          );
       } catch (error) {
         if (error.name !== 'AbortError') {
           notifyMessage(error.message);

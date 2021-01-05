@@ -17,7 +17,7 @@ const PostAppbar = ({ scene, insets, tid }: PostAppbarProps) => {
   } = scene;
   const [menuVisible, setMenuVisible] = useState(false);
   const {
-    state: { ordertype },
+    state: { ordertype, authorid, posts },
     actions,
   } = useContext(PostContext);
 
@@ -39,13 +39,26 @@ const PostAppbar = ({ scene, insets, tid }: PostAppbarProps) => {
         <Menu.Item
           title={ordertype === postOrderDesc ? '正序看贴' : '倒序看帖'}
           onPress={() => {
+            setMenuVisible(false);
             actions.resetPost();
             actions.loadPost({
               tid,
               ordertype:
                 ordertype === postOrderDesc ? postOrderAsc : postOrderDesc,
+              authorid,
             });
+          }}
+        />
+        <Menu.Item
+          title={authorid ? '显示全部' : '只看楼主'}
+          onPress={() => {
             setMenuVisible(false);
+            actions.resetPost();
+            actions.loadPost({
+              tid,
+              ordertype,
+              authorid: authorid ? undefined : posts[0].author.uid,
+            });
           }}
         />
       </Menu>

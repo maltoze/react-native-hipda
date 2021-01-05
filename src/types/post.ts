@@ -20,6 +20,7 @@ export type PostState = {
   hasNextPage: boolean;
   ordertype: PostSortOrderType;
   tid?: number;
+  authorid?: number;
 };
 
 export type PostAction = {
