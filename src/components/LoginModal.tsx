@@ -25,6 +25,7 @@ export default function LoginModal() {
       const user = await requestToLogin(username, password);
       setUser(user);
       setLoginModalVisible(false);
+      notifyMessage('登录成功');
     } catch (error) {
       notifyMessage(error.message);
     }

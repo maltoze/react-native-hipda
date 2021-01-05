@@ -16,7 +16,7 @@ export default function App() {
       <SafeAreaProvider>
         <Navigation />
         <LoginModal />
-        <StatusBar />
+        <StatusBar style="light" />
       </SafeAreaProvider>
     </PaperProvider>
   );

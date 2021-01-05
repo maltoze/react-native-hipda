@@ -27,6 +27,7 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
   };
 
   const handleLogout = () => {
+    navigation.closeDrawer();
     CookieManager.clearAll();
     stRemoveCookie();
     setUser({ isGuest: true });

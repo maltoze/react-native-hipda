@@ -24,3 +24,18 @@ export const fetchGet = async (
     headers: await getHeaders(),
   });
 };
+
+export const fetchPost = async (
+  url: string,
+  body: BodyInit_,
+  headers: HeadersInit_,
+  abortController?: AbortController,
+) => {
+  const defaultHeaders = await getHeaders();
+  return fetch(url, {
+    method: 'POST',
+    body,
+    headers: { ...defaultHeaders, ...headers },
+    signal: abortController?.signal,
+  });
+};
