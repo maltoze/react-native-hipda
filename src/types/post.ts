@@ -18,7 +18,7 @@ export type PostState = {
   page: number;
   isLoading: boolean;
   hasNextPage: boolean;
-  ordertype: PostOrderType;
+  ordertype: PostSortOrderType;
   tid?: number;
 };
 
@@ -27,11 +27,13 @@ export type PostAction = {
   payload?: Partial<PostState>;
 };
 
-type PostOrderType = 1 | 2;
+export const postOrderAsc = 2;
+export const postOrderDesc = 1;
+type PostSortOrderType = typeof postOrderAsc | typeof postOrderDesc;
 
 export type PostListUrlArgs = {
   tid: number;
   page?: number;
-  ordertype?: PostOrderType;
+  ordertype?: PostSortOrderType;
   authorid?: number;
 };

@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { Appbar, Menu } from 'react-native-paper';
 import { PostContext } from '../../context/PostContext';
+import { postOrderAsc, postOrderDesc } from '../../types/post';
 
 const moreIcon = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
@@ -15,7 +16,11 @@ const PostAppbar = ({ scene, insets, tid }: PostAppbarProps) => {
     descriptor: { navigation, options },
   } = scene;
   const [menuVisible, setMenuVisible] = useState(false);
-  const { actions } = useContext(PostContext);
+  const {
+    state: { ordertype },
+    actions,
+  } = useContext(PostContext);
+
   return (
     <Appbar.Header statusBarHeight={insets.top}>
       <Appbar.BackAction onPress={() => navigation.goBack()} />
@@ -32,9 +37,14 @@ const PostAppbar = ({ scene, insets, tid }: PostAppbarProps) => {
           />
         }>
         <Menu.Item
-          title="倒序看帖"
+          title={ordertype === postOrderDesc ? '正序看贴' : '倒序看帖'}
           onPress={() => {
-            actions.loadPost({ tid, ordertype: 1 });
+            actions.resetPost();
+            actions.loadPost({
+              tid,
+              ordertype:
+                ordertype === postOrderDesc ? postOrderAsc : postOrderDesc,
+            });
             setMenuVisible(false);
           }}
         />

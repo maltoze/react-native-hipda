@@ -3,6 +3,7 @@ import {
   PostState,
   PostActionTypes,
   PostItemBaseProps,
+  postOrderAsc,
 } from '../../types/post';
 
 export const postInitialState: PostState = {
@@ -10,7 +11,7 @@ export const postInitialState: PostState = {
   page: 0,
   isLoading: true,
   hasNextPage: true,
-  ordertype: 2,
+  ordertype: postOrderAsc,
 };
 
 export const postReducer = (
@@ -35,10 +36,10 @@ export const postReducer = (
       }
       return {
         posts: newPosts,
-        page: hasNextPage ? state.page + 1 : state.page,
+        page: state.page + 1,
         isLoading: false,
         hasNextPage,
-        ordertype: ordertype || 2,
+        ordertype: ordertype || postOrderAsc,
         tid,
       };
     case PostActionTypes.FETCH_POST__SENT:
