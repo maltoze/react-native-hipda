@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
 import CookieManager from '@react-native-community/cookies';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Avatar,
   Drawer,
@@ -34,6 +35,8 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
   const setColorScheme = useSetColorScheme();
   const colorScheme = useColorScheme();
 
+  const insets = useSafeAreaInsets();
+
   const toggleTheme = () => {
     navigation.closeDrawer();
     setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
@@ -57,7 +60,8 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
-      <View style={{ backgroundColor: colors.background }}>
+      <View
+        style={{ backgroundColor: colors.background, paddingTop: insets.top }}>
         <Pressable onPress={handleAvatarPress} style={styles.accountContainer}>
           {user.isGuest ? (
             <Avatar.Icon
@@ -78,7 +82,7 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
         </Pressable>
       </View>
       <TouchableRipple onPress={toggleTheme}>
-        <View style={styles.preference}>
+        <View style={styles.darkMode}>
           <Drawer.Item icon="brightness-6" label="深色模式" />
           <Switch value={colorScheme === 'dark'} onValueChange={toggleTheme} />
         </View>
@@ -101,16 +105,16 @@ const styles = StyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 36,
-    paddingBottom: 18,
+    paddingVertical: 24,
   },
   headerText: {
     marginTop: 8,
     marginLeft: 8,
   },
-  preference: {
+  darkMode: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingRight: 10,
   },
 });
