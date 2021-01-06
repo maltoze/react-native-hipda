@@ -1,9 +1,22 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
 import CookieManager from '@react-native-community/cookies';
-import { Avatar, Drawer } from 'react-native-paper';
+import {
+  Avatar,
+  Drawer,
+  useTheme,
+  Text,
+  TouchableRipple,
+  Switch,
+} from 'react-native-paper';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { useSetLoginModalVisible, useSetUser, useUser } from '../state/store';
+import {
+  useColorScheme,
+  useSetColorScheme,
+  useSetLoginModalVisible,
+  useSetUser,
+  useUser,
+} from '../state/store';
 import navigate from '../navigation/navigate';
 import { stRemoveCookie } from '../utils/storage';
 import HiAvatar from './HiAvatar';
@@ -16,6 +29,15 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
   const user = useUser();
   const setUser = useSetUser();
   const setLoginModalVisible = useSetLoginModalVisible();
+
+  const { colors } = useTheme();
+  const setColorScheme = useSetColorScheme();
+  const colorScheme = useColorScheme();
+
+  const toggleTheme = () => {
+    navigation.closeDrawer();
+    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+  };
 
   const handleAvatarPress = () => {
     if (user.isGuest) {
@@ -34,9 +56,9 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Drawer.Section>
-        <Pressable onPress={handleAvatarPress} style={styles.headerContainer}>
+    <View style={[styles.container, { backgroundColor: colors.surface }]}>
+      <View style={{ backgroundColor: colors.background }}>
+        <Pressable onPress={handleAvatarPress} style={styles.accountContainer}>
           {user.isGuest ? (
             <Avatar.Icon
               size={avatarSize}
@@ -54,7 +76,13 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
             </>
           )}
         </Pressable>
-      </Drawer.Section>
+      </View>
+      <TouchableRipple onPress={toggleTheme}>
+        <View style={styles.preference}>
+          <Drawer.Item icon="brightness-6" label="深色模式" />
+          <Switch value={colorScheme === 'dark'} onValueChange={toggleTheme} />
+        </View>
+      </TouchableRipple>
       {!user.isGuest && (
         <Drawer.Item icon="logout" label="登出" onPress={handleLogout} />
       )}
@@ -65,19 +93,25 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
   },
   avatarContainer: {
     marginLeft: 16,
   },
-  headerContainer: {
+  headerContainer: {},
+  accountContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingTop: 36,
+    paddingBottom: 18,
   },
   headerText: {
     marginTop: 8,
     marginLeft: 8,
+  },
+  preference: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 10,
   },
 });
 

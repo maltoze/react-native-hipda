@@ -1,6 +1,13 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Caption, IconButton, Subheading, Text } from 'react-native-paper';
+import dayjs from 'dayjs';
+import {
+  Caption,
+  IconButton,
+  Subheading,
+  Text,
+  useTheme,
+} from 'react-native-paper';
 import { ThreadItemProps } from '../../types/thread';
 import HiAvatar from '../HiAvatar';
 
@@ -9,22 +16,35 @@ interface ThreadProps extends ThreadItemProps {
 }
 
 function ThreadItem(props: ThreadProps) {
-  const { onPress, author, title, date, comments } = props;
+  const { onPress, author, title, date, comments, views } = props;
+
+  const { colors } = useTheme();
+
   return (
     <Pressable onPress={onPress}>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.surface }]}>
         <View style={styles.upContainer}>
           <HiAvatar user={author} style={styles.avatarImg} size={36} />
           <View>
             <Text>{author.username}</Text>
             <View style={styles.rowContainer}>
-              <Caption>{date}</Caption>
-              <IconButton
-                icon="comment-outline"
-                size={12}
-                style={styles.icon}
-              />
-              <Caption>{comments}</Caption>
+              <Caption>{dayjs().to(dayjs(date))}</Caption>
+              <View style={[styles.rowContainer, styles.nums]}>
+                <IconButton
+                  icon="comment-multiple-outline"
+                  size={12}
+                  color={colors.caption}
+                  style={styles.icon}
+                />
+                <Caption>{comments}</Caption>
+                <IconButton
+                  icon="eye-outline"
+                  size={12}
+                  color={colors.caption}
+                  style={styles.icon}
+                />
+                <Caption>{views}</Caption>
+              </View>
             </View>
           </View>
         </View>
@@ -39,7 +59,7 @@ function ThreadItem(props: ThreadProps) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
-    paddingLeft: 10,
+    paddingHorizontal: 10,
   },
   upContainer: {
     flexDirection: 'row',
@@ -50,11 +70,15 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   icon: {
     margin: 0,
-    marginLeft: 10,
+    marginLeft: 4,
     marginTop: 2,
+  },
+  nums: {
+    marginLeft: 12,
   },
 });
 

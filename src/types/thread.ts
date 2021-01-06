@@ -15,6 +15,7 @@ export type ThreadItemProps = {
   author: User;
   date: string;
   comments: number;
+  views: number;
   lastpost?: { author: string; date: string };
 };
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Divider } from 'react-native-paper';
 
-export default function HiDivider() {
+const HiDivider = React.memo(() => {
   return <Divider />;
-}
+});
+
+export default HiDivider;

@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { User } from '../types/user';
 import PostItem from '../components/Post/PostItem';
 import { useFocusEffect } from '@react-navigation/native';
@@ -19,6 +19,8 @@ function renderItem({ item }: { item: PostItemProp }) {
 function PostScreen({ navigation, route }: StackScreenProps<any>) {
   const { tid } = route.params as any;
   const navigator = navigate(navigation);
+
+  const { colors } = useTheme();
 
   const { state, actions } = useContext(PostContext);
   const { posts, isLoading, page, hasNextPage, ordertype } = state;
@@ -38,7 +40,7 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.surface }]}>
       {isLoading && !page ? (
         <ActivityIndicator size="large" style={styles.container} />
       ) : (

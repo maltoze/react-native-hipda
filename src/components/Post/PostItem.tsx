@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Text, TouchableRipple, useTheme, Colors } from 'react-native-paper';
+import { Text, TouchableRipple, useTheme } from 'react-native-paper';
 import { PostItemBaseProps } from '../../types/post';
 import { PostContent } from './PostContent';
 import HiAvatar from '../HiAvatar';
@@ -13,16 +13,15 @@ interface PostItemProps extends PostItemBaseProps {
 
 const PostItem = React.memo((props: PostItemProps) => {
   const { author, postno, content, onPress, posttime, onAvatarPress } = props;
+
   const { colors } = useTheme();
   const postInfoRightTextStyle = {
-    color: colors.backdrop,
+    color: colors.caption,
   };
-  const postNoTextStyle = {
-    backgroundColor: Colors.grey300,
-  };
+
   return (
     <TouchableRipple onPress={onPress}>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.surface }]}>
         <View style={styles.postInfoContainer}>
           <Pressable onPress={() => onAvatarPress(author)}>
             <View style={styles.postInfoView}>
@@ -32,13 +31,8 @@ const PostItem = React.memo((props: PostItemProps) => {
           </Pressable>
           <View style={styles.postInfoView}>
             <Text style={postInfoRightTextStyle}>{posttime}</Text>
-            <Text
-              style={[
-                postInfoRightTextStyle,
-                postNoTextStyle,
-                styles.postNoText,
-              ]}>
-              {postno}
+            <Text style={[postInfoRightTextStyle, styles.postNoText]}>
+              {postno}#
             </Text>
           </View>
         </View>
@@ -52,7 +46,7 @@ const PostItem = React.memo((props: PostItemProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 4,
+    paddingTop: 6,
     paddingHorizontal: 8,
   },
   content: {
@@ -70,11 +64,11 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   postNoText: {
-    minWidth: 24,
+    // minWidth: 24,
     textAlign: 'center',
     marginLeft: 8,
-    paddingHorizontal: 8,
-    borderRadius: 8,
+    // paddingHorizontal: 8,
+    // borderRadius: 8,
     // fix borderRadius not work on ios
     overflow: 'hidden',
   },

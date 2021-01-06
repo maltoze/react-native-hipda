@@ -9,6 +9,7 @@ import navigate from '../navigation/navigate';
 import { useSetLoginModalVisible, useUser } from '../state/store';
 import HiDivider from '../components/HiDivider';
 import ThreadListFooter from '../components/Thread/ThreadListFooter';
+import { useTheme } from 'react-native-paper';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -23,6 +24,8 @@ function keyExtractor(item: ThreadItemProps) {
 function ThreadScreen(props: DrawerScreenProps<any>) {
   const { navigation } = props;
   const navigator = useMemo(() => navigate(navigation), [navigation]);
+
+  const { colors } = useTheme();
 
   const { state, actions } = useContext(ThreadContext);
   const { threads, refreshing, page, forum } = state;
@@ -47,7 +50,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.surface }]}>
       <FlatList
         ref={flatListRef}
         data={threads.map((thread) => ({

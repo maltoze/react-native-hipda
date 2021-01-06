@@ -33,6 +33,7 @@ export const parseThreadList = async (html: string) => {
             },
             date: $(elem).find('.author em').text().trim(),
             comments: parseFloat($(elem).find('.nums strong').text().trim()),
+            views: parseFloat($(elem).find('.nums em').text().trim()),
             lastpost: {
               author: $(elem).find('.lastpost cite').text().trim(),
               date: $(elem).find('.lastpost em').text().trim(),

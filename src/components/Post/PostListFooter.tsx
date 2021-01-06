@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Text } from 'react-native-paper';
+import { ActivityIndicator, Text, useTheme } from 'react-native-paper';
 import HiDivider from '../HiDivider';
 
 type PostListFooter = {
@@ -9,10 +9,11 @@ type PostListFooter = {
 
 const PostListFooter = (props: PostListFooter) => {
   const { hasNextPage } = props;
+  const { colors } = useTheme();
   return (
     <View>
       <HiDivider />
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.surface }]}>
         {hasNextPage ? (
           <>
             <ActivityIndicator />

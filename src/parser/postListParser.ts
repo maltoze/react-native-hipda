@@ -1,4 +1,4 @@
-import { PostItemBaseProps } from '../types';
+import { PostItemBaseProps } from '../types/post';
 import { getAvatarUrl } from '../api/urls';
 import { loadHtml } from './cheerio';
 

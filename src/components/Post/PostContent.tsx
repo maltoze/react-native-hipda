@@ -87,7 +87,7 @@ export const PostContent = React.memo((props: any) => {
   const dimensionsWidth = useWindowDimensions().width - 16;
   const classesStyles = {
     pstatus: {
-      color: colors.backdrop,
+      color: colors.disabled,
       fontSize: 14,
       // textAlign not work on Android
       textAlign: 'center',
@@ -95,7 +95,7 @@ export const PostContent = React.memo((props: any) => {
       letterSpacing: 0,
     },
     quote: {
-      backgroundColor: Colors.grey200,
+      color: Colors.grey600,
       padding: 8,
       borderRadius: 4,
       borderLeftWidth: 4,
@@ -114,7 +114,10 @@ export const PostContent = React.memo((props: any) => {
       contentWidth={dimensionsWidth}
       ignoreNodesFunction={ignoreNodesFunction}
       alterNode={alterNode}
-      baseFontStyle={styles.baseFontStyle}
+      baseFontStyle={StyleSheet.flatten([
+        styles.baseFontStyle,
+        { color: colors.text },
+      ])}
       classesStyles={classesStyles}
     />
   );
