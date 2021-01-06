@@ -1,5 +1,7 @@
+import forums from '../forums';
 import { PostListUrlArgs } from '../types/post';
 import { ThreadListUrlArgs } from '../types/thread';
+import { fetchGet } from './fetch';
 
 export const FORUM_SERVER = 'http://www.hi-pda.com';
 export const FORUM_SERVER_SSL = 'https://www.hi-pda.com';
@@ -11,16 +13,26 @@ const AVATAR_BASE = '000000000';
 export const LOGIN_SUBMIT =
   BASE_URL + 'logging.php?action=login&loginsubmit=yes&inajax=1';
 
-export const getThreadListUrl = ({
-  fid,
+export const getThreadListUrl = async ({
+  forum,
   page = 1,
   orderby,
   filter,
 }: ThreadListUrlArgs) => {
-  return (
-    `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}` +
-    `&filter=${filter || ''}&orderby=${orderby || ''}`
-  );
+  if (forum === 'All') {
+    const resp = await fetchGet(getLatestThreadUrl());
+    if (resp.ok) {
+      return resp.url;
+    } else {
+      throw new Error(resp.statusText);
+    }
+  } else {
+    const { fid } = forums[forum];
+    return (
+      `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}` +
+      `&filter=${filter || ''}&orderby=${orderby || ''}`
+    );
+  }
 };
 
 export const getPostListUrl = ({

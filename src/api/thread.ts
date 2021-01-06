@@ -8,7 +8,7 @@ export const getThreadList = async (
   urlArgs: ThreadListUrlArgs,
   abortController: AbortController | undefined,
 ) => {
-  const url = getThreadListUrl(urlArgs);
+  const url = await getThreadListUrl(urlArgs);
   const resp = await fetchGet(url, abortController);
   if (resp.ok) {
     const respBlob = await resp.blob();

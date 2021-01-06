@@ -29,7 +29,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
 
   const { state, actions } = useContext(ThreadContext);
   const { threads, refreshing, page, forum } = state;
-  const { fid, needLogin } = forums[forum];
+  const { needLogin } = forums[forum];
 
   const user = useUser();
   const setLoginModalVisible = useSetLoginModalVisible();
@@ -40,13 +40,20 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
     if (user.isGuest && needLogin) {
       setLoginModalVisible(true);
     } else {
-      actions.refreshThread(fid);
+      actions.refreshThread(forum);
       flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     }
-  }, [actions, fid, navigator, needLogin, setLoginModalVisible, user.isGuest]);
+  }, [
+    actions,
+    forum,
+    navigator,
+    needLogin,
+    setLoginModalVisible,
+    user.isGuest,
+  ]);
 
   const handleOnLoad = () => {
-    actions.loadThread(fid, page + 1);
+    actions.loadThread(forum, page + 1);
   };
 
   return (
@@ -62,7 +69,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
             });
           },
         }))}
-        onRefresh={() => actions.refreshThread(fid)}
+        onRefresh={() => actions.refreshThread(forum)}
         refreshing={refreshing}
         keyExtractor={keyExtractor}
         renderItem={renderItem}

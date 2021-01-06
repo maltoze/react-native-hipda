@@ -9,12 +9,13 @@ type IconProps = {
 
 type ForumDeclaration = {
   name: string;
-  fid: number;
+  fid?: number;
   icon?: string | ((props: IconProps) => React.ReactNode);
   needLogin?: boolean;
 };
 
 export type Forum =
+  | 'All'
   | 'Discovery'
   | 'Geek'
   | 'Palm'
@@ -25,6 +26,10 @@ export type Forum =
 export const defaultForum = 'Discovery';
 
 const forums: Record<Forum, ForumDeclaration> = {
+  All: {
+    name: '全部',
+    icon: 'view-sequential',
+  },
   Discovery: {
     name: 'Discovery',
     fid: 2,

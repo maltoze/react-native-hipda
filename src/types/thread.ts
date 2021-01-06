@@ -16,6 +16,7 @@ export type ThreadItemProps = {
   date: string;
   comments: number;
   views: number;
+  forum?: string;
   lastpost?: { author: string; date: string };
 };
 
@@ -43,7 +44,7 @@ export type ThreadAction = {
 };
 
 export type ThreadListUrlArgs = {
-  fid: number;
+  forum: Forum;
   page?: number;
   orderby?: ThreadOrderby;
   filter?: ThreadFilter;

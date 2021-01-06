@@ -23,12 +23,12 @@ export const useThreadReducer = () => {
   }, []);
 
   const loadThread = useCallback(
-    async (fid: number, page = 1) => {
+    async (forum: Forum, page = 1) => {
       dispatch(fetchThreadSent());
       try {
         abortControllerRef.current = new AbortController();
         const threads = await getThreadList(
-          { fid, page, filter, orderby },
+          { forum, page, filter, orderby },
           abortControllerRef.current,
         );
         isMounted() && dispatch(fetchThread(threads));
@@ -42,12 +42,12 @@ export const useThreadReducer = () => {
   );
 
   const refreshThread = useCallback(
-    async (fid: number) => {
+    async (forum: Forum) => {
       dispatch(refreshThreadSent());
       try {
         abortControllerRef.current = new AbortController();
         const threads = await getThreadList(
-          { fid },
+          { forum },
           abortControllerRef.current,
         );
         isMounted() && dispatch(refreshThreadFulfilled(threads));
