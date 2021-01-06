@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import dayjs from 'dayjs';
+import isToday from 'dayjs/plugin/isToday';
+import isYesterday from 'dayjs/plugin/isYesterday';
 import {
   Caption,
   IconButton,
@@ -11,14 +13,22 @@ import {
 import { ThreadItemProps } from '../../types/thread';
 import HiAvatar from '../HiAvatar';
 
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+
 interface ThreadProps extends ThreadItemProps {
   onPress?: () => void;
 }
 
 function ThreadItem(props: ThreadProps) {
-  const { onPress, author, title, date, comments, views } = props;
-
   const { colors } = useTheme();
+
+  const { onPress, author, title, date, comments, views } = props;
+  const relativeTime = dayjs(date).isToday()
+    ? '今天'
+    : dayjs(date).isYesterday()
+    ? '昨天'
+    : dayjs(date).fromNow();
 
   return (
     <Pressable onPress={onPress}>
@@ -28,7 +38,7 @@ function ThreadItem(props: ThreadProps) {
           <View>
             <Text>{author.username}</Text>
             <View style={styles.rowContainer}>
-              <Caption>{dayjs().to(dayjs(date))}</Caption>
+              <Caption>{relativeTime}</Caption>
               <View style={[styles.rowContainer, styles.nums]}>
                 <IconButton
                   icon="comment-multiple-outline"
