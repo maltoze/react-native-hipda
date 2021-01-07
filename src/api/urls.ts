@@ -22,7 +22,7 @@ export const getThreadListUrl = async ({
   if (forum === 'All') {
     const resp = await fetchGet(getLatestThreadUrl());
     if (resp.ok) {
-      return resp.url;
+      return `${resp.url}&page=${page}`;
     } else {
       throw new Error(resp.statusText);
     }
