@@ -18,7 +18,8 @@ export const parseThreadList = async (html: string) => {
         throw new Error('Subject link not found');
       }
       const tid = parseFloat(tidHref.match(/.*tid=(\d+)/)![1]);
-      const title = $(elem).find('.subject').find('a').text();
+      const title = $(elem).find('.subject').find('a').first().text();
+      const forum = $(elem).find('.forum').text();
       const threadPromise = async () => {
         const avatar = await getAvatarUrl(uid);
         return {
@@ -32,6 +33,7 @@ export const parseThreadList = async (html: string) => {
           date: $(elem).find('.author em').text().trim(),
           comments: parseFloat($(elem).find('.nums strong').text().trim()),
           views: parseFloat($(elem).find('.nums em').text().trim()),
+          forum,
           lastpost: {
             author: $(elem).find('.lastpost cite').text().trim(),
             date: $(elem).find('.lastpost em').text().trim(),

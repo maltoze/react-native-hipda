@@ -23,7 +23,7 @@ interface ThreadProps extends ThreadItemProps {
 function ThreadItem(props: ThreadProps) {
   const { colors } = useTheme();
 
-  const { onPress, author, title, date, comments, views } = props;
+  const { onPress, author, title, date, comments, views, forum } = props;
   const relativeTime = dayjs(date).isToday()
     ? '今天'
     : dayjs(date).isYesterday()
@@ -34,29 +34,36 @@ function ThreadItem(props: ThreadProps) {
     <Pressable onPress={onPress}>
       <View style={[styles.container, { backgroundColor: colors.surface }]}>
         <View style={styles.upContainer}>
-          <HiAvatar user={author} style={styles.avatarImg} size={36} />
-          <View>
-            <Text>{author.username}</Text>
-            <View style={styles.rowContainer}>
-              <Caption>{relativeTime}</Caption>
-              <View style={[styles.rowContainer, styles.nums]}>
-                <IconButton
-                  icon="comment-multiple-outline"
-                  size={12}
-                  color={colors.caption}
-                  style={styles.icon}
-                />
-                <Caption>{comments}</Caption>
-                <IconButton
-                  icon="eye-outline"
-                  size={12}
-                  color={colors.caption}
-                  style={styles.icon}
-                />
-                <Caption>{views}</Caption>
+          <View style={styles.rowContainer}>
+            <HiAvatar user={author} style={styles.avatarImg} size={36} />
+            <View>
+              <Text>{author.username}</Text>
+              <View style={styles.rowContainer}>
+                <Caption>{relativeTime}</Caption>
+                <View style={[styles.rowContainer, styles.nums]}>
+                  <IconButton
+                    icon="comment-multiple-outline"
+                    size={12}
+                    color={colors.caption}
+                    style={styles.icon}
+                  />
+                  <Caption>{comments}</Caption>
+                  <IconButton
+                    icon="eye-outline"
+                    size={12}
+                    color={colors.caption}
+                    style={styles.icon}
+                  />
+                  <Caption>{views}</Caption>
+                </View>
               </View>
             </View>
           </View>
+          {forum ? (
+            <Text style={[styles.tag, { backgroundColor: colors.background }]}>
+              {forum}
+            </Text>
+          ) : null}
         </View>
         <View>
           <Subheading>{title}</Subheading>
@@ -68,19 +75,19 @@ function ThreadItem(props: ThreadProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
+    paddingTop: 8,
+    paddingHorizontal: 8,
   },
   upContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   avatarImg: {
     marginRight: 10,
   },
   rowContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   icon: {
     margin: 0,
@@ -88,7 +95,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   nums: {
+    alignItems: 'center',
     marginLeft: 12,
+  },
+  tag: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
   },
 });
 

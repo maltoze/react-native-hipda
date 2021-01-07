@@ -14,7 +14,8 @@ const fontSizeKeywords = [
   // set the min size to small(12)
   // 'xx-small',
   // 'x-small',
-  'small',
+  // 'small',
+  'medium',
   'medium',
   'large',
   'x-large',

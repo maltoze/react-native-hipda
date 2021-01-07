@@ -23,7 +23,7 @@ export type Forum =
   | 'BS'
   | 'Smartphone';
 
-export const defaultForum = 'Discovery';
+export const defaultForum = 'All';
 
 const forums: Record<Forum, ForumDeclaration> = {
   All: {
