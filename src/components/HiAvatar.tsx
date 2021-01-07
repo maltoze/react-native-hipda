@@ -3,6 +3,7 @@ import { StyleProp, ViewStyle } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { Buffer } from 'buffer';
 import { User } from '../types/user';
+import FastImage from 'react-native-fast-image';
 
 type HiAvatarProps = {
   user: User;
@@ -11,10 +12,19 @@ type HiAvatarProps = {
 };
 
 const HiAvatar = (props: HiAvatarProps) => {
-  const { user, style, size } = props;
+  const { user, style, size = 64 } = props;
   if (user.avatar) {
     return (
-      <Avatar.Image source={{ uri: user.avatar }} size={size} style={style} />
+      <Avatar.Image
+        source={() => (
+          <FastImage
+            source={{ uri: user.avatar }}
+            style={{ width: size, height: size, borderRadius: size / 2 }}
+          />
+        )}
+        size={size}
+        style={style}
+      />
     );
   } else {
     const label = Buffer.from(user.username || '匿名')
