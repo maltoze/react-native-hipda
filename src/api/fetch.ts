@@ -19,10 +19,14 @@ export const fetchGet = async (
   url: string,
   abortController?: AbortController,
 ) => {
-  return fetch(url, {
-    signal: abortController?.signal,
-    headers: await getHeaders(),
-  });
+  try {
+    return await fetch(url, {
+      signal: abortController?.signal,
+      headers: await getHeaders(),
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const fetchPost = async (
@@ -32,10 +36,14 @@ export const fetchPost = async (
   abortController?: AbortController,
 ) => {
   const defaultHeaders = await getHeaders();
-  return fetch(url, {
-    method: 'POST',
-    body,
-    headers: { ...defaultHeaders, ...headers },
-    signal: abortController?.signal,
-  });
+  try {
+    return await fetch(url, {
+      method: 'POST',
+      body,
+      headers: { ...defaultHeaders, ...headers },
+      signal: abortController?.signal,
+    });
+  } catch (error) {
+    throw error;
+  }
 };
