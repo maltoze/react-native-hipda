@@ -5,17 +5,7 @@ import { PostItemBaseProps } from '../../types/post';
 import { PostContent } from './PostContent';
 import HiAvatar from '../HiAvatar';
 import { User } from '../../types/user';
-
-import 'intl';
-import 'intl/locale-data/jsonp/zh-Hans-CN';
-import 'date-time-format-timezone';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('Asia/Shanghai');
 
 interface PostItemProps extends PostItemBaseProps {
   onPress?: () => void;
@@ -42,7 +32,7 @@ const PostItem = React.memo((props: PostItemProps) => {
           </Pressable>
           <View style={styles.postInfoView}>
             <Text style={postInfoRightTextStyle}>
-              {dayjs.tz(posttime).fromNow()}
+              {dayjs(posttime).fromNow()}
             </Text>
             <Text style={[postInfoRightTextStyle, styles.postNoText]}>
               {postno}#
