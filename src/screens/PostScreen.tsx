@@ -1,10 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { User } from '../types/user';
 import PostItem from '../components/Post/PostItem';
-import { useFocusEffect } from '@react-navigation/native';
 import navigate from '../navigation/navigate';
 import HiDivider from '../components/HiDivider';
 import PostListFooter from '../components/Post/PostListFooter';
@@ -32,12 +31,10 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
     actions.loadPost({ tid, page: page + 1, ordertype });
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      actions.resetPost();
-      actions.loadPost({ tid });
-    }, [actions, tid]),
-  );
+  useEffect(() => {
+    actions.loadPost({ tid });
+    return () => actions.resetPost();
+  }, [actions, tid]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
