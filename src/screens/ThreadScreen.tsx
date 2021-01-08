@@ -1,4 +1,10 @@
-import React, { useMemo, useContext, useEffect, useRef } from 'react';
+import React, {
+  useMemo,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { ThreadItemProps } from '../types/thread';
@@ -37,11 +43,16 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
   const flatListRef = useRef<FlatList<ThreadProp>>(null);
 
   useEffect(() => {
+    if (!refreshing) {
+      flatListRef.current?.scrollToIndex({ animated: true, index: 0 });
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
     if (user.isGuest && needLogin) {
       setLoginModalVisible(true);
     } else {
       actions.refreshThread(forum);
-      flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     }
   }, [
     actions,
@@ -55,6 +66,11 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
   const handleOnLoad = () => {
     actions.loadThread(forum, page + 1);
   };
+
+  const ListFooterComponent = useCallback(
+    () => <ThreadListFooter refreshing={refreshing} />,
+    [refreshing],
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
@@ -76,7 +92,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
         onEndReached={handleOnLoad}
         initialNumToRender={15}
         ItemSeparatorComponent={HiDivider}
-        ListFooterComponent={() => <ThreadListFooter refreshing={refreshing} />}
+        ListFooterComponent={ListFooterComponent}
       />
     </View>
   );

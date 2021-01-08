@@ -46,7 +46,6 @@ export const threadReducer = (
       return {
         ...state,
         forum: payload?.forum || defaultForum,
-        refreshing: true,
       };
     default:
       throw new Error('Unknown action type');
