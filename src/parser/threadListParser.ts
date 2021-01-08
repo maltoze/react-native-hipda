@@ -13,12 +13,16 @@ export const parseThreadList = async (html: string) => {
       const authorHref = $(elem).find('.author cite a').attr('href');
       // authorHref may not exist
       const uid = parseFloat(authorHref?.match(/.*uid=(\d+)/)![1] || '0');
-      const tidHref = $(elem).find('.subject').find('a').attr('href');
-      if (!tidHref) {
-        throw new Error('Subject link not found');
+      const subjectLinkElem = $(elem)
+        .find('.subject')
+        .find('a[href^=viewthread]')
+        .first();
+      const threadHref = subjectLinkElem.attr('href');
+      if (!threadHref) {
+        return;
       }
-      const tid = parseFloat(tidHref.match(/.*tid=(\d+)/)![1]);
-      const title = $(elem).find('.subject').find('a').first().text();
+      const tid = parseFloat(threadHref.match(/.*tid=(\d+)/)![1]);
+      const title = subjectLinkElem.text();
       const forum = $(elem).find('.forum').text();
       const threadPromise = async () => {
         const avatar = await getAvatarUrl(uid);

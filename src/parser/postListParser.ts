@@ -32,6 +32,7 @@ export const parsePostList = async (html: string) => {
       }
       const postno = $(elem).find('.postinfo strong a em').text();
       const uid = parseFloat(uidMatch[1]);
+      const posttime = $(elem).find('.authorinfo em').text().slice(4);
 
       const postPromise = async () => {
         const avatar = await getAvatarUrl(uid);
@@ -43,7 +44,7 @@ export const parsePostList = async (html: string) => {
             avatar,
           },
           content: content && handleContent(content),
-          posttime: $(elem).find('.authorinfo em').text().slice(4),
+          posttime,
         };
       };
       promises.push(postPromise());
