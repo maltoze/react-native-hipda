@@ -84,7 +84,9 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
       <TouchableRipple onPress={toggleTheme}>
         <View style={styles.darkMode}>
           <Drawer.Item icon="brightness-6" label="深色模式" />
-          <Switch value={colorScheme === 'dark'} onValueChange={toggleTheme} />
+          <View pointerEvents="none">
+            <Switch value={colorScheme === 'dark'} />
+          </View>
         </View>
       </TouchableRipple>
       {!user.isGuest && (
