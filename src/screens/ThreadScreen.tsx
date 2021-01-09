@@ -72,25 +72,30 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
     [refreshing],
   );
 
+  const threadData = useMemo(
+    () =>
+      threads.map((thread) => ({
+        ...thread,
+        onPress: () => {
+          navigator.openPostScreen({
+            tid: thread.tid,
+            subject: thread.title,
+          });
+        },
+      })),
+    [navigator, threads],
+  );
+
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
       <FlatList
         ref={flatListRef}
-        data={threads.map((thread) => ({
-          ...thread,
-          onPress: () => {
-            navigator.openPostScreen({
-              tid: thread.tid,
-              subject: thread.title,
-            });
-          },
-        }))}
+        data={threadData}
         onRefresh={() => actions.refreshThread(forum)}
         refreshing={refreshing}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         onEndReached={handleOnLoad}
-        initialNumToRender={15}
         ItemSeparatorComponent={HiDivider}
         ListFooterComponent={ListFooterComponent}
       />

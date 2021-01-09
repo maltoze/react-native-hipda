@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback, useMemo } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
@@ -36,29 +36,38 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
     return () => actions.resetPost();
   }, [actions, tid]);
 
+  const ListFooterComponent = useCallback(
+    () => <PostListFooter hasNextPage={hasNextPage} />,
+    [hasNextPage],
+  );
+
+  const postData = useMemo(
+    () =>
+      posts.map((post) => ({
+        ...post,
+        onAvatarPress: (user: User) => {
+          navigator.openProfile({ user });
+        },
+      })),
+    [navigator, posts],
+  );
+
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
       {isLoading && !page ? (
         <ActivityIndicator size="large" style={styles.container} />
       ) : (
-        <FlatList
-          data={
-            posts &&
-            posts.map((post) => ({
-              ...post,
-              onAvatarPress: (user: User) => {
-                navigator.openProfile({ user });
-              },
-            }))
-          }
-          renderItem={renderItem}
-          keyExtractor={(item) => item.postno.toString()}
-          initialNumToRender={10}
-          ItemSeparatorComponent={HiDivider}
-          onEndReached={handleOnLoad}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={<PostListFooter hasNextPage={hasNextPage} />}
-        />
+        <>
+          <FlatList
+            data={postData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.postno.toString()}
+            ItemSeparatorComponent={HiDivider}
+            onEndReached={handleOnLoad}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={ListFooterComponent}
+          />
+        </>
       )}
     </View>
   );
