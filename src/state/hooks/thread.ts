@@ -8,12 +8,15 @@ import {
   fetchThreadSent,
   refreshThreadFulfilled,
   refreshThreadSent,
-  setForum,
 } from '../actions/thread';
 import { threadInitialState, threadReducer } from '../reducers/thread';
 
-export const useThreadReducer = () => {
-  const [state, dispatch] = useReducer(threadReducer, threadInitialState);
+const initThreadState = (forum: Forum) => {
+  return { ...threadInitialState, forum };
+};
+
+export const useThreadReducer = (forum: Forum) => {
+  const [state, dispatch] = useReducer(threadReducer, forum, initThreadState);
   const isMounted = useMounted();
   const { filter, orderby } = state;
   /* global AbortController */
@@ -23,7 +26,7 @@ export const useThreadReducer = () => {
   }, []);
 
   const loadThread = useCallback(
-    async (forum: Forum, page = 1) => {
+    async (page = 1) => {
       dispatch(fetchThreadSent());
       try {
         abortControllerRef.current = new AbortController();
@@ -38,42 +41,31 @@ export const useThreadReducer = () => {
         }
       }
     },
-    [filter, isMounted, orderby],
+    [forum, filter, isMounted, orderby],
   );
 
-  const refreshThread = useCallback(
-    async (forum: Forum) => {
-      dispatch(refreshThreadSent());
-      try {
-        abortControllerRef.current = new AbortController();
-        const threads = await getThreadList(
-          { forum },
-          abortControllerRef.current,
-        );
-        isMounted() && dispatch(refreshThreadFulfilled(threads));
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          notifyMessage(error.message);
-        }
+  const refreshThread = useCallback(async () => {
+    dispatch(refreshThreadSent());
+    try {
+      abortControllerRef.current = new AbortController();
+      const threads = await getThreadList(
+        { forum },
+        abortControllerRef.current,
+      );
+      isMounted() && dispatch(refreshThreadFulfilled(threads));
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        notifyMessage(error.message);
       }
-    },
-    [isMounted],
-  );
-
-  const _setForum = useCallback((forum: Forum) => {
-    if (!abortControllerRef.current?.signal.aborted) {
-      abortControllerRef.current?.abort();
     }
-    dispatch(setForum(forum));
-  }, []);
+  }, [forum, isMounted]);
 
   const actions = useMemo(
     () => ({
       loadThread,
       refreshThread,
-      setForum: _setForum,
     }),
-    [_setForum, loadThread, refreshThread],
+    [loadThread, refreshThread],
   );
 
   return { state, actions };

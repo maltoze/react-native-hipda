@@ -9,11 +9,11 @@ import dayjs from 'dayjs';
 
 interface PostItemProps extends PostItemBaseProps {
   onPress?: () => void;
-  onAvatarPress: (user: User) => void;
+  onAvatarPress?: (user: User) => void;
 }
 
 const PostItem = React.memo((props: PostItemProps) => {
-  const { author, postno, content, onPress, posttime, onAvatarPress } = props;
+  const { author, postno, content, onPress, posttime } = props;
 
   const { colors } = useTheme();
   const postInfoRightTextStyle = {
@@ -24,7 +24,7 @@ const PostItem = React.memo((props: PostItemProps) => {
     <TouchableRipple onPress={onPress}>
       <View style={[styles.container, { backgroundColor: colors.surface }]}>
         <View style={styles.postInfoContainer}>
-          <Pressable onPress={() => onAvatarPress(author)}>
+          <Pressable>
             <View style={styles.postInfoView}>
               <HiAvatar user={author} size={36} />
               <Text style={styles.postAuthorText}>{author.username}</Text>

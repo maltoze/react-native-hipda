@@ -21,9 +21,24 @@ export const postReducer = (
   const { payload } = action;
   switch (action.type) {
     case PostActionTypes.FETCH_POST__FULFILLED:
-      const { posts = [], hasNextPage = true, ordertype, tid, authorid } = {
+      const {
+        posts = [],
+        hasNextPage = true,
+        ordertype = postOrderAsc,
+        authorid,
+      } = {
         ...payload,
       };
+      if (authorid !== state.authorid) {
+        return {
+          posts,
+          page: state.page + 1,
+          isLoading: false,
+          hasNextPage,
+          authorid,
+          ordertype,
+        };
+      }
       const toAdd = posts.filter(
         (r: PostItemBaseProps) =>
           !state.posts.find((s) => s.postno === r.postno),
@@ -39,8 +54,7 @@ export const postReducer = (
         page: state.page + 1,
         isLoading: false,
         hasNextPage,
-        ordertype: ordertype || postOrderAsc,
-        tid,
+        ordertype,
         authorid,
       };
     case PostActionTypes.FETCH_POST__SENT:

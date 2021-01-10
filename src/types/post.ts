@@ -19,7 +19,6 @@ export type PostState = {
   isLoading: boolean;
   hasNextPage: boolean;
   ordertype: PostSortOrderType;
-  tid?: number;
   authorid?: number;
 };
 
@@ -30,7 +29,7 @@ export type PostAction = {
 
 export const postOrderAsc = 2;
 export const postOrderDesc = 1;
-type PostSortOrderType = typeof postOrderAsc | typeof postOrderDesc;
+export type PostSortOrderType = typeof postOrderAsc | typeof postOrderDesc;
 
 export type PostListUrlArgs = {
   tid: number;

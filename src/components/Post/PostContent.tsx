@@ -18,10 +18,10 @@ const fontSizeKeywords = [
   'medium',
   'medium',
   'large',
-  'x-large',
-  'xx-large',
-  'xx-large',
-  'xx-large',
+  'large',
+  'large',
+  'large',
+  'large',
   // 'xxx-large',
 ];
 

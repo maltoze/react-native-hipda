@@ -8,11 +8,10 @@ export const fetchPostFulfilled = ({
   posts,
   hasNextPage,
   ordertype,
-  tid,
   authorid,
 }: Partial<PostState>) => ({
   type: PostActionTypes.FETCH_POST__FULFILLED,
-  payload: { posts, hasNextPage, ordertype, tid, authorid },
+  payload: { posts, hasNextPage, ordertype, authorid },
 });
 
 export const resetPost = () => ({ type: PostActionTypes.RESET_POST });

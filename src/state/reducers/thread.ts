@@ -42,11 +42,6 @@ export const threadReducer = (
       return { ...state, isLoading: true };
     case ThreadActionTypes.REFRESH_THREAD__SENT:
       return { ...state, isLoading: false, refreshing: true };
-    case ThreadActionTypes.SET_FORUM:
-      return {
-        ...state,
-        forum: payload?.forum || defaultForum,
-      };
     default:
       throw new Error('Unknown action type');
   }

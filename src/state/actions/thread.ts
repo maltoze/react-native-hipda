@@ -1,4 +1,3 @@
-import { Forum } from '../../forums';
 import { ThreadActionTypes, ThreadItemProps } from '../../types/thread';
 
 export const fetchThreadSent = () => ({
@@ -17,9 +16,4 @@ export const refreshThreadSent = () => ({
 export const refreshThreadFulfilled = (threads: ThreadItemProps[]) => ({
   type: ThreadActionTypes.REFRESH_THREAD__FULFILLED,
   payload: { threads },
-});
-
-export const setForum = (forum: Forum) => ({
-  type: ThreadActionTypes.SET_FORUM,
-  payload: { forum },
 });

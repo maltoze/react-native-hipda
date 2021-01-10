@@ -1,21 +1,20 @@
-import React, {
-  useMemo,
-  useContext,
-  useEffect,
-  useRef,
-  useCallback,
-} from 'react';
+import React, { useMemo, useEffect, useRef, useCallback } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { DrawerScreenProps } from '@react-navigation/drawer';
 import { ThreadItemProps } from '../types/thread';
 import ThreadItem from '../components/Thread/ThreadItem';
 import forums from '../forums';
-import { ThreadContext } from '../context/ThreadContext';
-import navigate from '../navigation/navigate';
 import { useSetLoginModalVisible, useUser } from '../state/store';
 import HiDivider from '../components/HiDivider';
 import ThreadListFooter from '../components/Thread/ThreadListFooter';
 import { useTheme } from 'react-native-paper';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import ThreadAppbar from '../components/Thread/ThreadAppBar';
+import { useThreadReducer } from '../state/hooks/thread';
+import {
+  RouteNames,
+  ThreadScreenNavigationProp,
+  ThreadScreenRouteProp,
+} from '../types/navigation';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -27,20 +26,26 @@ function keyExtractor(item: ThreadItemProps) {
   return item.tid.toString();
 }
 
-function ThreadScreen(props: DrawerScreenProps<any>) {
-  const { navigation } = props;
-  const navigator = useMemo(() => navigate(navigation), [navigation]);
+function ThreadScreen() {
+  const navigation = useNavigation<ThreadScreenNavigationProp>();
+
+  const route = useRoute<ThreadScreenRouteProp>();
+  const { forum } = route.params;
 
   const { colors } = useTheme();
 
-  const { state, actions } = useContext(ThreadContext);
-  const { threads, refreshing, page, forum } = state;
+  const { state, actions } = useThreadReducer(forum);
+  const { threads, refreshing, page } = state;
   const { needLogin } = forums[forum];
 
   const user = useUser();
   const setLoginModalVisible = useSetLoginModalVisible();
 
   const flatListRef = useRef<FlatList<ThreadProp>>(null);
+
+  useEffect(() => {
+    navigation.setOptions({ header: () => <ThreadAppbar /> });
+  }, [navigation]);
 
   useEffect(() => {
     if (!refreshing) {
@@ -52,19 +57,12 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
     if (user.isGuest && needLogin) {
       setLoginModalVisible(true);
     } else {
-      actions.refreshThread(forum);
+      actions.refreshThread();
     }
-  }, [
-    actions,
-    forum,
-    navigator,
-    needLogin,
-    setLoginModalVisible,
-    user.isGuest,
-  ]);
+  }, [actions, needLogin, setLoginModalVisible, user.isGuest]);
 
   const handleOnLoad = () => {
-    actions.loadThread(forum, page + 1);
+    actions.loadThread(page + 1);
   };
 
   const ListFooterComponent = useCallback(
@@ -77,13 +75,14 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
       threads.map((thread) => ({
         ...thread,
         onPress: () => {
-          navigator.openPostScreen({
+          navigation.navigate(RouteNames.Post, {
             tid: thread.tid,
-            subject: thread.title,
+            title: thread.title,
+            author: thread.author,
           });
         },
       })),
-    [navigator, threads],
+    [navigation, threads],
   );
 
   return (
@@ -91,7 +90,7 @@ function ThreadScreen(props: DrawerScreenProps<any>) {
       <FlatList
         ref={flatListRef}
         data={threadData}
-        onRefresh={() => actions.refreshThread(forum)}
+        onRefresh={() => actions.refreshThread()}
         refreshing={refreshing}
         keyExtractor={keyExtractor}
         renderItem={renderItem}

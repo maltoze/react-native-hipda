@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import RootNavigator from './RootNavigator';
+import {
+  getFocusedRouteNameFromRoute,
+  NavigationContainer,
+  Route,
+} from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { getUser } from '../api/user';
 import { useSetUser } from '../state/store';
-import SplashScreen from '../screens/SplashScreen';
 import { notifyMessage } from '../utils/notify';
 import useMounted from '../hooks/useMounted';
+import RootNavigator from './RootNavigator';
+import HiDrawerContent from '../components/HiDrawerContent';
+import { RouteNames } from '../types/navigation';
+
+const Drawer = createDrawerNavigator();
+
+const getGestureEnabled = (route: Route<any>) => {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? RouteNames.Thread;
+  switch (routeName) {
+    case RouteNames.Thread:
+      return true;
+    default:
+      return false;
+  }
+};
 
 export default function Navigation() {
   const [loading, setLoading] = useState(true);
@@ -26,12 +44,23 @@ export default function Navigation() {
   }, [isMounted, setUser]);
 
   if (loading) {
-    return <SplashScreen />;
+    return null;
   }
 
   return (
     <NavigationContainer>
-      <RootNavigator />
+      <Drawer.Navigator
+        drawerContent={(props) => <HiDrawerContent {...props} />}>
+        <Drawer.Screen
+          name="Home"
+          component={RootNavigator}
+          options={({ route }) => {
+            return {
+              gestureEnabled: getGestureEnabled(route),
+            };
+          }}
+        />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

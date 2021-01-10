@@ -6,7 +6,6 @@ export enum ThreadActionTypes {
   REFRESH_THREAD__FULFILLED = 'REFRESH_THREAD__FULFILLED',
   FETCH_THREAD__SENT = 'FETCH_THREAD__SENT',
   REFRESH_THREAD__SENT = 'REFRESH_THREAD__SENT',
-  SET_FORUM = 'SET_FORUM',
 }
 
 export type ThreadItemProps = {

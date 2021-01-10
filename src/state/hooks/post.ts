@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { getPostList } from '../../api/post';
 import useMounted from '../../hooks/useMounted';
-import { PostListUrlArgs } from '../../types/post';
+import { PostListUrlArgs, postOrderAsc } from '../../types/post';
 import { notifyMessage } from '../../utils/notify';
 import { fetchPostFulfilled, fetchPostSent, resetPost } from '../actions/post';
 import { postInitialState, postReducer } from '../reducers/post';
@@ -16,7 +16,12 @@ export const usePostReducer = () => {
   }, []);
 
   const loadPost = useCallback(
-    async ({ tid, page = 1, ordertype = 2, authorid }: PostListUrlArgs) => {
+    async ({
+      tid,
+      page = 1,
+      ordertype = postOrderAsc,
+      authorid,
+    }: PostListUrlArgs) => {
       dispatch(fetchPostSent());
       try {
         abortControllerRef.current = new AbortController();
@@ -30,7 +35,6 @@ export const usePostReducer = () => {
               posts,
               hasNextPage,
               ordertype,
-              tid,
               authorid,
             }),
           );

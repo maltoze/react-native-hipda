@@ -18,15 +18,13 @@ import {
   useSetUser,
   useUser,
 } from '../state/store';
-import navigate from '../navigation/navigate';
 import { stRemoveCookie } from '../utils/storage';
 import HiAvatar from './HiAvatar';
 
 const avatarSize = 60;
 
-const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
+const HiDrawerContent = (props: DrawerContentComponentProps) => {
   const { navigation } = props;
-  const navigator = navigate(navigation);
   const user = useUser();
   const setUser = useSetUser();
   const setLoginModalVisible = useSetLoginModalVisible();
@@ -46,8 +44,6 @@ const HiDrawerContent = (props: DrawerContentComponentProps<any>) => {
     if (user.isGuest) {
       navigation.closeDrawer();
       setLoginModalVisible(true);
-    } else {
-      navigator.openProfile({ user });
     }
   };
 

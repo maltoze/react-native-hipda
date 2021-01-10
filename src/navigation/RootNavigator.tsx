@@ -3,65 +3,48 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack';
-import { Appbar } from 'react-native-paper';
-import ProfileScreen from '../screens/ProfileScreen';
-import HomeScreen from '../screens/HomeDrawerScreen';
 import PostScreen from '../screens/PostScreen';
-import {
-  homeNavigatorRouteName,
-  postRouteName,
-  profileRouteName,
-} from './routes';
-import PostAppbar from '../components/Post/PostAppbar';
-import { PostProvider } from '../provider/PostProvider';
+import ThreadScreen from '../screens/ThreadScreen';
+import { defaultForum } from '../forums';
+import { RootStackParamList, RouteNames } from '../types/navigation';
+import { Appbar } from 'react-native-paper';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
   return (
-    <PostProvider>
-      <Stack.Navigator
-        initialRouteName="Home"
-        headerMode="screen"
-        screenOptions={{
-          header: ({ navigation, scene, previous, insets }) => {
-            const { options } = scene.descriptor;
-            return (
-              <Appbar.Header statusBarHeight={insets.top}>
-                {previous ? (
-                  <Appbar.BackAction onPress={() => navigation.goBack()} />
-                ) : null}
-                <Appbar.Content title={options.title} />
-              </Appbar.Header>
-            );
-          },
-        }}>
-        <Stack.Screen
-          name={homeNavigatorRouteName}
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name={postRouteName}
-          options={({ route }) => {
-            const { subject, tid } = route.params as any;
-            return {
-              gestureEnabled: true,
-              title: subject,
-              ...TransitionPresets.SlideFromRightIOS,
-              header: (props) => <PostAppbar {...props} tid={tid} />,
-            };
-          }}>
-          {(props) => <PostScreen {...props} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name={profileRouteName}
-          component={ProfileScreen}
-          options={{
+    <Stack.Navigator
+      initialRouteName={RouteNames.Thread}
+      headerMode="screen"
+      screenOptions={{
+        header: ({ navigation, scene, previous, insets }) => {
+          const { options } = scene.descriptor;
+          return (
+            <Appbar.Header statusBarHeight={insets.top}>
+              {previous ? (
+                <Appbar.BackAction onPress={() => navigation.goBack()} />
+              ) : null}
+              <Appbar.Content title={options.title} />
+            </Appbar.Header>
+          );
+        },
+      }}>
+      <Stack.Screen
+        name={RouteNames.Thread}
+        component={ThreadScreen}
+        initialParams={{ forum: defaultForum }}
+      />
+      <Stack.Screen
+        name={RouteNames.Post}
+        component={PostScreen}
+        options={({ route }) => {
+          return {
+            title: route.params.title,
             gestureEnabled: true,
-          }}
-        />
-      </Stack.Navigator>
-    </PostProvider>
+            ...TransitionPresets.SlideFromRightIOS,
+          };
+        }}
+      />
+    </Stack.Navigator>
   );
 }

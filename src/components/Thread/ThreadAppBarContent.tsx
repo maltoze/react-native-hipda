@@ -7,7 +7,7 @@ type HomeBarContentProps = {
   onPress: () => void;
 };
 
-function HomeBarContent(props: HomeBarContentProps) {
+function ThreadAppbarContent(props: HomeBarContentProps) {
   const { title, onPress } = props;
 
   return (
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(HomeBarContent);
+export default React.memo(ThreadAppbarContent);

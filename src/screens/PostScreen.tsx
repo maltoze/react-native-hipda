@@ -1,13 +1,17 @@
-import React, { useEffect, useContext, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
-import { User } from '../types/user';
 import PostItem from '../components/Post/PostItem';
-import navigate from '../navigation/navigate';
 import HiDivider from '../components/HiDivider';
 import PostListFooter from '../components/Post/PostListFooter';
-import { PostContext } from '../context/PostContext';
+import { usePostReducer } from '../state/hooks/post';
+import PostAppbar from '../components/Post/PostAppbar';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  PostScreenNavigationProp,
+  PostScreenRouteProp,
+} from '../types/navigation';
+import { postOrderAsc } from '../types/post';
 
 type PostItemProp = React.ComponentProps<typeof PostItem>;
 
@@ -15,14 +19,16 @@ function renderItem({ item }: { item: PostItemProp }) {
   return <PostItem {...item} />;
 }
 
-function PostScreen({ navigation, route }: StackScreenProps<any>) {
-  const { tid } = route.params as any;
-  const navigator = navigate(navigation);
+function PostScreen() {
+  const route = useRoute<PostScreenRouteProp>();
+  const { tid, ordertype = postOrderAsc, authorid } = route.params;
+
+  const navigation = useNavigation<PostScreenNavigationProp>();
 
   const { colors } = useTheme();
 
-  const { state, actions } = useContext(PostContext);
-  const { posts, isLoading, page, hasNextPage, ordertype } = state;
+  const { state, actions } = usePostReducer();
+  const { posts, isLoading, page, hasNextPage } = state;
 
   const handleOnLoad = async () => {
     if (isLoading || !hasNextPage) {
@@ -32,24 +38,16 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
   };
 
   useEffect(() => {
-    actions.loadPost({ tid });
-    return () => actions.resetPost();
-  }, [actions, tid]);
+    navigation.setOptions({ header: () => <PostAppbar /> });
+  }, [navigation]);
+
+  useEffect(() => {
+    actions.loadPost({ tid, ordertype, authorid });
+  }, [actions, authorid, ordertype, tid]);
 
   const ListFooterComponent = useCallback(
     () => <PostListFooter hasNextPage={hasNextPage} />,
     [hasNextPage],
-  );
-
-  const postData = useMemo(
-    () =>
-      posts.map((post) => ({
-        ...post,
-        onAvatarPress: (user: User) => {
-          navigator.openProfile({ user });
-        },
-      })),
-    [navigator, posts],
   );
 
   return (
@@ -59,7 +57,7 @@ function PostScreen({ navigation, route }: StackScreenProps<any>) {
       ) : (
         <>
           <FlatList
-            data={postData}
+            data={posts}
             renderItem={renderItem}
             keyExtractor={(item) => item.postno.toString()}
             ItemSeparatorComponent={HiDivider}
