@@ -4,4 +4,7 @@ module.exports = {
   rules: {
     'no-return-await': 'warn',
   },
+  env: {
+    'jest/globals': true,
+  },
 };
