@@ -6,7 +6,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import ThreadAppbarContent from './ThreadAppBarContent';
+import ThreadAppbarContent from './ThreadAppbarContent';
 import forums, { defaultForum, Forum } from '../../forums';
 import {
   ThreadScreenNavigationProp,
@@ -14,7 +14,7 @@ import {
 } from '../../types/navigation';
 import useVisible from '../../hooks/useVisible';
 
-function ThreadAppBar() {
+function ThreadAppbar() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<ThreadScreenNavigationProp>();
 
@@ -60,4 +60,4 @@ function ThreadAppBar() {
   );
 }
 
-export default React.memo(ThreadAppBar);
+export default React.memo(ThreadAppbar);

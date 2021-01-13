@@ -8,7 +8,7 @@ import HiDivider from '../components/HiDivider';
 import ThreadListFooter from '../components/Thread/ThreadListFooter';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import ThreadAppbar from '../components/Thread/ThreadAppBar';
+import ThreadAppbar from '../components/Thread/ThreadAppbar';
 import {
   RouteNames,
   ThreadScreenNavigationProp,
