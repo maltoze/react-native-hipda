@@ -6,7 +6,7 @@ import { getThreadListUrl } from './urls';
 
 export const getThreadList = async (
   urlArgs: ThreadListUrlArgs,
-  abortController: AbortController | undefined,
+  abortController?: AbortController | undefined,
 ) => {
   const url = await getThreadListUrl(urlArgs);
   const resp = await fetchGet(url, abortController);

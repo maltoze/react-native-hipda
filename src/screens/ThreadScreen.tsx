@@ -9,12 +9,12 @@ import ThreadListFooter from '../components/Thread/ThreadListFooter';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ThreadAppbar from '../components/Thread/ThreadAppBar';
-import { useThreadReducer } from '../state/hooks/thread';
 import {
   RouteNames,
   ThreadScreenNavigationProp,
   ThreadScreenRouteProp,
 } from '../types/navigation';
+import { useThreadStore } from '../store/thread';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -34,8 +34,7 @@ function ThreadScreen() {
 
   const { colors } = useTheme();
 
-  const { state, actions } = useThreadReducer(forum);
-  const { threads, refreshing, page } = state;
+  const { threads, refreshing, actions, isLoading } = useThreadStore();
   const { needLogin } = forums[forum];
 
   const user = useUser();
@@ -57,12 +56,18 @@ function ThreadScreen() {
     if (user.isGuest && needLogin) {
       setLoginModalVisible(true);
     } else {
-      actions.refreshThread();
+      actions.refreshThread(forum);
     }
-  }, [actions, needLogin, setLoginModalVisible, user.isGuest]);
+  }, [actions, forum, needLogin, setLoginModalVisible, user.isGuest]);
 
   const handleOnLoad = () => {
-    actions.loadThread(page + 1);
+    if (!isLoading) {
+      actions.loadThread(forum);
+    }
+  };
+
+  const handleOnRefresh = () => {
+    actions.refreshThread(forum);
   };
 
   const ListFooterComponent = useCallback(
@@ -90,7 +95,7 @@ function ThreadScreen() {
       <FlatList
         ref={flatListRef}
         data={threadData}
-        onRefresh={() => actions.refreshThread()}
+        onRefresh={handleOnRefresh}
         refreshing={refreshing}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
