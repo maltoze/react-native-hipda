@@ -15,6 +15,7 @@ import {
   ThreadScreenRouteProp,
 } from '../types/navigation';
 import { useThreadStore } from '../store/thread';
+import { navigateOneTime } from '../navigation/navigate';
 
 type ThreadProp = React.ComponentProps<typeof ThreadItem>;
 
@@ -48,7 +49,7 @@ function ThreadScreen() {
 
   useEffect(() => {
     if (!refreshing) {
-      flatListRef.current?.scrollToIndex({ animated: true, index: 0 });
+      flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
     }
   }, [refreshing]);
 
@@ -79,13 +80,13 @@ function ThreadScreen() {
     () =>
       threads.map((thread) => ({
         ...thread,
-        onPress: () => {
-          navigation.navigate(RouteNames.Post, {
+        onPress: navigateOneTime(() => {
+          navigation.push(RouteNames.Post, {
             tid: thread.tid,
             title: thread.title,
             author: thread.author,
           });
-        },
+        }),
       })),
     [navigation, threads],
   );
