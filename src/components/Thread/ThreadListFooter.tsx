@@ -3,15 +3,15 @@ import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Text, useTheme } from 'react-native-paper';
 
 type ThreadListFooterProps = {
-  refreshing: boolean;
+  loading: boolean;
 };
 
 const ThreadListFooter = (props: ThreadListFooterProps) => {
-  const { refreshing } = props;
+  const { loading } = props;
   const { colors } = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
-      {refreshing ? null : (
+      {loading && (
         <>
           <ActivityIndicator />
           <Text style={styles.loading}>正在加载...</Text>

@@ -6,7 +6,7 @@ import forums from '../forums';
 import { useSetLoginModalVisible, useUser } from '../state/store';
 import HiDivider from '../components/HiDivider';
 import ThreadListFooter from '../components/Thread/ThreadListFooter';
-import { useTheme } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ThreadAppbar from '../components/Thread/ThreadAppbar';
 import {
@@ -72,8 +72,8 @@ function ThreadScreen() {
   };
 
   const ListFooterComponent = useCallback(
-    () => <ThreadListFooter refreshing={refreshing} />,
-    [refreshing],
+    () => <ThreadListFooter loading={refreshing || isLoading} />,
+    [isLoading, refreshing],
   );
 
   const threadData = useMemo(
@@ -93,17 +93,22 @@ function ThreadScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
-      <FlatList
-        ref={flatListRef}
-        data={threadData}
-        onRefresh={handleOnRefresh}
-        refreshing={refreshing}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        onEndReached={handleOnLoad}
-        ItemSeparatorComponent={HiDivider}
-        ListFooterComponent={ListFooterComponent}
-      />
+      {refreshing && threadData.length === 0 ? (
+        <ActivityIndicator size="large" style={styles.container} />
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          data={threadData}
+          onRefresh={handleOnRefresh}
+          refreshing={refreshing}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          onEndReached={handleOnLoad}
+          onEndReachedThreshold={1}
+          ItemSeparatorComponent={HiDivider}
+          ListFooterComponent={ListFooterComponent}
+        />
+      )}
     </View>
   );
 }
