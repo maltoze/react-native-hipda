@@ -29,6 +29,7 @@ const forums: Record<Forum, ForumDeclaration> = {
   All: {
     name: '全部',
     icon: 'view-sequential',
+    needLogin: true,
   },
   Discovery: {
     name: 'Discovery',

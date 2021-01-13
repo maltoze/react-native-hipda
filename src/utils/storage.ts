@@ -12,7 +12,10 @@ export const stRemoveCookie = () => {
   return AsyncStorage.removeItem(stCookieKey);
 };
 
-const getJsonObjectFromStorage = (key: string, params: any = {}) =>
+const getJsonObjectFromStorage = (
+  key: string,
+  params: any = {},
+): Promise<any> =>
   new Promise(async (resolve) => {
     const { onJsonParseError } = params;
 
