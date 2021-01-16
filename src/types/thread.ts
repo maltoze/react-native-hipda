@@ -1,13 +1,6 @@
 import { Forum } from '../forums';
 import { User } from './user';
 
-export enum ThreadActionTypes {
-  FETCH_THREAD__FULFILLED = 'FETCH_THREAD__FULFILLED',
-  REFRESH_THREAD__FULFILLED = 'REFRESH_THREAD__FULFILLED',
-  FETCH_THREAD__SENT = 'FETCH_THREAD__SENT',
-  REFRESH_THREAD__SENT = 'REFRESH_THREAD__SENT',
-}
-
 export type ThreadItemProps = {
   title: string;
   tid: number;
@@ -35,11 +28,6 @@ export type ThreadState = {
   orderby?: ThreadOrderby;
   isLoading: boolean;
   refreshing: boolean;
-};
-
-export type ThreadAction = {
-  type: ThreadActionTypes;
-  payload?: Partial<ThreadState>;
 };
 
 export type ThreadListUrlArgs = {

@@ -4,17 +4,17 @@ import { ActivityIndicator, Text, useTheme } from 'react-native-paper';
 import HiDivider from '../HiDivider';
 
 type PostListFooter = {
-  hasNextPage: boolean;
+  loading: boolean;
 };
 
 const PostListFooter = (props: PostListFooter) => {
-  const { hasNextPage } = props;
+  const { loading } = props;
   const { colors } = useTheme();
   return (
     <View>
       <HiDivider />
       <View style={[styles.container, { backgroundColor: colors.surface }]}>
-        {hasNextPage ? (
+        {loading ? (
           <>
             <ActivityIndicator />
             <Text style={styles.loading}>正在加载...</Text>

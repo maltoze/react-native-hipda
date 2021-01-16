@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { getUser } from '../api/user';
-import { useSetUser } from '../state/store';
+import { useSetUser } from '../store/user';
 import { notifyMessage } from '../utils/notify';
 import useMounted from '../hooks/useMounted';
 import RootNavigator from './RootNavigator';

@@ -6,7 +6,7 @@ import { getPostListUrl } from './urls';
 
 export const getPostList = async (
   urlArgs: PostListUrlArgs,
-  abortController: AbortController | undefined,
+  abortController?: AbortController | undefined,
 ) => {
   const url = getPostListUrl(urlArgs);
   const resp = await fetchGet(url, abortController);

@@ -1,10 +1,9 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 import PostItem from '../components/Post/PostItem';
 import HiDivider from '../components/HiDivider';
 import PostListFooter from '../components/Post/PostListFooter';
-import { usePostReducer } from '../state/hooks/post';
 import PostAppbar from '../components/Post/PostAppbar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -12,11 +11,16 @@ import {
   PostScreenRouteProp,
 } from '../types/navigation';
 import { postOrderAsc } from '../types/post';
+import { postStore } from '../store/post';
 
 type PostItemProp = React.ComponentProps<typeof PostItem>;
 
 function renderItem({ item }: { item: PostItemProp }) {
   return <PostItem {...item} />;
+}
+
+function keyExtractor(item: PostItemProp) {
+  return item.postno.toString();
 }
 
 function PostScreen() {
@@ -27,10 +31,17 @@ function PostScreen() {
 
   const { colors } = useTheme();
 
-  const { state, actions } = usePostReducer();
-  const { posts, isLoading, page, hasNextPage } = state;
+  const usePostStore = useMemo(postStore, []);
+  const {
+    posts,
+    isLoading,
+    refreshing,
+    page,
+    hasNextPage,
+    actions,
+  } = usePostStore();
 
-  const handleOnLoad = async () => {
+  const handleOnLoad = () => {
     if (isLoading || !hasNextPage) {
       return;
     }
@@ -42,27 +53,29 @@ function PostScreen() {
   }, [navigation]);
 
   useEffect(() => {
-    actions.loadPost({ tid, ordertype, authorid });
+    actions.refreshPost({ tid, ordertype, authorid });
   }, [actions, authorid, ordertype, tid]);
 
   const ListFooterComponent = useCallback(
-    () => <PostListFooter hasNextPage={hasNextPage} />,
-    [hasNextPage],
+    () => <PostListFooter loading={isLoading && !refreshing} />,
+    [isLoading, refreshing],
   );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
-      {isLoading && !page ? (
+      {refreshing && posts.length === 0 ? (
         <ActivityIndicator size="large" style={styles.container} />
       ) : (
         <>
           <FlatList
             data={posts}
             renderItem={renderItem}
-            keyExtractor={(item) => item.postno.toString()}
+            keyExtractor={keyExtractor}
             ItemSeparatorComponent={HiDivider}
             onEndReached={handleOnLoad}
-            onEndReachedThreshold={0.5}
+            onEndReachedThreshold={0.8}
+            onRefresh={() => actions.refreshPost({ tid, ordertype, authorid })}
+            refreshing={refreshing}
             ListFooterComponent={ListFooterComponent}
           />
         </>

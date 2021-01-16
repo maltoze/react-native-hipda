@@ -6,7 +6,7 @@ import {
   useLoginModalVisible,
   useSetLoginModalVisible,
   useSetUser,
-} from '../state/store';
+} from '../store/user';
 import { notifyMessage } from '../utils/notify';
 
 export default function LoginModal() {
