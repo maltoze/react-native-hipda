@@ -8,6 +8,7 @@ import ThreadScreen from '../screens/ThreadScreen';
 import { defaultForum } from '../forums';
 import { RootStackParamList, RouteNames } from '../types/navigation';
 import { Appbar } from 'react-native-paper';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -23,6 +24,13 @@ export default function RootNavigator() {
             <Appbar.Header statusBarHeight={insets.top}>
               {previous ? (
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
+              ) : (navigation as any).openDrawer ? (
+                <Appbar.Action
+                  icon="menu"
+                  onPress={() =>
+                    ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
+                  }
+                />
               ) : null}
               <Appbar.Content title={options.title} />
             </Appbar.Header>

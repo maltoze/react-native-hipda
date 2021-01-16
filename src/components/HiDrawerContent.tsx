@@ -11,13 +11,8 @@ import {
   Switch,
 } from 'react-native-paper';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import {
-  useColorScheme,
-  useSetColorScheme,
-  useSetLoginModalVisible,
-  useSetUser,
-  useUser,
-} from '../state/store';
+import { useSetLoginModalVisible, useSetUser, useUser } from '../store/user';
+import { useColorScheme, useSetColorScheme } from '../store/preferences';
 import { stRemoveCookie } from '../utils/storage';
 import HiAvatar from './HiAvatar';
 

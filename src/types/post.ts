@@ -7,12 +7,6 @@ export type PostItemBaseProps = {
   postno: number;
 };
 
-export enum PostActionTypes {
-  FETCH_POST__FULFILLED = 'FETCH_POST__FULFILLED',
-  FETCH_POST__SENT = 'FETCH_POST__SENT',
-  RESET_POST = 'RESET_POST',
-}
-
 export type PostState = {
   posts: PostItemBaseProps[];
   page: number;
@@ -20,11 +14,6 @@ export type PostState = {
   hasNextPage: boolean;
   ordertype: PostSortOrderType;
   authorid?: number;
-};
-
-export type PostAction = {
-  type: PostActionTypes;
-  payload?: Partial<PostState>;
 };
 
 export const postOrderAsc = 2;

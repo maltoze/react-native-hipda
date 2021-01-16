@@ -10,7 +10,7 @@ import 'dayjs/locale/zh-cn';
 import Navigation from './navigation';
 import LoginModal from './components/LoginModal';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useColorScheme } from './state/store';
+import { useColorScheme } from './store/preferences';
 import { DarkTheme, LightTheme } from './styles/Theme';
 
 enableScreens();

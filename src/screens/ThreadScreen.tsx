@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { ThreadItemProps } from '../types/thread';
 import ThreadItem from '../components/Thread/ThreadItem';
 import forums from '../forums';
-import { useSetLoginModalVisible, useUser } from '../state/store';
+import { useSetLoginModalVisible, useUser } from '../store/user';
 import HiDivider from '../components/HiDivider';
 import ThreadListFooter from '../components/Thread/ThreadListFooter';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
