@@ -32,7 +32,10 @@ const HiDrawerContent = (props: DrawerContentComponentProps) => {
 
   const toggleTheme = () => {
     navigation.closeDrawer();
-    setColorScheme(colorScheme === 'dark' ? 'light' : 'dark');
+    setTimeout(
+      () => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark'),
+      10,
+    );
   };
 
   const handleAvatarPress = () => {
