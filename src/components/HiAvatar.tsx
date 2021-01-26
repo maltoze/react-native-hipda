@@ -18,7 +18,7 @@ const HiAvatar = (props: HiAvatarProps) => {
       <Avatar.Image
         source={() => (
           <FastImage
-            source={{ uri: user.avatar }}
+            source={{ uri: user.avatar, cache: FastImage.cacheControl.web }}
             style={{ width: size, height: size, borderRadius: size / 2 }}
           />
         )}
