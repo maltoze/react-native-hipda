@@ -3,7 +3,11 @@ import { getAvatarUrl } from '../api/urls';
 import { loadHtml } from './cheerio';
 
 function handleContent(content: string) {
-  return content;
+  const newContent = content.replace(
+    /<i class="pstatus">.*<\/i>/,
+    '<div style="text-align: center">$&</div>',
+  );
+  return newContent;
 }
 
 export const parsePostList = async (html: string) => {
