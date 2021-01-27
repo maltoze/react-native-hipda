@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { ActivityIndicator, FAB, useTheme } from 'react-native-paper';
 import PostItem from '../components/Post/PostItem';
 import HiDivider from '../components/HiDivider';
 import PostListFooter from '../components/Post/PostListFooter';
@@ -12,6 +12,8 @@ import {
 } from '../types/navigation';
 import { postOrderAsc } from '../types/post';
 import { postStore } from '../store/post';
+import ReplyModal from '../components/Post/ReplyModal';
+import useVisible from '../hooks/useVisible';
 
 type PostItemProp = React.ComponentProps<typeof PostItem>;
 
@@ -41,6 +43,18 @@ function PostScreen() {
     actions,
   } = usePostStore();
 
+  const {
+    visible: replyModalVisible,
+    show: showReplyModal,
+    hide: hideReplyModal,
+  } = useVisible();
+
+  const {
+    visible: replyBtnVisible,
+    show: showReplyBtn,
+    hide: hideReplyBtn,
+  } = useVisible(true);
+
   const handleOnLoad = () => {
     if (isLoading || !hasNextPage) {
       return;
@@ -61,6 +75,16 @@ function PostScreen() {
     [isLoading, refreshing],
   );
 
+  const handleReplyBtnPress = () => {
+    showReplyModal();
+    hideReplyBtn();
+  };
+
+  const handleReplyModalClose = () => {
+    showReplyBtn();
+    hideReplyModal();
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
       {refreshing && posts.length === 0 ? (
@@ -78,6 +102,18 @@ function PostScreen() {
             refreshing={refreshing}
             ListFooterComponent={ListFooterComponent}
           />
+          <FAB
+            visible={replyBtnVisible}
+            style={styles.fab}
+            icon="reply"
+            onPress={handleReplyBtnPress}
+          />
+          <ReplyModal
+            tid={tid}
+            isVisible={replyModalVisible}
+            close={handleReplyModalClose}
+            onReplyPost={actions.replyPost}
+          />
         </>
       )}
     </View>
@@ -87,6 +123,12 @@ function PostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });
 

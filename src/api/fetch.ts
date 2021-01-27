@@ -15,6 +15,10 @@ const getHeaders = async () => {
   };
 };
 
+const defaultPostHeaders = {
+  'Content-Type': 'application/x-www-form-urlencoded',
+};
+
 export const fetchGet = async (
   url: string,
   abortController?: AbortController,
@@ -32,7 +36,7 @@ export const fetchGet = async (
 export const fetchPost = async (
   url: string,
   body: BodyInit_,
-  headers: HeadersInit_,
+  headers?: HeadersInit_,
   abortController?: AbortController,
 ) => {
   const defaultHeaders = await getHeaders();
@@ -40,7 +44,7 @@ export const fetchPost = async (
     return await fetch(url, {
       method: 'POST',
       body,
-      headers: { ...defaultHeaders, ...headers },
+      headers: { ...defaultHeaders, ...defaultPostHeaders, ...headers },
       signal: abortController?.signal,
     });
   } catch (error) {

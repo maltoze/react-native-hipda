@@ -42,7 +42,7 @@ function ThreadItem(props: ThreadProps) {
                 <Caption>{relativeTime}</Caption>
                 <View style={[styles.rowContainer, styles.nums]}>
                   <IconButton
-                    icon="comment-multiple-outline"
+                    icon="forum-outline"
                     size={12}
                     color={colors.caption}
                     style={styles.icon}

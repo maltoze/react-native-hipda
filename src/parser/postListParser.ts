@@ -54,6 +54,7 @@ export const parsePostList = async (html: string) => {
       }
     });
   const hasNext = $('.pages .next').length > 0 ? true : false;
+  const formhash = $('input[name=formhash]').val();
   const postList = await Promise.all(promises);
-  return { postList, hasNext };
+  return { postList, hasNext, formhash };
 };

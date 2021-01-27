@@ -26,3 +26,13 @@ export type PostListUrlArgs = {
   ordertype?: PostSortOrderType;
   authorid?: number;
 };
+
+export type PostReplyUrlParams = {
+  tid: number;
+  fid?: number;
+};
+
+export type PostReplyBody = {
+  message: string;
+  formhash: string;
+};

@@ -5,13 +5,13 @@ import { fetchGet } from './fetch';
 
 export const FORUM_SERVER = 'http://www.hi-pda.com';
 export const FORUM_SERVER_SSL = 'https://www.hi-pda.com';
-export const BASE_URL = FORUM_SERVER_SSL + '/forum/';
+export const BASE_URL = FORUM_SERVER_SSL + '/forum';
 export const COOKIE_DOMAIN = 'hi-pda.com';
-const AVATAR_BASE = '000000000';
-
-// 登录
+export const SMILIES_PATTERN = COOKIE_DOMAIN + '/forum/images/smilies';
 export const LOGIN_SUBMIT =
-  BASE_URL + 'logging.php?action=login&loginsubmit=yes&inajax=1';
+  BASE_URL + '/logging.php?action=login&loginsubmit=yes&inajax=1';
+
+const AVATAR_BASE = '000000000';
 
 export const getThreadListUrl = async ({
   forum,
@@ -29,7 +29,7 @@ export const getThreadListUrl = async ({
   } else {
     const { fid } = forums[forum];
     return (
-      `${BASE_URL}forumdisplay.php?fid=${fid}&page=${page}` +
+      `${BASE_URL}/forumdisplay.php?fid=${fid}&page=${page}` +
       `&filter=${filter || ''}&orderby=${orderby || ''}`
     );
   }
@@ -42,18 +42,18 @@ export const getPostListUrl = ({
   authorid,
 }: PostListUrlArgs) => {
   return (
-    `${BASE_URL}viewthread.php?tid=${tid}&page=${page}` +
+    `${BASE_URL}/viewthread.php?tid=${tid}&page=${page}` +
     `&ordertype=${ordertype}&authorid=${authorid || ''}`
   );
 };
 
 export const getLatestThreadUrl = () => {
   // 24小时内的帖子
-  return `${BASE_URL}search.php?srchfrom=86400&searchsubmit=yes`;
+  return `${BASE_URL}/search.php?srchfrom=86400&searchsubmit=yes`;
 };
 
 export const getAvatarUrl = async (uid: number) => {
-  const avatarBaseUrl = BASE_URL + 'uc_server/data/avatar/';
+  const avatarBaseUrl = BASE_URL + '/uc_server/data/avatar/';
   const fullUid =
     new Array(AVATAR_BASE.length - uid.toString().length + 1).join('0') + uid;
   const str = [
@@ -74,7 +74,3 @@ export const getAvatarUrl = async (uid: number) => {
     return '';
   }
 };
-
-export const SMILIES_PATTERN = COOKIE_DOMAIN + '/forum/images/smilies';
-export const FORUM_IMG_PATTERN =
-  COOKIE_DOMAIN + '/forum/images/(common|default)';
