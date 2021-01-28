@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["@babel/env", { "targets": { "android": "4", "ios": "6" } }],
+    "@babel/preset-react"
+  ]
+}
