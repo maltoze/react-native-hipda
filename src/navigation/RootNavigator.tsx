@@ -3,7 +3,7 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack';
-import PostScreen from '../screens/PostScreen';
+import PostScreen from '../screens/PostWebViewScreen';
 import ThreadScreen from '../screens/ThreadScreen';
 import { defaultForum } from '../forums';
 import { RootStackParamList, RouteNames } from '../types/navigation';
