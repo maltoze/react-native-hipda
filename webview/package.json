@@ -6,24 +6,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "dev": "webpack serve --mode development"
+    "dev": "webpack serve --mode development --host 0.0.0.0"
   },
   "author": "maltoze",
   "license": "ISC",
   "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "@emotion/css": "^11.1.3",
+    "lit-html": "^1.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
-    "@types/react-dom": "^17.0.0",
     "@types/webpack-dev-server": "^3.11.1",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
-    "html-webpack-inline-source-plugin": "1.0.0-beta.2",
+    "eslint": "^7.19.0",
     "html-webpack-plugin": "^5.0.0-beta.6",
     "pug": "^3.0.0",
     "pug-loader": "^2.4.0",

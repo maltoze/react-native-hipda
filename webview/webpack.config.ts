@@ -4,7 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const config: Configuration = {
   entry: {
-    posts: './src/index.tsx',
+    posts: './src/posts.tsx',
   },
   output: {
     path: resolve(__dirname, 'build'),
