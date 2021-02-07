@@ -45,15 +45,15 @@ const PostScreen = () => {
 
   const setPostsScript = useCallback(
     (postsData) => `
-    (function(){
-      const app = document.getElementById('root');
-      app && 
-        setTimeout(() => app.setAttribute(
-          'data-bootstrap',
-          JSON.stringify(${JSON.stringify(postsData)})
-        ), 500);
-    })()
-  `,
+      (function(){
+        const app = document.getElementById('root');
+        app && 
+          app.setAttribute(
+            'data-bootstrap',
+            JSON.stringify(${JSON.stringify(postsData)})
+          )
+      })()
+    `,
     [],
   );
 
@@ -65,7 +65,7 @@ const PostScreen = () => {
 
   return (
     <View style={styles.container}>
-      {posts.length === 0 && refreshing && (
+      {posts.length === 0 && refreshing && !webViewLoaded && (
         <ActivityIndicator
           size="large"
           style={[StyleSheet.absoluteFill, styles.spinner]}
