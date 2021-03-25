@@ -3,11 +3,22 @@ import { getAvatarUrl } from '../api/urls';
 import { loadHtml } from './cheerio';
 
 function handleContent(content: string) {
-  const newContent = content.replace(
-    /<i class="pstatus">.*<\/i>/,
-    '<div style="text-align: center">$&</div>',
-  );
-  return newContent;
+  const $ = loadHtml(content);
+  $('div.t_attach').remove();
+  const imgPlaceHolders = $('span[id^=attach_]');
+  if (imgPlaceHolders.find('> img').length > 0) {
+    imgPlaceHolders.remove();
+  }
+  $('img').each((_, elem) => {
+    const src = elem.attribs.file || elem.attribs.src;
+    $(elem).attr('src', src);
+    $(elem)
+      .removeAttr('onload')
+      .removeAttr('onmouseover')
+      .removeAttr('onclick')
+      .removeAttr('file');
+  });
+  return $.html();
 }
 
 export const parsePostList = async (html: string) => {

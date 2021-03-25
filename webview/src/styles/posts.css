@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  img {
+    @apply inline;
+  }
+}
+
+.pstatus {
+  @apply text-sm text-gray-400 text-center block not-italic my-2;
+}
+.pstatus + br {
+  @apply hidden;
+}
+
+a[href='javascript:;'] img {
+  @apply w-full;
+}
+
+img[src$='/common/back.gif'] {
+  @apply hidden;
+}
