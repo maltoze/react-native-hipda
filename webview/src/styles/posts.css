@@ -9,16 +9,38 @@
 }
 
 .pstatus {
-  @apply text-sm text-gray-400 text-center block not-italic my-2;
+  @apply text-sm text-gray-400 text-center block not-italic;
 }
 .pstatus + br {
   @apply hidden;
 }
 
-a[href='javascript:;'] img {
+span[href='javascript:;'] img {
   @apply w-full;
 }
 
 img[src$='/common/back.gif'] {
   @apply hidden;
+}
+
+strong i {
+  @apply not-italic;
+}
+
+.locked {
+  @apply text-gray-500;
+}
+
+.quote + br {
+  @apply hidden;
+}
+.quote + br + br {
+  @apply hidden;
+}
+.quote + br + br + br {
+  @apply hidden;
+}
+
+blockquote {
+  @apply border-l-4 rounded-sm border-gray-300 px-3 py-2 mx-3 mt-2 mb-5;
 }

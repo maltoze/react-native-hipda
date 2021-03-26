@@ -2,7 +2,7 @@ import { PostItemBaseProps } from '../types/post';
 import { getAvatarUrl } from '../api/urls';
 import { loadHtml } from './cheerio';
 
-function handleContent(content: string) {
+function parseContent(content: string) {
   const $ = loadHtml(content);
   $('div.t_attach').remove();
   const imgPlaceHolders = $('span[id^=attach_]');
@@ -12,11 +12,16 @@ function handleContent(content: string) {
   $('img').each((_, elem) => {
     const src = elem.attribs.file || elem.attribs.src;
     $(elem).attr('src', src);
+    $(elem).attr('data-src', src.split('.thumb.jpg')[0]);
+    $(elem).addClass('lozad');
     $(elem)
       .removeAttr('onload')
       .removeAttr('onmouseover')
       .removeAttr('onclick')
       .removeAttr('file');
+  });
+  $('a[href="javascript:;"]').each((_, elem) => {
+    elem.tagName = 'span';
   });
   return $.html();
 }
@@ -59,7 +64,7 @@ export const parsePostList = async (html: string) => {
               uid,
               avatar,
             },
-            content: content && handleContent(content),
+            content: content && parseContent(content),
             posttime,
           };
         };

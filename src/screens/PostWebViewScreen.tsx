@@ -71,7 +71,7 @@ const PostScreen = () => {
         ref={webViewRef}
         source={source}
         onLoadEnd={() => setWebViewLoaded(true)}
-        style={{ backgroundColor: colors.surface }}
+        style={{ backgroundColor: colors.background }}
       />
     </View>
   );

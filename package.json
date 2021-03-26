@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start",
+    "main": "react-native start",
+    "webview": "cd webview && yarn dev",
+    "start": "npm-run-all -p main webview",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "test": "jest",
@@ -56,6 +58,7 @@
     "eslint": "^7.14.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.64.0",
+    "npm-run-all": "^4.1.5",
     "react-test-renderer": "16.13.1",
     "typescript": "^4.1.2"
   },

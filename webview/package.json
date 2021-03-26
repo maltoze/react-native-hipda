@@ -17,6 +17,8 @@
     }
   },
   "dependencies": {
+    "buffer": "4.9.2",
+    "lozad": "^1.16.0",
     "preact": "^10.5.13"
   },
   "devDependencies": {
@@ -24,6 +26,7 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@types/css-minimizer-webpack-plugin": "^1.1.2",
+    "@types/lozad": "^1.9.0",
     "@types/mini-css-extract-plugin": "^1.2.2",
     "@types/webpack-dev-server": "^3.11.1",
     "autoprefixer": "^10.2.5",

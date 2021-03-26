@@ -71,7 +71,7 @@ export const getAvatarUrl = async (uid: number) => {
       throw new Error(resp.statusText);
     }
   } catch (error) {
-    return '';
+    return;
   }
 };
 
