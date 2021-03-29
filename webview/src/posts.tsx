@@ -5,9 +5,20 @@ import { PostItemBaseProps } from '../../src/types/post';
 import Avatar from './components/Avatar';
 import './styles/posts.css';
 
+type PostsDataProps = {
+  posts: PostItemBaseProps[];
+  hasNextPage: Boolean;
+};
+
+const defaultPostsData = {
+  posts: [],
+  hasNextPage: false,
+};
+
 const Posts = () => {
-  const [posts, setPosts] = useState<PostItemBaseProps[]>([]);
+  const [postsData, setPostsData] = useState<PostsDataProps>(defaultPostsData);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const { posts, hasNextPage } = postsData;
 
   useEffect(() => {
     if (posts.length > 0) {
@@ -17,7 +28,7 @@ const Posts = () => {
   }, [posts]);
 
   useEffect(() => {
-    window.hiSetPosts = setPosts;
+    window.hiSetPostsData = setPostsData;
     window.hiSetTheme = setTheme;
   }, []);
 
@@ -29,10 +40,12 @@ const Posts = () => {
     }
   }, [theme]);
 
+  if (posts.length === 0) return <div />;
+
   return (
-    <div className="px-2 pb-5 dark:text-gray-100 dark:bg-dark">
+    <div className="px-2 dark:text-gray-lightest dark:bg-dark">
       {posts?.map((post) => (
-        <div className="border-b py-2 dark:border-gray-800">
+        <div className="border-b py-2 dark:border-gray-darkest ">
           <div className="flex items-center justify-between">
             <div className="flex items-center text-sm">
               <Avatar
@@ -51,6 +64,9 @@ const Posts = () => {
             className="break-words pt-2"></p>
         </div>
       ))}
+      {hasNextPage ? null : (
+        <div className="text-center py-4 text-sm text-gray">全部加载完成</div>
+      )}
     </div>
   );
 };

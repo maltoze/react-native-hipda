@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, View, NativeModules } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
@@ -32,7 +26,7 @@ const PostScreen = () => {
   const { colors, dark } = useTheme();
 
   const usePostStore = useMemo(postStore, []);
-  const { posts, refreshing, actions } = usePostStore();
+  const { posts, refreshing, actions, hasNextPage } = usePostStore();
 
   const webViewRef = useRef<WebView>(null);
   const [webViewLoaded, setWebViewLoaded] = useState(false);
@@ -45,22 +39,26 @@ const PostScreen = () => {
     actions.refreshPost({ tid, ordertype, authorid });
   }, [actions, authorid, ordertype, tid]);
 
-  const setPostsScript = useCallback(
-    (postsData) => `
+  const renderScript = useMemo(
+    () => `
       window.hiSetTheme("${dark ? 'dark' : 'light'}");
-      window.hiSetPosts(${JSON.stringify(postsData)});
+      window.hiSetPostsData(JSON.parse(JSON.stringify(${JSON.stringify({
+        posts,
+        hasNextPage,
+      })})));
+      true;
     `,
-    [dark],
+    [dark, hasNextPage, posts],
   );
 
   useEffect(() => {
     posts.length > 0 &&
       webViewLoaded &&
-      webViewRef.current?.injectJavaScript(setPostsScript(posts));
-  }, [webViewLoaded, posts, setPostsScript]);
+      webViewRef.current?.injectJavaScript(renderScript);
+  }, [webViewLoaded, posts, renderScript]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {(posts.length === 0 || refreshing) && (
         <ActivityIndicator
           size="large"
