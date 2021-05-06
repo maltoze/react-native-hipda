@@ -11,8 +11,8 @@ function parseContent(content: string) {
   }
   $('img').each((_, elem) => {
     const src = elem.attribs.file || elem.attribs.src;
-    $(elem).attr('src', src);
-    $(elem).attr('data-src', src.split('.thumb.jpg')[0]);
+    $(elem).attr('data-src', src);
+    // $(elem).attr('data-src', src.split('.thumb.jpg')[0]);
     $(elem).addClass('lozad');
     $(elem)
       .removeAttr('onload')

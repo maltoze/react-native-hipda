@@ -6,6 +6,9 @@
   img {
     @apply inline;
   }
+  a {
+    @apply whitespace-pre-wrap;
+  }
 }
 
 .pstatus {
