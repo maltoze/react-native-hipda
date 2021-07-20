@@ -26,7 +26,7 @@
     "iconv-lite": "^0.6.2",
     "lodash": "^4.17.21",
     "react": "16.13.1",
-    "react-native": "0.63.3",
+    "react-native": "0.64.1",
     "react-native-fast-image": "^8.3.4",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-paper": "^4.7.0",
